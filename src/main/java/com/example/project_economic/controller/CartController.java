@@ -52,7 +52,6 @@ public class CartController {
             @RequestParam String color,
             Model model
     ){
-        System.out.println(size);
         CartItemEntity cartItemEntity=this.cartItemService.addProduct(productId,quantity,userId, size, color);
         List<CartItemResponse>cartItemEntities=this.cartItemService.listCartItem(userId);
         model.addAttribute("cartItems",cartItemEntities);

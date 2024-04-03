@@ -30,20 +30,23 @@ public class SecurityConfig {
                 .requestMatchers("/api/users/index","/webjars/**").permitAll()
                 .requestMatchers("/api/users/login","/api/users/register","/webjars/**", "/css/**", "/js.js/**", "/images/**","/icomoon/**","/lib/**")
                 .permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().authenticated() //Bat authenticate ngoai cac trang tren
+
+                //Form dang nhap
                 .and().formLogin()
-                .loginPage("/api/users/login")
-                .loginProcessingUrl("/api/users/home")
-                .failureUrl("/api/users/fail")
-                .defaultSuccessUrl("/api/users/homepage",true)
-                .permitAll()
-                .and()
-                .logout()
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
-                .logoutSuccessUrl("/api/users/login")
+                    .loginPage("/api/users/login") //Trang chua bieu mau dang nhap
+                    .loginProcessingUrl("/api/users/home")
+                    .failureUrl("/api/users/fail") //Trang tra ve neu dang nhap that bai
+                    .defaultSuccessUrl("/api/users/homepage",true)
+                    .permitAll()
+
+                .and().logout()
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID")
+                    .clearAuthentication(true)
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
+                    .logoutSuccessUrl("/api/users/login") //Trang tra ve khi dang xuat thanh cong
+
                 .and().build();
     }
 

@@ -27,9 +27,8 @@ public class ShoppingCartController {
     private DiscountService discountService;
     @GetMapping("/{userId}")
     public String showShoppingCart(Model model,
-            @PathVariable Long userId
-            , @AuthenticationPrincipal Authentication authentication){
-        List<CartItemResponse>cartItemEntities=this.cartItemService.listCartItem(userId);
+            @PathVariable Long userId){
+        List<CartItemResponse> cartItemEntities = this.cartItemService.listCartItem(userId);
         UserEntity userEntity = userService.findUserById(userId);
         model.addAttribute("user", userEntity);
         model.addAttribute("cartItems",cartItemEntities);

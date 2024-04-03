@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>P Store</title>
+    <title>Autumn</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <!-- Favicon -->
-    <link th:href="@{/images/favicon.ico}" rel="icon">
+    <link th:href="@{/images/chatboticon.png}" rel="icon">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Source+Code+Pro:700,900&display=swap"
@@ -19,6 +19,9 @@
     <link th:href="@{/lib/slick/slick-theme.css}" rel="stylesheet">
     <!--Stylesheet -->
     <link th:href="@{/css/stylehome.css}" rel="stylesheet">
+    <!-- chatbox -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link th:href="@{/css/chatbox.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -78,8 +81,10 @@
                     </div>
                     <div class="col-md-4" th:each="product:${products}">
                         <div class="product-item">
-                            <div class="product-title">
-                                <a th:onclick="searchProductById([[${product.id}]])" th:text="${product.getName()}"></a>
+                            <div class="product-title" >
+                                <div style="height:140px;">
+                                    <a th:onclick="searchProductById([[${product.id}]])" th:text="${product.getName()}" ></a>
+                                </div>
                                 <div class="ratting">
                                     <i class="fa fa-star"></i>
                                     <i class="fa fa-star"></i>
@@ -90,7 +95,7 @@
                             </div>
                             <div class="product-image">
                                 <a th:href="product-detail.html">
-                                    <img th:src="${product.getImage_url()}" alt="Hình ảnh">
+                                    <img th:src="${product.getImage_url()}" alt="Hình ảnh" height="300">
                                 </a>
                                 <div class="product-action">
                                     <input type="hidden" th:value="${product.id}"/>
@@ -260,29 +265,36 @@
                         <p class="chatbox-message-status">Friendly chatbot</p>
                     </div>
                 </div>
-        </div>
-    </div>
-</div>
-    <!--    Chat icon-->
-    <div id="chatIcon">
-        <img th:src ="@{/images/chatboticon.jpg}" alt="Chatbot Icon" id="chatIconImg">
-    </div>
-    <!--    Chat window-->
-    <div id="chatWindow" class="hidden">
-        <div id="chatHeader">
-            <span id="closeBtn">&times;</span>
-            <h2>Aut</h2>
-        </div>
-        <ul id="chatContent">
-            <li id="messages">
-                <div class="message botMessage">
-                    Hi how can i help you today?.
+                <div class="chatbox-message-dropdown">
+                    <i class='bx bx-dots-vertical-rounded chatbox-message-dropdown-toggle'></i>
+                    <ul class="chatbox-message-dropdown-menu">
+                        <li>
+                            <a href="#">Search</a>
+                        </li>
+                    </ul>
                 </div>
-            </li>
-        </ul>
-        <div id="userInput" class="chat-input">
-            <input type="text" id="textInput" placeholder="Type your message...">
-            <button id="sendBtn">Send</button>
+            </div>
+            <div class="chatbox-message-content">
+                <h4 class="chatbox-message-no-message">You don't have message yet!</h4>
+                <!-- <div class="chatbox-message-item sent">
+                    <span class="chatbox-message-item-text">
+                        Lorem, ipsum, dolor sit amet consectetur adipisicing elit. Quod, fugiat?
+                    </span>
+                    <span class="chatbox-message-item-time">08:30</span>
+                </div>
+                <div class="chatbox-message-item received">
+                    <span class="chatbox-message-item-text">
+                        Lorem, ipsum, dolor sit amet consectetur adipisicing elit. Quod, fugiat?
+                    </span>
+                    <span class="chatbox-message-item-time">08:30</span>
+                </div> -->
+            </div>
+            <div class="chatbox-message-bottom">
+                <form action="#" class="chatbox-message-form">
+                    <textarea rows="1" cols="50" placeholder="Type message..." class="chatbox-message-input"></textarea>
+                    <button type="submit" class="chatbox-message-submit"><i class='bx bx-send' ></i></button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -304,14 +316,19 @@
     </div>
 </div>
     <!-- Back to Top -->
-<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+<!--<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>-->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/lib/easing/easing.min.js}"></script>
 <script th:src="@{/lib/slick/slick.min.js}"></script>
 <script th:src="@{/images/main.js}"></script>
+<script th:src="@{/images/chatbox.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/openai-js-sdk@0.2.2/dist/openai-js-sdk.umd.js"></script>
+
+
 </body>
 <script th:inline="javascript">
+;
 
     //Chatbot
     const chatIcon = document.getElementById('chatIcon');
@@ -340,7 +357,7 @@
     }
 
     const generateResponse = (incomingChatLi) => {
-        const API_URL = "https://b4c0-34-126-167-124.ngrok-free.app/routegicungduoc";
+        const API_URL = "https://170f-34-32-212-96.ngrok-free.app/routegicungduoc";
         const data = {
             "message" : chatInput.value.trim()
         };
