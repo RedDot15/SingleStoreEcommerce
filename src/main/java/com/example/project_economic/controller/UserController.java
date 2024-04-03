@@ -154,26 +154,26 @@ public class UserController {
 
 
         //External API post
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        JSONObject userID = new JSONObject();
-        userID.put("user_id", ((UserInfoDetails)authentication.getPrincipal()).getUserId());
-
-        HttpEntity<String> request =
-                new HttpEntity<String>(userID.toString(), headers);
-        String result =
-                restTemplate.postForObject("https://0699-34-74-244-164.ngrok-free.app/traketqua", request, String.class);
-
-        JSONObject resultAsJSON = new JSONObject(result);
-        JSONArray jsonArray = resultAsJSON.getJSONArray("item_ids");
-
-        List<ProductResponse> recommendedProducts= new ArrayList();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            recommendedProducts.add(productService.findById(jsonArray.getLong(i)));
-        }
-
-        model.addAttribute("recommendedProducts", recommendedProducts);
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//        JSONObject userID = new JSONObject();
+//        userID.put("user_id", ((UserInfoDetails)authentication.getPrincipal()).getUserId());
+//
+//        HttpEntity<String> request =
+//                new HttpEntity<String>(userID.toString(), headers);
+//        String result =
+//                restTemplate.postForObject("https://3f2e-35-192-155-199.ngrok-free.app/traketqua", request, String.class);
+//
+//        JSONObject resultAsJSON = new JSONObject(result);
+//        JSONArray jsonArray = resultAsJSON.getJSONArray("item_ids");
+//
+//        List<ProductResponse> recommendedProducts= new ArrayList();
+//        for (int i = 0; i < jsonArray.length(); i++) {
+//            recommendedProducts.add(productService.findById(jsonArray.getLong(i)));
+//        }
+//
+//        model.addAttribute("recommendedProducts", recommendedProducts);
         return "home/product-list";
     }
     @PostMapping("/update/")
