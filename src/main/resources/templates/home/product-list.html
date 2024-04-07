@@ -7,11 +7,9 @@
 
     <!-- Favicon -->
     <link th:href="@{/images/chatboticon.png}" rel="icon">
-
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Source+Code+Pro:700,900&display=swap"
           rel="stylesheet">
-
     <!-- CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -22,6 +20,7 @@
     <!-- chatbox -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link th:href="@{/css/chatbox.css}" rel="stylesheet">
+
 </head>
 
 <body>
@@ -69,7 +68,7 @@
                                             </div>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a href="#" class="dropdown-item" th:each="price:${prices}"
-                                                th:onclick="getUrlToPrices([[${price.getFirst_price()}]],[[${price.getSecond_price()}]])"
+                                                   th:onclick="getUrlToPrices([[${price.getFirst_price()}]],[[${price.getSecond_price()}]])"
                                                 >[[${price.getFirst_price()}]]
                                                     - [[${price.getSecond_price()}]]₫</a>
                                             </div>
@@ -81,9 +80,10 @@
                     </div>
                     <div class="col-md-4" th:each="product:${products}">
                         <div class="product-item">
-                            <div class="product-title" >
+                            <div class="product-title">
                                 <div style="height:140px;">
-                                    <a th:onclick="searchProductById([[${product.id}]])" th:text="${product.getName()}" ></a>
+                                    <a th:onclick="searchProductById([[${product.id}]])"
+                                       th:text="${product.getName()}"></a>
                                 </div>
                                 <div class="ratting">
                                     <i class="fa fa-star"></i>
@@ -100,13 +100,15 @@
                                 <div class="product-action">
                                     <input type="hidden" th:value="${product.id}"/>
                                     <a th:onclick="likeProductById([[${product.id}]])"><i class="fa fa-heart"></i></a>
-                                    <a th:onclick="searchProductById([[${product.id}]])"><i class="fa fa-search"></i></a>
+                                    <a th:onclick="searchProductById([[${product.id}]])"><i
+                                            class="fa fa-search"></i></a>
                                 </div>
                             </div>
                             <div class="product-price">
                                 <h3 th:text="${product.getSalePriceFormat()}"></h3>
-<!--                                <span style="color: gray; text-decoration: line-through;"  th:text="${product.getCostPriceFormat()}"></span>-->
-                                <a class="btn" th:onclick="searchProductById([[${product.id}]])"><i class="fa fa-shopping-cart" ></i>Chi tiết</a>
+                                <!--                                <span style="color: gray; text-decoration: line-through;"  th:text="${product.getCostPriceFormat()}"></span>-->
+                                <a class="btn" th:onclick="searchProductById([[${product.id}]])"><i
+                                        class="fa fa-shopping-cart"></i>Chi tiết</a>
                             </div>
                         </div>
                     </div>
@@ -193,7 +195,8 @@
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center">
                             <li class="page-item" style="margin: 0 2px;">
-                                <a class="page-link" th:onclick="getUrlPriceAndPagination([[${previousPage}]])">Trước</a>
+                                <a class="page-link"
+                                   th:onclick="getUrlPriceAndPagination([[${previousPage}]])">Trước</a>
                             </li>
 
                             <div th:each="indexPage,index:${totalPage}" style="margin: 0 2px;">
@@ -227,31 +230,31 @@
                         </ul>
                     </nav>
                 </div>
+            </div>
         </div>
     </div>
-</div>
-<!--    &lt;!&ndash;    Chat icon&ndash;&gt;-->
-<!--    <div id="chatIcon">-->
-<!--        <img th:src ="@{/images/chatboticon.jpg}" alt="Chatbot Icon" id="chatIconImg">-->
-<!--    </div>-->
-<!--    &lt;!&ndash;    Chat window&ndash;&gt;-->
-<!--    <div id="chatWindow" class="hidden" style="border:5px solid greenyellow; border-radius:20px;">-->
-<!--        <div id="chatHeader" style="border:5px solid greenyellow; border-radius:10px 10px 0 0;">-->
-<!--            <span id="closeBtn">&times;</span>-->
-<!--            <h2>Aut</h2>-->
-<!--        </div>-->
-<!--        <ul id="chatContent" style="border:5px solid greenyellow;">-->
-<!--            <li id="messages">-->
-<!--                <div class="message botMessage">-->
-<!--                    Hi how can i help you today?.-->
-<!--                </div>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--        <div id="userInput" class="chat-input" style="border:5px solid greenyellow;">-->
-<!--            <input type="text" id="textInput" placeholder="Type your message...">-->
-<!--            <button id="sendBtn">Send</button>-->
-<!--        </div>-->
-<!--    </div>-->
+    <!--    &lt;!&ndash;    Chat icon&ndash;&gt;-->
+    <!--    <div id="chatIcon">-->
+    <!--        <img th:src ="@{/images/chatboticon.jpg}" alt="Chatbot Icon" id="chatIconImg">-->
+    <!--    </div>-->
+    <!--    &lt;!&ndash;    Chat window&ndash;&gt;-->
+    <!--    <div id="chatWindow" class="hidden" style="border:5px solid greenyellow; border-radius:20px;">-->
+    <!--        <div id="chatHeader" style="border:5px solid greenyellow; border-radius:10px 10px 0 0;">-->
+    <!--            <span id="closeBtn">&times;</span>-->
+    <!--            <h2>Aut</h2>-->
+    <!--        </div>-->
+    <!--        <ul id="chatContent" style="border:5px solid greenyellow;">-->
+    <!--            <li id="messages">-->
+    <!--                <div class="message botMessage">-->
+    <!--                    Hi how can i help you today?.-->
+    <!--                </div>-->
+    <!--            </li>-->
+    <!--        </ul>-->
+    <!--        <div id="userInput" class="chat-input" style="border:5px solid greenyellow;">-->
+    <!--            <input type="text" id="textInput" placeholder="Type your message...">-->
+    <!--            <button id="sendBtn">Send</button>-->
+    <!--        </div>-->
+    <!--    </div>-->
     <div class="chatbox-wrapper">
         <div class="chatbox-toggle">
             <i class='bx bx-message-dots'></i>
@@ -292,14 +295,14 @@
             <div class="chatbox-message-bottom">
                 <form action="#" class="chatbox-message-form">
                     <textarea rows="1" cols="50" placeholder="Type message..." class="chatbox-message-input"></textarea>
-                    <button type="submit" class="chatbox-message-submit"><i class='bx bx-send' ></i></button>
+                    <button type="submit" class="chatbox-message-submit"><i class='bx bx-send'></i></button>
                 </form>
             </div>
         </div>
     </div>
 
 
-<div style="margin-top: 50px"></div>
+    <div style="margin-top: 50px"></div>
     <!-- Footer -->
     <div class="footer-bottom">
         <div class="container">
@@ -315,7 +318,7 @@
         </div>
     </div>
 </div>
-    <!-- Back to Top -->
+<!-- Back to Top -->
 <!--<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>-->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
@@ -328,84 +331,84 @@
 
 </body>
 <script th:inline="javascript">
-;
+    ;
 
-    //Chatbot
-    const chatIcon = document.getElementById('chatIcon');
-    const chatWindow = document.getElementById('chatWindow');
-    const closeBtn = document.getElementById('closeBtn');
-
-    chatIcon.addEventListener('click', () => {
-        chatWindow.classList.remove('hidden');
-    });
-    closeBtn.addEventListener('click', () => {
-        chatWindow.classList.add('hidden');
-    });
-
-    const chatInput = document.querySelector("#textInput");
-    const sendChatBtn = document.querySelector(".chat-input button");
-    const chatbox = document.querySelector("#chatContent");
-
-    let userMessage;
-
-    const createChatLi = (message, classname) => {
-        const chatLi = document.createElement("li");
-        // chatLi.classList.add("chat", classname);
-        let chatContent = classname === "outgoing" ? `<div class="message userMessage">${message}</div>`: `<div class="message botMessage">${message}</div>`
-        chatLi.innerHTML = chatContent;
-        return chatLi;
-    }
-
-    const generateResponse = (incomingChatLi) => {
-        const API_URL = "https://170f-34-32-212-96.ngrok-free.app/routegicungduoc";
-        const data = {
-            "message" : chatInput.value.trim()
-        };
-        const messageElement = incomingChatLi.querySelector("div");
-
-        const requestOptions = {
-            method: "POST",
-            headers:{
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-
-        };
-
-        fetch(API_URL, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log(data);
-                messageElement.textContent = data.answer;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            }).finally(() => chatbox.scrollTo(0, chatbox.scrollHeight));
-    }
-
-    const handleChat = () => {
-        userMessage = chatInput.value.trim();
-        console.log(userMessage);
-        if (!userMessage) return;
-
-        chatbox.appendChild(createChatLi(userMessage, "outgoing"));
-        chatbox.scrollTo(0, chatbox.scrollHeight);
-
-        setTimeout(() => {
-            const incomingChatLi = createChatLi("Thinking...","incoming")
-            chatbox.appendChild(incomingChatLi);
-            chatbox.scrollTo(0, chatbox.scrollHeight);
-            generateResponse(incomingChatLi);
-        },600)
-
-    }
-
-    sendChatBtn.addEventListener("click",handleChat);
+    // //Chatbot
+    // const chatIcon = document.getElementById('chatIcon');
+    // const chatWindow = document.getElementById('chatWindow');
+    // const closeBtn = document.getElementById('closeBtn');
+    //
+    // chatIcon.addEventListener('click', () => {
+    //     chatWindow.classList.remove('hidden');
+    // });
+    // closeBtn.addEventListener('click', () => {
+    //     chatWindow.classList.add('hidden');
+    // });
+    //
+    // const chatInput = document.querySelector("#textInput");
+    // const sendChatBtn = document.querySelector(".chat-input button");
+    // const chatbox = document.querySelector("#chatContent");
+    //
+    // let userMessage;
+    //
+    // const createChatLi = (message, classname) => {
+    //     const chatLi = document.createElement("li");
+    //     // chatLi.classList.add("chat", classname);
+    //     let chatContent = classname === "outgoing" ? `<div class="message userMessage">${message}</div>`: `<div class="message botMessage">${message}</div>`
+    //     chatLi.innerHTML = chatContent;
+    //     return chatLi;
+    // }
+    //
+    // const generateResponse = (incomingChatLi) => {
+    //     const API_URL = "https://170f-34-32-212-96.ngrok-free.app/routegicungduoc";
+    //     const data = {
+    //         "message" : chatInput.value.trim()
+    //     };
+    //     const messageElement = incomingChatLi.querySelector("div");
+    //
+    //     const requestOptions = {
+    //         method: "POST",
+    //         headers:{
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify(data),
+    //
+    //     };
+    //
+    //     fetch(API_URL, requestOptions)
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             console.log(data);
+    //             messageElement.textContent = data.answer;
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //         }).finally(() => chatbox.scrollTo(0, chatbox.scrollHeight));
+    // }
+    //
+    // const handleChat = () => {
+    //     userMessage = chatInput.value.trim();
+    //     console.log(userMessage);
+    //     if (!userMessage) return;
+    //
+    //     chatbox.appendChild(createChatLi(userMessage, "outgoing"));
+    //     chatbox.scrollTo(0, chatbox.scrollHeight);
+    //
+    //     setTimeout(() => {
+    //         const incomingChatLi = createChatLi("Thinking...","incoming");
+    //         chatbox.appendChild(incomingChatLi);
+    //         chatbox.scrollTo(0, chatbox.scrollHeight);
+    //         generateResponse(incomingChatLi);
+    //     },600)
+    //
+    // }
+    //
+    // sendChatBtn.addEventListener("click",handleChat);
 
 
     function getUrl() {
@@ -432,12 +435,13 @@
         window.location.href = 'http://localhost:3000/api/products/all/?category_id=' + category + '&pageNumber=' + pageNumber;
         return false;
     }
-    function  getUrlToPrices(firstPrice,secondPrice){
-        window.location.href = 'http://localhost:3000/api/products/prices/?firstPrice=' + firstPrice +'&secondPrice='+secondPrice+ '&pageNumber=' + 1;
+
+    function getUrlToPrices(firstPrice, secondPrice) {
+        window.location.href = 'http://localhost:3000/api/products/prices/?firstPrice=' + firstPrice + '&secondPrice=' + secondPrice + '&pageNumber=' + 1;
         return false;
     }
 
-    function buy_product(){
+    function buy_product() {
         var userId = ''
         var cookies = document.cookie.split(';');
         for (var i = 0; i < cookies.length; i++) {
@@ -447,51 +451,45 @@
                 break;
             }
         }
-        var url="/api/history/add/"+userId;
+        var url = "/api/history/add/" + userId;
         $.ajax({
-            type:"POST",
-            url:url,
-            success:function (res){
+            type: "POST",
+            url: url,
+            success: function (res) {
                 console.log(res);
-                if(res=="add fail"){
+                if (res == "add fail") {
 
-                }else{
+                } else {
                     removeAll_list_cartItem()
                 }
             },
-            error:function (xhr,status,error){
+            error: function (xhr, status, error) {
 
             }
         })
 
     }
 
-    function  getUrlPriceAndPagination(pageNumber){
-        var firstPrice=[[${firstPrice}]];
-        var secondPrice=[[${secondPrice}]];
-        window.location.href = 'http://localhost:3000/api/products/prices/?firstPrice=' + firstPrice +'&secondPrice='+secondPrice+ '&pageNumber=' + pageNumber;
+    function getUrlPriceAndPagination(pageNumber) {
+        var firstPrice = [[${firstPrice}]];
+        var secondPrice = [[${secondPrice}]];
+        window.location.href = 'http://localhost:3000/api/products/prices/?firstPrice=' + firstPrice + '&secondPrice=' + secondPrice + '&pageNumber=' + pageNumber;
         return false;
     }
+
+    //Keo thong tin username,userId,numbercart tu model xuong
     var username = [[${username}]];
-    var userId=[[${userId}]]
-    var numbercart=[[${numbercart}]]
-    console.log(getSave())
-    if(!getSave()){
-        localStorage.setItem("save" , "isLogin")
-        console.log("userInfo : " , userId, username, numbercart)
-        document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        document.cookie = "userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        document.cookie = "numbercart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        document.cookie="userId="+userId+"; expires=Wed, 18 Dec 2024 12:00:00 UTC; path=/"
+    var userId = [[${userId}]];
+    var numbercart = [[${numbercart}]];
+    if (!getSave()) { //Neu chua day (username,userId,numbercart) vao cookie => Day vao
+        localStorage.setItem("save","isLogin");
+
+        document.cookie = "userId=" + userId + "; expires=Wed, 18 Dec 2024 12:00:00 UTC; path=/";
         document.cookie = "username=" + username + "; expires=Wed, 18 Dec 2024 12:00:00 UTC; path=/";
-        document.cookie="numbercart="+numbercart+"; expires=Wed, 18 Dec 2024 12:00:00 UTC; path=/"
-        document.cookie = "save="+true;
-        console.log("login af")
+        document.cookie = "numbercart=" + numbercart + "; expires=Wed, 18 Dec 2024 12:00:00 UTC; path=/";
     }
     /* Lưu username vào cookie */
-
-    // getUserNameFromCookie();
-    getUserNameFromCookie()
+    getUserNameFromCookie() //Loi thong tin tu cookie ra len hien thi
 </script>
 </html>
 

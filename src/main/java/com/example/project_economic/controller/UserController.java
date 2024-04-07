@@ -1,34 +1,22 @@
 package com.example.project_economic.controller;
 
 import com.example.project_economic.config.UserInfoDetails;
-import com.example.project_economic.dto.ProductDto;
 import com.example.project_economic.entity.CategoryEntity;
 import com.example.project_economic.entity.UserEntity;
-import com.example.project_economic.jwt.JwtService;
 import com.example.project_economic.response.PageProductResponse;
 import com.example.project_economic.response.ProductResponse;
 import com.example.project_economic.service.*;
-import jakarta.servlet.http.HttpSession;
-import org.apache.catalina.User;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller

@@ -272,14 +272,13 @@
         $.ajax({
             type: "POST",
             url: url,
-            data: { size: size, color: color },
+            data: {size: size, color: color},
         }).done(function (res) {
             changeNumberCart(res);
         }).fail(function () {
             console.log("fail");
         });
     }
-
 
 
     $(".addproducttocard").click(function () {
@@ -355,8 +354,6 @@ function getUserNameFromCookie() {
             break;
         }
     }
-    console.log('username', username)
-    console.log('username', numbercart)
     $('#usernameweb').text(username)
     $('.numbercart').text(numbercart)
 }
@@ -373,6 +370,7 @@ function removeInfo() {
     }
     document.cookie = "save" + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
 }
+
 function getSave() {
     return localStorage.getItem("save") === "isLogin"
 }
@@ -383,7 +381,7 @@ function changeNumberCart(number) {
     $('.numbercart').text(number)
 }
 
-function getCreateProduct(){
+function getCreateProduct() {
     var userId = ''
     var cookies = document.cookie.split(';');
     for (var i = 0; i < cookies.length; i++) {
@@ -393,7 +391,7 @@ function getCreateProduct(){
             break;
         }
     }
-        window.location.href = 'http://localhost:3000/api/products/create/' + userId;
+    window.location.href = 'http://localhost:3000/api/products/create/' + userId;
     return false;
 }
 
@@ -413,20 +411,20 @@ function getNumberCartInEveryPage() {
             break;
         }
     }
-    setTimeout(function() {
+    setTimeout(function () {
         window.location.href = 'http://localhost:3000/api/carts/' + userId;
     }, 50);
     return false;
 }
 
-function likeProductById(productId){
-    var url="/api/products/all/like/"+ productId;
+function likeProductById(productId) {
+    var url = "/api/products/all/like/" + productId;
     $.ajax({
-        type:"POST",
-        url:url,
-        success:function (res){
+        type: "POST",
+        url: url,
+        success: function (res) {
         },
-        error:function (xhr,status,error){
+        error: function (xhr, status, error) {
             console.log("nol");
         }
     })
@@ -512,7 +510,7 @@ function addCommentParent(comment) {
         console.log("appending first-comment");
         console.log(comment)
         let box_comment = `
-             <div id="chatbox" class="commentParent_${comment.id} product-detail tab-content" style="margin-left: ${comment.step*30}px; padding: 0px">
+             <div id="chatbox" class="commentParent_${comment.id} product-detail tab-content" style="margin-left: ${comment.step * 30}px; padding: 0px">
 			    <div class="boxmessage col-sm-12 row form" style="display: flex;flex-direction: column;" id="usersendMessage" class="container comment-form container tab-pane fade">
                                                     <div id="avatarDiv" class="boxmessage col-sm-12 row form">
                                                         <h4  class="textUserName avatar reviewer">${comment.userName}</h4>
@@ -586,8 +584,8 @@ function addCommentRep(comment) {
         console.log(comment)
         var commentParent = '.commentParent_' + comment.commentParentId;
         var tagCommentParent = $(commentParent);
-        let box_comment=`
-             <div id="chatbox" class="commentParent_${comment.id} product-detail tab-content" style="margin-left: ${comment.step*30}px; padding: 0px">
+        let box_comment = `
+             <div id="chatbox" class="commentParent_${comment.id} product-detail tab-content" style="margin-left: ${comment.step * 30}px; padding: 0px">
             <div class="boxmessage col-sm-12 row form" style="display: flex;flex-direction: column;" id="usersendMessage" class=" container comment-form container tab-pane fade">
                                                     <div class="boxmessage col-sm-12 row form" id="avatarDiv" >
                                                         <h4  class="textUserName avatar reviewer">${comment.userName}</h4>
@@ -609,8 +607,8 @@ function addCommentRep(comment) {
     }
 }
 
-function topageHistory(){
-    var userId=''
+function topageHistory() {
+    var userId = ''
     var cookies = document.cookie.split(';');
     for (var i = 0; i < cookies.length; i++) {
         var cookie = cookies[i].trim();
@@ -623,8 +621,8 @@ function topageHistory(){
     window.location.href = 'http://localhost:3000/api/history-page/' + userId;
 }
 
-function tocard(){
-    var userId=''
+function tocard() {
+    var userId = ''
     var cookies = document.cookie.split(';');
     for (var i = 0; i < cookies.length; i++) {
         var cookie = cookies[i].trim();
