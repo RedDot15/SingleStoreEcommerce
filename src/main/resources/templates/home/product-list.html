@@ -230,31 +230,39 @@
                         </ul>
                     </nav>
                 </div>
+                <div class="sidebar-widget widget-slider">
+                    <div class="sidebar-slider normal-slider">
+                        <div class="product-item" th:each="product:${recommendedProducts}">
+                            <div class="product-title">
+                                <a href="#" th:text="${product.getName()}"></a>
+                                <div class="ratting">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="product-image">
+                                <a th:href="product-detail.html">
+                                    <img th:src="${product.getImage_url()}" alt="Hình ảnh">
+                                </a>
+                                <div class="product-action">
+                                    <input type="hidden" th:value="${product.id}"/>
+                                    <a href="#"><i class="fa fa-heart"></i></a>
+                                    <a th:onclick="searchProductById([[${product.id}]])"><i class="fa fa-search"></i></a>
+                                </div>
+                            </div>
+                            <div class="product-price">
+                                <h3 th:text="${product.getSalePriceFormat()}"></h3>
+                                <a class="btn" th:onclick="searchProductById([[${product.id}]])"><i class="fa fa-shopping-cart" ></i>Chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <!--    &lt;!&ndash;    Chat icon&ndash;&gt;-->
-    <!--    <div id="chatIcon">-->
-    <!--        <img th:src ="@{/images/chatboticon.jpg}" alt="Chatbot Icon" id="chatIconImg">-->
-    <!--    </div>-->
-    <!--    &lt;!&ndash;    Chat window&ndash;&gt;-->
-    <!--    <div id="chatWindow" class="hidden" style="border:5px solid greenyellow; border-radius:20px;">-->
-    <!--        <div id="chatHeader" style="border:5px solid greenyellow; border-radius:10px 10px 0 0;">-->
-    <!--            <span id="closeBtn">&times;</span>-->
-    <!--            <h2>Aut</h2>-->
-    <!--        </div>-->
-    <!--        <ul id="chatContent" style="border:5px solid greenyellow;">-->
-    <!--            <li id="messages">-->
-    <!--                <div class="message botMessage">-->
-    <!--                    Hi how can i help you today?.-->
-    <!--                </div>-->
-    <!--            </li>-->
-    <!--        </ul>-->
-    <!--        <div id="userInput" class="chat-input" style="border:5px solid greenyellow;">-->
-    <!--            <input type="text" id="textInput" placeholder="Type your message...">-->
-    <!--            <button id="sendBtn">Send</button>-->
-    <!--        </div>-->
-    <!--    </div>-->
     <div class="chatbox-wrapper">
         <div class="chatbox-toggle">
             <i class='bx bx-message-dots'></i>
@@ -278,7 +286,7 @@
                 </div>
             </div>
             <div class="chatbox-message-content">
-                <h4 class="chatbox-message-no-message">You don't have message yet!</h4>
+                <h4 class="chatbox-message-no-message">Hi! Im Aut. Ask me something.</h4>
                 <!-- <div class="chatbox-message-item sent">
                     <span class="chatbox-message-item-text">
                         Lorem, ipsum, dolor sit amet consectetur adipisicing elit. Quod, fugiat?
@@ -331,86 +339,6 @@
 
 </body>
 <script th:inline="javascript">
-    ;
-
-    // //Chatbot
-    // const chatIcon = document.getElementById('chatIcon');
-    // const chatWindow = document.getElementById('chatWindow');
-    // const closeBtn = document.getElementById('closeBtn');
-    //
-    // chatIcon.addEventListener('click', () => {
-    //     chatWindow.classList.remove('hidden');
-    // });
-    // closeBtn.addEventListener('click', () => {
-    //     chatWindow.classList.add('hidden');
-    // });
-    //
-    // const chatInput = document.querySelector("#textInput");
-    // const sendChatBtn = document.querySelector(".chat-input button");
-    // const chatbox = document.querySelector("#chatContent");
-    //
-    // let userMessage;
-    //
-    // const createChatLi = (message, classname) => {
-    //     const chatLi = document.createElement("li");
-    //     // chatLi.classList.add("chat", classname);
-    //     let chatContent = classname === "outgoing" ? `<div class="message userMessage">${message}</div>`: `<div class="message botMessage">${message}</div>`
-    //     chatLi.innerHTML = chatContent;
-    //     return chatLi;
-    // }
-    //
-    // const generateResponse = (incomingChatLi) => {
-    //     const API_URL = "https://170f-34-32-212-96.ngrok-free.app/routegicungduoc";
-    //     const data = {
-    //         "message" : chatInput.value.trim()
-    //     };
-    //     const messageElement = incomingChatLi.querySelector("div");
-    //
-    //     const requestOptions = {
-    //         method: "POST",
-    //         headers:{
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(data),
-    //
-    //     };
-    //
-    //     fetch(API_URL, requestOptions)
-    //         .then(response => {
-    //             if (!response.ok) {
-    //                 throw new Error('Network response was not ok');
-    //             }
-    //             return response.json();
-    //         })
-    //         .then(data => {
-    //             console.log(data);
-    //             messageElement.textContent = data.answer;
-    //         })
-    //         .catch(error => {
-    //             console.error('Error:', error);
-    //         }).finally(() => chatbox.scrollTo(0, chatbox.scrollHeight));
-    // }
-    //
-    // const handleChat = () => {
-    //     userMessage = chatInput.value.trim();
-    //     console.log(userMessage);
-    //     if (!userMessage) return;
-    //
-    //     chatbox.appendChild(createChatLi(userMessage, "outgoing"));
-    //     chatbox.scrollTo(0, chatbox.scrollHeight);
-    //
-    //     setTimeout(() => {
-    //         const incomingChatLi = createChatLi("Thinking...","incoming");
-    //         chatbox.appendChild(incomingChatLi);
-    //         chatbox.scrollTo(0, chatbox.scrollHeight);
-    //         generateResponse(incomingChatLi);
-    //     },600)
-    //
-    // }
-    //
-    // sendChatBtn.addEventListener("click",handleChat);
-
-
     function getUrl() {
         var key = $("#input-keyword").val();
         window.location.href = 'http://localhost:3000/api/products/search/?key=' + key + '&pageNumber=1';

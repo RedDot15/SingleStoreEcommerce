@@ -67,6 +67,8 @@ function addZero(num) {
     return num < 10 ? '0'+num : num
 }
 
+let save = '';
+
 function writeMessage() {
     const today = new Date()
     let message = `
@@ -79,6 +81,7 @@ function writeMessage() {
 	`
     chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
     chatboxForm.style.alignItems = 'center'
+    save = textarea.value.trim();
     textarea.rows = 1
     textarea.focus()
     textarea.value = ''
@@ -87,46 +90,50 @@ function writeMessage() {
 }
 
 async function autoReply() {
-   ;
-    const API_URL = "https://api.openai.com/v1/chat/completions";
+    const today = new Date();
 
-    const options = {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${API_KEY}`,
-            'Content-Type': "application/json"
+    const API_URL = "https://a6a5-35-222-53-126.ngrok-free.app/routegicungduoc";
+    const data = {
+        "message" : save
+    };
+    const requestOptions = {
+        method: "POST",
+        headers:{
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [
-                {
-                    role: "system",
-                    content: "You are a helpful assistant."
-                },
-                {
-                    role: "user",
-                    content: "Hello!"
-                }
-            ]
+        body: JSON.stringify(data),
+
+    };
+
+    let message;
+
+    fetch(API_URL, requestOptions)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
         })
-    }
-    try{
-        const response = await fetch(API_URL,options);
-        const data = await response.json();
-        console.log(data);
-    } catch (error){
-        console.error(error);
-    }
-    const today = new Date()
-    let message = `
-		<div class="chatbox-message-item received">
-			<span class="chatbox-message-item-text">
-				Thank you for your awesome support!
-			</span>
-			<span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
-		</div>
-	`
-    chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
+        .then(data => {
+            console.log(data);
+            message = `
+                <div class="chatbox-message-item received">
+                    <span class="chatbox-message-item-text">
+                        ${data.answer}
+                    </span>
+                    <span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
+                </div>
+            `;
+            chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        }).finally(() => scrollBottom());
+
+    message = `
+        <p class="chatbox-message-no-message" style="font-size: 12px">Thinking... This may take a while :D</p>
+    `;
+    chatboxMessageWrapper.insertAdjacentHTML('beforeend', message);
     scrollBottom()
 }
 
