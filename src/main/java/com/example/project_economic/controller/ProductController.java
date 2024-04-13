@@ -186,26 +186,26 @@ public class ProductController {
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
 
 //        //External API post
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        JSONObject userID = new JSONObject();
-        userID.put("user_id", ((UserInfoDetails)authentication.getPrincipal()).getUserId());
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//        JSONObject userID = new JSONObject();
+//        userID.put("user_id", ((UserInfoDetails)authentication.getPrincipal()).getUserId());
+//
+//        HttpEntity<String> request =
+//                new HttpEntity<String>(userID.toString(), headers);
+//        String result =
+//                restTemplate.postForObject("https://2f5e-35-237-149-61.ngrok-free.app/traketqua", request, String.class);
+//
+//        JSONObject resultAsJSON = new JSONObject(result);
+//        JSONArray jsonArray = resultAsJSON.getJSONArray("item_ids");
+//
+//        List<ProductResponse> recommendedProducts= new ArrayList();
+//        for (int i = 0; i < jsonArray.length(); i++) {
+//            recommendedProducts.add(productService.findById(jsonArray.getLong(i)));
+//        }
 
-        HttpEntity<String> request =
-                new HttpEntity<String>(userID.toString(), headers);
-        String result =
-                restTemplate.postForObject("https://2f5e-35-237-149-61.ngrok-free.app/traketqua", request, String.class);
-
-        JSONObject resultAsJSON = new JSONObject(result);
-        JSONArray jsonArray = resultAsJSON.getJSONArray("item_ids");
-
-        List<ProductResponse> recommendedProducts= new ArrayList();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            recommendedProducts.add(productService.findById(jsonArray.getLong(i)));
-        }
-
-        model.addAttribute("recommendedProducts", recommendedProducts);
+        model.addAttribute("recommendedProducts", this.productService.findAllIsActived(pageSize, pageNumber));
         return "home/product-list";
     }
 

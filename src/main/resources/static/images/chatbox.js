@@ -90,45 +90,45 @@ function writeMessage() {
 }
 
 async function autoReply() {
-    const today = new Date();
-
-    const API_URL = "https://a6a5-35-222-53-126.ngrok-free.app/routegicungduoc";
-    const data = {
-        "message" : save
-    };
-    const requestOptions = {
-        method: "POST",
-        headers:{
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-
-    };
-
-    let message;
-
-    fetch(API_URL, requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log(data);
-            message = `
-                <div class="chatbox-message-item received">
-                    <span class="chatbox-message-item-text">
-                        ${data.answer}
-                    </span>
-                    <span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
-                </div>
-            `;
-            chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        }).finally(() => scrollBottom());
+    // const today = new Date();
+    //
+    // const API_URL = "https://a6a5-35-222-53-126.ngrok-free.app/routegicungduoc";
+    // const data = {
+    //     "message" : save
+    // };
+    // const requestOptions = {
+    //     method: "POST",
+    //     headers:{
+    //         "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(data),
+    //
+    // };
+    //
+    // let message;
+    //
+    // fetch(API_URL, requestOptions)
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(data => {
+    //         console.log(data);
+    //         message = `
+    //             <div class="chatbox-message-item received">
+    //                 <span class="chatbox-message-item-text">
+    //                     ${data.answer}
+    //                 </span>
+    //                 <span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span>
+    //             </div>
+    //         `;
+    //         chatboxMessageWrapper.insertAdjacentHTML('beforeend', message)
+    //     })
+    //     .catch(error => {
+    //         console.error('Error:', error);
+    //     }).finally(() => scrollBottom());
 
     message = `
         <p class="chatbox-message-no-message" style="font-size: 12px">Thinking... This may take a while :D</p>
