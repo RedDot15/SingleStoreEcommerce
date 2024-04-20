@@ -46,11 +46,6 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/index")
-    public String welcomePage(){
-        return "index";
-    }
-
     @GetMapping("/login")
     public String showFormLogin(Model model){
         model.addAttribute("userEntity" ,new UserEntity());
@@ -112,10 +107,6 @@ public class UserController {
         model.addAttribute("error","Sai tài khoản hoặc mật khẩu!");
         model.addAttribute("userEntity", new UserEntity());
         return "login/index";
-    }
-    @GetMapping("/product-detail")
-    public String getproductdetail(){
-        return "home/product-detail";
     }
 
     @GetMapping("/categories")
