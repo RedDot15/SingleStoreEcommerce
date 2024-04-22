@@ -59,6 +59,7 @@ public class ProductController {
             new Price(200000,400000),
             new Price(400000,1000000)
     );
+
     public List<CountProuductDto>countProuductDtos(){
         List<CountProuductDto>countProuductDtos=new ArrayList<>();
         List<Object[]>objects=this.productService.countProductByCategoryId();
@@ -173,15 +174,17 @@ public class ProductController {
             Principal principal
     ) throws URISyntaxException {
         int pageSize=9;
+        model.addAttribute("products", this.productService.findAllIsActived(pageSize, pageNumber));
+        model.addAttribute("categories",this.categoryService.findAllByActived());
+        model.addAttribute("prices",prices);
+
         PageProductResponse pageProductResponse=productService.findAllPagination(pageNumber,pageSize);
         model.addAttribute("currentPage",pageNumber);
         model.addAttribute("show_pagination","all");
         model.addAttribute("lastPage",pageProductResponse.getLastPage());
         model.addAttribute("previousPage",pageNumber>1?pageNumber-1:pageNumber);
         model.addAttribute("totalPage",new int[pageProductResponse.getTotalPage()]);
-        model.addAttribute("categories",this.categoryService.findAllByActived());
-        model.addAttribute("products", this.productService.findAllIsActived(pageSize, pageNumber));
-        model.addAttribute("prices",prices);
+
 
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
 

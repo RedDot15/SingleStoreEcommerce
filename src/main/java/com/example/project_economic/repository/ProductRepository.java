@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
-    @Query(value = "select p.category_id, count(p.product_id)  productCount from products p where p.is_actived=true group by p.category_id order by productCount desc",nativeQuery = true)
+    @Query(value = "select p.category_id, count(p.product_id) productCount from products p where p.is_actived=true group by p.category_id order by productCount desc",nativeQuery = true)
     List<Object[]> countProductByCategoryId();
     @Query(value = "select * from products as p inner join categories as c on p.category_id=c.category_id where c.category_id=?1 and c.is_actived=true and p.is_actived=true",nativeQuery = true)
     List<ProductEntity>findAllProductByCategoryId(Long category_id);

@@ -51,6 +51,7 @@ public class UserController {
         model.addAttribute("userEntity" ,new UserEntity());
         return "login/index";
     }
+
     @GetMapping("/register")
     public String showFormRegister(Model model){
         model.addAttribute("userEntity" ,new UserEntity());
@@ -61,7 +62,7 @@ public class UserController {
     public String registerUser(@ModelAttribute("userEntity") UserEntity userEntity, @RequestParam("reset-password") String pass, Model model){
         try{
             if(pass.equals(userEntity.getPassword()))
-                this.userService.createUser(userEntity);
+                userService.createUser(userEntity);
             else{
                 model.addAttribute("wrongpass", "Mật khẩu không khớp!");
                 model.addAttribute("userEntity", userEntity);
@@ -69,7 +70,6 @@ public class UserController {
             }
             return "login/index";
         }catch (Exception exception){
-
             model.addAttribute("error",exception.getMessage());
             return "register/index";
         }
@@ -102,6 +102,7 @@ public class UserController {
         model.addAttribute("error","Sai tài khoản hoặc mật khẩu!");
         return "login/index";
     }
+
     @GetMapping("/fail")
     public String loginFail(Model model){
         model.addAttribute("error","Sai tài khoản hoặc mật khẩu!");
@@ -162,6 +163,7 @@ public class UserController {
         model.addAttribute("recommendedProducts", this.productService.findAllIsActived(9, 1));
         return "home/product-list";
     }
+
     @PostMapping("/update/")
     public String updateUser(@ModelAttribute("users") UserEntity userEntity, @RequestParam("id") Long userId, Model model){
         try{

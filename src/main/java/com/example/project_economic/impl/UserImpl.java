@@ -15,6 +15,7 @@ public class UserImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Override
     public UserEntity createUser(UserEntity userEntity) throws Exception {
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
@@ -26,10 +27,12 @@ public class UserImpl implements UserService {
         UserEntity userSaved=this.userRepository.save(userEntity);
         return userSaved;
     }
+
     @Override
     public UserEntity findUserById(Long userId) {
         return this.userRepository.findById(userId).get();
     }
+
     @Override
     public UserEntity update(UserEntity userEntity, Long userId){
         UserEntity userEntityFind = new UserEntity();
