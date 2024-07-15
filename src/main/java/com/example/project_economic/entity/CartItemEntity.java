@@ -1,33 +1,34 @@
 package com.example.project_economic.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "cart_items")
-public class CartItemEntity {
+public class CartItemEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private ProductEntity product;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_with_attributes_id")
+    private ProductWithAttributesEntity productWithAttributesEntity;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserEntity user;
+    private UserEntity userEntity;
 
-    private String size;
-    private String color;
     private int quantity;
-    public Long totalInCartItem(){
-        return this.quantity*this.getProduct().getSalePrice();
-    }
+
+//    public Long totalInCartItem(){
+//        return quantity*this.getProduct().getSalePrice();
+//    }
 }

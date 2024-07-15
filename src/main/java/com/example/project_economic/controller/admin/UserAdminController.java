@@ -1,0 +1,220 @@
+package com.example.project_economic.controller.admin;
+
+import com.example.project_economic.dto.request.Price;
+import com.example.project_economic.dto.request.UserRequest;
+import com.example.project_economic.entity.UserEntity;
+import com.example.project_economic.dto.response.PageProductResponse;
+import com.example.project_economic.dto.response.ProductResponse;
+import com.example.project_economic.service.*;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
+
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Controller
+@RequestMapping("/admin/user")
+public class UserAdminController {
+    UserService userService;
+    CategoryService categoryService;
+//    AuthenticationManager authenticationManager;
+    ProductService productService;
+    CartItemService cartItemService;
+    HistoryCardService historyCardService;
+    ProductAdminController productAdminController;
+
+    @GetMapping("")
+    public String showAll(Model model){
+        //Call service Get all user available in database
+        //Pushing to view using model
+        model.addAttribute("userResponseList",userService.getAll());
+        //Declare SizeRequest Dto for create-request-form
+        //Pushing to view using model
+        model.addAttribute("userRequest",new UserRequest());
+        return "/admin/user.html";
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute UserRequest userRequest) throws Exception {
+        //Handle already available exception
+
+        //Call service to Add/Update userEntity to database
+        userService.save(userRequest);
+        return "redirect:/admin/user";
+    }
+
+    @DeleteMapping(value = "/delete/{userId}")
+    public String delete(@PathVariable Long userId){
+        //Call service to Delete selected userEntity by id
+        userService.deleteById(userId);
+        return "redirect:/admin/user";
+    }
+
+    @GetMapping("/login")
+    public String showFormLogin(Model model){
+        model.addAttribute("userEntity" ,new UserEntity());
+        return "login/index";
+    }
+
+    @GetMapping("/register")
+    public String showFormRegister(Model model){
+        model.addAttribute("userEntity" ,new UserEntity());
+        return "register/index";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@ModelAttribute("userEntity") UserEntity userEntity, @RequestParam("reset-password") String pass, Model model){
+        try{
+            if(pass.equals(userEntity.getPassword()))
+                userService.createUser(userEntity);
+            else{
+                model.addAttribute("wrongpass", "Mật khẩu không khớp!");
+                model.addAttribute("userEntity", userEntity);
+                return "register/index";
+            }
+            return "login/index";
+        }catch (Exception exception){
+            model.addAttribute("error",exception.getMessage());
+            return "register/index";
+        }
+    }
+
+//    @PostMapping("/home")
+//    public String loginPage(@ModelAttribute("userEntity") UserEntity userEntity, Model model){
+//        try{
+////            Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+//                    userEntity.getUsername(),
+//                    userEntity.getPassword()
+//            ));
+////            System.out.println(principal.getName());
+////            if(authentication.isAuthenticated()){
+////                SecurityContextHolder.getContext().setAuthentication(authentication);
+////                String token=this.jwtService.generateToken(authentication.getName());
+////                model.addAttribute("token",token);
+////                model.addAttribute("username",authentication.getName());
+////                model.addAttribute("roles",authentication.getAuthorities().toString());
+////                model.addAttribute("products",this.findByAllProductActive());
+////                model.addAttribute("numbercart",this.cartItemService.countCart(1L));
+////                return "home/index";
+////
+////            }
+//
+//        }catch (Exception exception){
+//            model.addAttribute("error","Sai tài khoản hoặc mật khẩu!");
+//            return "login/index";
+//        }
+//        model.addAttribute("error","Sai tài khoản hoặc mật khẩu!");
+//        return "login/index";
+//    }
+
+    @GetMapping("/fail")
+    public String loginFail(Model model){
+        model.addAttribute("error","Sai tài khoản hoặc mật khẩu!");
+        model.addAttribute("userEntity", new UserEntity());
+        return "login/index";
+    }
+
+    List<Price>prices=List.of(
+            new Price(0,100000),
+            new Price(100000,200000),
+            new Price(200000,400000),
+            new Price(400000,1000000)
+    );
+
+    @GetMapping("/homepage")
+    public String getHomeIndex(Model model,Principal principal){
+//        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+//        model.addAttribute("userId",((UserInfoDetails)authentication.getPrincipal()).getUserId());
+        model.addAttribute("username",principal.getName());
+        model.addAttribute("products", this.productService.getAllIsActiveByPage(9, 1));
+//        model.addAttribute("numbercart",this.cartItemService.countCart(((UserInfoDetails)(authentication.getPrincipal())).getUserId()));
+        model.addAttribute("categories", this.categoryService.findAllByActived());
+        model.addAttribute("prices", prices);
+        int pageSize=9;
+        PageProductResponse pageProductResponse=productService.findAllPagination(1,9);
+        model.addAttribute("currentPage",1);
+        model.addAttribute("show_pagination","all");
+        model.addAttribute("lastPage",pageProductResponse.getLastPage());
+        model.addAttribute("previousPage",1);
+        model.addAttribute("totalPage",new int[pageProductResponse.getTotalPage()]);
+
+
+        //External API post
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//        JSONObject userID = new JSONObject();
+//        userID.put("user_id", ((UserInfoDetails)authentication.getPrincipal()).getUserId());
+//
+//        HttpEntity<String> request =
+//                new HttpEntity<String>(userID.toString(), headers);
+//        String result =
+//                restTemplate.postForObject("https://2f5e-35-237-149-61.ngrok-free.app/traketqua", request, String.class);
+//
+//        JSONObject resultAsJSON = new JSONObject(result);
+//        JSONArray jsonArray = resultAsJSON.getJSONArray("item_ids");
+//
+//        List<ProductResponse> recommendedProducts= new ArrayList();
+//        for (int i = 0; i < jsonArray.length(); i++) {
+//            recommendedProducts.add(productService.findById(jsonArray.getLong(i)));
+//        }
+
+        model.addAttribute("recommendedProducts", this.productService.getAllIsActiveByPage(9, 1));
+        return "home/product-list";
+    }
+
+    @PostMapping("/update/")
+    public String updateUser(@ModelAttribute("users") UserEntity userEntity, @RequestParam("id") Long userId, Model model){
+        try{
+            this.userService.update(userEntity, userId);
+//            model.addAttribute("users",new UserEntity());
+        }catch (Exception exception){
+            model.addAttribute("error","error");
+            return "home/my-account";
+        }
+        model.addAttribute("history_card",this.historyCardService.findByUserId(userId));
+        model.addAttribute("user",this.userService.findUserById(userId));
+        return "home/my-account";
+    }
+
+//    @PostMapping("/change-password/")
+//    @ResponseBody
+//    public Integer changePassword(
+//                                 @RequestParam("userId") Long userId,
+//                                 @RequestParam("passNow") String passNow,
+//                                 @RequestParam("pass1") String pass1,
+//                                 @RequestParam("pass2") String pass2,
+//                                 Model model){
+//        try{
+//            UserEntity userEntity = this.userService.findUserById(userId);
+//            if(pass1.equals(pass2)){
+////                if (passwordEncoder.matches(passNow, this.userService.findUserById(userId).getPassword())){
+////                    userEntity.setPassword(passwordEncoder.encode(pass1));
+//                    this.userService.update(userEntity, userId);
+//                    return 0;
+//                }
+//                else{
+//                    return 1;
+//                }
+//            }
+//            else return 2;
+//        }catch (Exception exception){
+////            model.addAttribute("error","error");
+//        }
+////        model.addAttribute("history_card",this.historyCardService.findByUserId(userId));
+////        model.addAttribute("user",this.userService.findUserById(userId));
+//        return 0;
+//    }
+
+    public List<ProductResponse>findByAllProductActive(){
+        int pageSize = 10;
+        int pageNumber = 1;
+        return this.productService.getAllIsActive();
+    }
+}

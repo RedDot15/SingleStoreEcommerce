@@ -1,7 +1,7 @@
 package com.example.project_economic.service;
 
 
-import com.example.project_economic.dto.CommentDTO;
+import com.example.project_economic.dto.request.CommentDTO;
 import com.example.project_economic.entity.Comment;
 
 import java.util.List;

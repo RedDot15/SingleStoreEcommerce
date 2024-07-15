@@ -1,6 +1,6 @@
 package com.example.project_economic.impl;
 
-import com.example.project_economic.dto.CommentDTO;
+import com.example.project_economic.dto.request.CommentDTO;
 import com.example.project_economic.entity.Comment;
 import com.example.project_economic.repository.CommentRepository;
 import com.example.project_economic.repository.UserRepository;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;

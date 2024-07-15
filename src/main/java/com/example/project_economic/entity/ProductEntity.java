@@ -1,46 +1,64 @@
 package com.example.project_economic.entity;
 
+import com.example.project_economic.dto.request.ProductRequest;
+import com.example.project_economic.mapper.ColorMapper;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-@Entity
-@Table(name = "products")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity
+@Table(name = "product")
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
-    private Long id;
+    Long id;
+    String name;
+    String description;
+    Long costPrice;
+    Long salePrice;
+    Integer likes;
+    Boolean isActive;
 
-    private String name;
-    @Column(columnDefinition = "TEXT")
-    private String description;
-    private Long costPrice;
-    private Long salePrice;
-    private Integer currentQuantity;
-    private Integer Likes;
-    private String image;
-    private String image_type;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "category_id",referencedColumnName = "id")
+    CategoryEntity categoryEntity;
 
-    @Lob
-    @Column(name = "data",columnDefinition = "LONGBLOB")
-    private byte[] data;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "product_id")
+    List<ProductImageEntity> productImageEntityList;
 
-    @ManyToOne(fetch =FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id",referencedColumnName = "category_id")
-    private CategoryEntity categoryEntity;
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+//    @JoinTable(
+//            name = "product_with_attributes",
+//            joinColumns = @JoinColumn(name = "product_id"),
+//            inverseJoinColumns = @JoinColumn(name = "color_id")
+//    )
+//    Set<ColorEntity> colorEntitySet;
 
-    @ManyToOne(fetch =FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "seller_id",referencedColumnName = "id")
-    private UserEntity userEntity;
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+//    @JoinTable(
+//            name = "product_with_attributes",
+//            joinColumns = @JoinColumn(name = "product_id"),
+//            inverseJoinColumns = @JoinColumn(name = "size_id")
+//    )
+//    Set<SizeEntity> sizeEntitySet;
 
-    private Boolean is_deteted;
-    private Boolean is_actived;
-    }
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "product_id")
+    List<ProductWithAttributesEntity> productWithAttributesEntityList;
+}

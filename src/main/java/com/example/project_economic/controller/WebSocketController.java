@@ -1,6 +1,6 @@
 package com.example.project_economic.controller;
 
-import com.example.project_economic.dto.CommentDTO;
+import com.example.project_economic.dto.request.CommentDTO;
 import com.example.project_economic.entity.Comment;
 import com.example.project_economic.service.CommentService;
 import com.example.project_economic.service.UserService;
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
