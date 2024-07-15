@@ -337,7 +337,7 @@
 <!-- End of wish list -->
 
 <!-- cart list -->
-<div th:fragment="offcanvas_cartlist" class="offcanvas offcanvas-cart-list">
+<div th:fragment="offcanvas_cartlist" class="offcanvas offcanvas-cart-list" th:user-id="${userId}">
     <div class="offcanvas-head">
         <div class="head-text">
             <img src="/client/assets/img/icons/add-bag2.svg" class="svg" alt="">

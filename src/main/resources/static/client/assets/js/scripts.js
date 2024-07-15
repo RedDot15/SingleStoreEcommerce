@@ -885,11 +885,54 @@ We may release future updates so it will overwrite this file. it's better and sa
             method: "get",
             url: "/isAuthenticated",
             success: function (data) {
-                if (data) {
-                    // User is authenticated
+                if (data) {// User is authenticated
+                    var userId = $('.offcanvas-cart-list').attr('user-id');
+
+                    //update cart
+                    $.ajax({
+                        method: "get",
+                        url: "/api/shoppingcarts/" + userId,
+                        success: function (data) {
+                            if (data) {// User is authenticated
+                                //clear
+                                $('.offcanvas-cart-list').find('.added-cart-list').empty();
+                                //update cart
+                                var totalCost = 0;
+                                for (let x of data) {
+                                    $('.offcanvas-cart-list').find('.added-cart-list').append('<div class="single-added-list">\n' +
+                                        '                <!-- single cart list left -->\n' +
+                                        '                <div class="single-item-left media align-items-center">\n' +
+                                        '                    <img src="/api/product-image/get/' + x.productWithAttributesEntity.productEntity.productImageEntityList[0].id + '" alt="" style="height: 80px; width: 80px; object-fit: contain">\n' +
+                                        '                    <div class="single-item-details midea-body">\n' +
+                                        '                        <h5><a href="#">' + x.productWithAttributesEntity.productEntity.name + '</a></h5>\n' +
+                                        '                        <p>' + getNumberWithCommas(x.productWithAttributesEntity.productEntity.salePrice) + ' X ' + x.quantity + '</p>\n' +
+                                        '                    </div>\n' +
+                                        '                </div>\n' +
+                                        '                <!-- End of single cart list left -->\n' +
+                                        '\n' +
+                                        '                <!-- Single wish list right -->\n' +
+                                        '                <div class="single-item-right text-right">\n' +
+                                        '                    <a href="#"><img src="/client/assets/img/icons/remove.svg" alt="" class="svg"></a>\n' +
+                                        '                    <h6>' + getNumberWithCommas(x.productWithAttributesEntity.productEntity.salePrice*x.quantity) + ' VND</h6>\n' +
+                                        '                </div>\n' +
+                                        '                <!-- End of Single cart list right -->\n' +
+                                        '            </div>')
+                                    totalCost += x.productWithAttributesEntity.productEntity.salePrice*x.quantity;
+                                }
+                                $('.offcanvas-cart-list').find('.total-price h3').text(getNumberWithCommas(totalCost) + ' VND');
+
+                                //show cart
+                                $('.offcanvas-cart-list').addClass('show');
+                            } else {// User is not authenticated
+                                //show login form
+                                $('.offcanvas-account').addClass('show')
+                            }
+                        }
+                    });
+                    //show cart
                     $('.offcanvas-cart-list').addClass('show');
-                } else {
-                    // User is not authenticated
+                } else {// User is not authenticated
+                    //show login form
                     $('.offcanvas-account').addClass('show')
                 }
             }
@@ -1228,7 +1271,11 @@ We may release future updates so it will overwrite this file. it's better and sa
                 //insert size data
                 $('.modal-quickview-container').find('.size-group').find('ul').empty();
                 for (let x of data) {
-                    $('.modal-quickview-container').find('.size-group').find('ul').append('<li><a href="#" class="product-size" size-id="' + x.id + '"><span>' + x.name + '</span></a></li>');
+                    $('.modal-quickview-container').find('.size-group').find('ul').append('<li>' +
+                        '                                                                   <a href="#" class="product-size" size-id="' + x.id + '">' +
+                        '                                                                       <span>' + x.name + '</span>' +
+                        '                                                                   </a>' +
+                        '                                                                  </li>');
                 }
                 //event handle: choose a size
                 $('.size-group a').on('click', function (e) {

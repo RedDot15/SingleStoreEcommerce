@@ -1,7 +1,9 @@
 package com.example.project_economic.dto.response;
 
 import com.example.project_economic.entity.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -23,7 +25,10 @@ public class ProductResponse {
     Integer likes;
     Boolean isActive;
 
-//    CategoryEntity categoryEntity;
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    CategoryResponse categoryResponse;
 //    Set<ColorEntity> colorEntitySet;
 //    Set<SizeEntity> sizeEntitySet;
     @JsonIgnore

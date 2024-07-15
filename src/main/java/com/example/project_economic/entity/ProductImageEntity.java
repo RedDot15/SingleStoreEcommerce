@@ -1,5 +1,6 @@
 package com.example.project_economic.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -20,6 +21,7 @@ public class ProductImageEntity {
     byte[] data;
     String imageType;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id")
     ProductEntity productEntity;

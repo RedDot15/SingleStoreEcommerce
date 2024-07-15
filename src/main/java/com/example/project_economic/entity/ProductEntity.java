@@ -2,7 +2,9 @@ package com.example.project_economic.entity;
 
 import com.example.project_economic.dto.request.ProductRequest;
 import com.example.project_economic.mapper.ColorMapper;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -31,12 +33,10 @@ public class ProductEntity {
     Integer likes;
     Boolean isActive;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_id",referencedColumnName = "id")
     CategoryEntity categoryEntity;
 
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "product_id")
     List<ProductImageEntity> productImageEntityList;
