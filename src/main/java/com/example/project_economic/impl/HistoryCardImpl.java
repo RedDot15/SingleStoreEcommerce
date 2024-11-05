@@ -1,6 +1,6 @@
 package com.example.project_economic.impl;
 
-import com.example.project_economic.dto.HistoryCartDto;
+import com.example.project_economic.dto.request.HistoryCartDto;
 import com.example.project_economic.entity.CartItemEntity;
 import com.example.project_economic.entity.HistoryCard;
 import com.example.project_economic.entity.UserEntity;
@@ -36,27 +36,27 @@ public class HistoryCardImpl implements HistoryCardService {
     }
 
 
-    @Override
-    public void addProductToHistoryCard(Long userId, Long discount){
-        DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("HH:mm:ss,dd/MM/yyyy");
-
-        UserEntity user=this.userRepository.findById(userId).get();
-        List<CartItemEntity> cartItemEntities=this.cartItemRepository.findByUser(user);
-        Long n = (Long)(discount/cartItemEntities.size());
-        for (CartItemEntity cartItem:cartItemEntities) {
-            HistoryCard historyCard=HistoryCard.builder()
-                    .quantity(cartItem.getQuantity())
-                    .product(cartItem.getProduct())
-                    .Received(false)
-                    .BoughtAt(dateTimeFormatter.format(LocalDateTime.now()))
-                    .user(user)
-                    .size(cartItem.getSize())
-                    .color(cartItem.getColor())
-                    .discount(n)
-                    .build();
-            this.historyCardRepository.save(historyCard);
-        }
-    }
+//    @Override
+//    public void addProductToHistoryCard(Long userId, Long discount){
+//        DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("HH:mm:ss,dd/MM/yyyy");
+//
+//        UserEntity user=this.userRepository.findById(userId).get();
+//        List<CartItemEntity> cartItemEntities=this.cartItemRepository.findByUser(user);
+//        Long n = (Long)(discount/cartItemEntities.size());
+//        for (CartItemEntity cartItem:cartItemEntities) {
+//            HistoryCard historyCard=HistoryCard.builder()
+//                    .quantity(cartItem.getQuantity())
+////                    .product(cartItem.getProduct())
+//                    .Received(false)
+//                    .BoughtAt(dateTimeFormatter.format(LocalDateTime.now()))
+//                    .user(user)
+////                    .size(cartItem.getSize())
+////                    .color(cartItem.getColor())
+//                    .discount(n)
+//                    .build();
+//            this.historyCardRepository.save(historyCard);
+//        }
+//    }
     @Override
     public List<HistoryCartDto> findByUserId(Long userId) {
         List<HistoryCard> historyCards=this.historyCardRepository.findByUser(

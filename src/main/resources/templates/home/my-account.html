@@ -1,270 +1,362 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>P Store - Tài khoản</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Document Title -->
+    <title>Ecommerce</title>
 
     <!-- Favicon -->
-    <link th:href="@{/images/favicon.ico}" rel="icon">
-    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-    <!--    <link href="/styles.css"/>-->
-    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Source+Code+Pro:700,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
 
-    <!-- CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link th:href="@{/lib/slick/slick.css}" rel="stylesheet">
-    <link th:href="@{/lib/slick/slick-theme.css}" rel="stylesheet">
+    <!-- CSS Files -->
+    <!--==== Google Fonts ====-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900%7CRoboto+Condensed:300,400,700"
+          rel="stylesheet">
 
-    <!-- Stylesheet -->
-    <link th:href="@{/css/stylehome.css}" rel="stylesheet">
+    <!--==== Bootstrap css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/bootstrap.min.css">
+
+    <!--==== Font-Awesome css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/font-awesome.min.css">
+
+    <!-- Owl Carusel css file -->
+    <link rel="stylesheet" href="/client/assets/plugins/owl-carousel/owl.carousel.min.css">
+
+    <!-- Magnific-Popup css file -->
+    <link rel="stylesheet" href="/client/assets/plugins/Magnific-Popup/magnific-popup.css">
+
+    <!-- animate css file -->
+    <link rel="stylesheet" href="/client/assets/plugins/animate-css/animate.min.css">
+
+    <!-- swiper -->
+    <link rel="stylesheet" href="/client/assets/plugins/swiper/swiper.min.css">
+
+    <!--==== Style css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/style.css">
+
+    <!--==== Responsive css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/responsive.css">
+
+    <!--==== Custom css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/custom.css">
 </head>
 
 <body>
-<div th:replace="home/index::header_home"></div>
-<div style="margin-top: 10rem"></div>
-<div class="breadcrumb-wrap">
-    <div class="container-fluid">
-        <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Pstore</a></li>
-            <li class="breadcrumb-item ">Tài khoản</li>
-        </ul>
-    </div>
-</div>
-
-<!-- My Account Start -->
-<div class="my-account">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" id="orders-nav" data-toggle="pill" href="#orders-tab" role="tab"><i class="fa fa-shopping-bag"></i>Đơn hàng</a>
-                    <a class="nav-link" id="account-nav" data-toggle="pill" href="#account-tab" role="tab"><i class="fa fa-user"></i>Thông tin tài khoản</a>
-                    <a class="nav-link " id="payment-nav" data-toggle="pill" href="#pass-tab" role="tab"><i class="fa fa-key"></i>Mật khẩu</a>
-
-                </div>
-            </div>
-            <div class="col-md-9">
-                <div class="tab-content">
-
-                    <div class="tab-pane fade show active" id="orders-tab" role="tabpanel" aria-labelledby="orders-nav">
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead class="thead-dark">
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Ngày đặt</th>
-                                    <th>Số lượng</th>
-                                    <th>Kích thước</th>
-                                    <th>Màu sắc</th>
-                                    <th>Thành tiền</th>
-                                    <th>Chi tiết</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="cart,index:${history_card}">
-                                    <td th:text="${index.count}"></td>
-                                    <td th:text="${cart.getProductResponse().getName()}">Product Name</td>
-                                    <td>
-                                        <img th:src="${cart.getProductResponse().getImage_url()}" style="width: 25px;height: 25px">
-                                    </td>
-                                    <td th:text="${cart.boughtAt}"></td>
-                                    <td th:text="${cart.quantity}"></td>
-                                    <td th:text="${cart.size}"></td>
-                                    <td th:text="${cart.color}"></td>
-                                    <td th:text="${cart.sumTotalInCartHistoryFormat()}"></td>
-                                    <td><button class="btn" th:onclick="searchProductById([[${cart.getProductResponse().getId()}]])">Xem</button></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div style="margin-bottom:280px"></div>
-                    </div>
-                    <div class="tab-pane fade" id="payment-tab" role="tabpanel" aria-labelledby="payment-nav">
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead class="thead-dark">
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Ngày đặt</th>
-                                    <th>Số lượng</th>
-                                    <th>Kích thước</th>
-                                    <th>Màu sắc</th>
-                                    <th>Thành tiền</th>
-                                    <th>Chi tiết</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="cart,index:${history_card}">
-                                    <td th:text="${index.count}"></td>
-                                    <td th:text="${cart.getProductResponse().getName()}">Product Name</td>
-                                    <td>
-                                        <img th:src="${cart.getProductResponse().getImage_url()}" style="width: 25px;height: 25px">
-                                    </td>
-                                    <td th:text="${cart.boughtAt}"></td>
-                                    <td th:text="${cart.quantity}"></td>
-                                    <td th:text="${cart.size}"></td>
-                                    <td th:text="${cart.color}"></td>
-                                    <td th:text="${cart.sumTotalInCartHistoryFormat()}"></td>
-                                    <td><button class="btn" th:onclick="searchProductById([[${cart.getProductResponse().getId()}]])">Xem</button></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                    <form class="tab-pane fade" id="account-tab" role="tabpanel" aria-labelledby="account-nav"
-                          th:action="@{/api/users/update/(id=${user.id})}" method="post" th:object="${users}">
-                        <h4>Thay đổi thông tin</h4>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="usern">Tên đăng nhập:</label>
-                                <input id = "usern" class="form-control" type="text" th:placeholder="${user.getUsername()}" th:field="*{username}">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="emai">Địa chỉ email:</label>
-                                <input id = "emai" class="form-control" type="email" th:placeholder="${user.getEmail()}" th:field="*{email}">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="add">Địa chỉ:</label>
-                                <input id="add" class="form-control" type="text" th:placeholder="${user.getAddress() != null ?
-                                            user.getAddress() : 'Địa chỉ'}" th:field="*{address}">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="phone">Số điện thoại:</label>
-                                <span id="phone-error" style="color: red;"></span>
-                                <input id = "phone" class="form-control" type="text" pattern="0[0-9]{6, 12}" th:placeholder="${user.getPhoneNumber() != null ?
-                                            user.getPhoneNumber() : 'Số điện thoại'}" th:field="*{phoneNumber}"  oninput="validatePhoneNumber(this)">
-
-                            </div>
-                            <div class="col-md-12">
-                                <button class="btn" type="submit">Cập nhật</button>
-                                <br><br>
-                            </div>
-                        </div>
-                    </form>
-
-<!--                    <form id="pass-tab" class="tab-pane fade" role="tabpanel" aria-labelledby="account-nav">-->
-
-                        <div id="pass-tab" class="tab-pane fade" role="tabpanel" aria-labelledby="payment-nav">
-                            <h4>Đổi mật khẩu</h4>
-                            <div class="col-md-12 align-items-center" id="error-pass-1" style="display: none; margin-bottom: 10px">
-                                <h6 class="text-danger" >Sai mật khẩu!</h6>
-                            </div>
-                            <div class="col-md-12 align-items-center" id="error-pass-2" style="display: none; margin-bottom: 10px">
-                                <h6 class="text-danger" >Mật khẩu không khớp!</h6>
-                            </div>
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <input class="form-control" type="password" name="pass-now" id="pass-now" placeholder="Mật khẩu hiện tại" oninput="validateInput(this)">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input class="form-control" type="password" name="pass-1" id="pass-1" placeholder="Mật khẩu mới" oninput="validateInput(this)">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input class="form-control" type="password" name="pass-2" id="pass-2" placeholder="Nhập lại mật khẩu" oninput="validateInput(this)">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <button class="btn" onclick="check_pass()">Lưu thay đổi</button>
-                                        <br><br>
-                                    </div>
-                                </div>
-                        </div>
-                    <div style="margin-bottom:130px"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-<!-- Footer -->
-<div class="footer-bottom">
+<!-- Preloader -->
+<div th:replace="/home/fragment :: preloader"></div>
+<!-- main header -->
+<header th:replace="/home/fragment :: main_header"></header>
+<!-- Catagory menu -->
+<div th:replace="/home/fragment :: category_menu" )></div>
+<!-- offcanvas menu-->
+<th:block th:replace="/home/fragment :: offcanvas_overlay_mainmenu"></th:block>
+<div th:replace="/home/fragment :: offcanvas_wishlist" )></div>
+<div th:replace="/home/fragment :: offcanvas_cartlist" )></div>
+<div th:replace="/home/fragment :: offcanvas_login_register" )></div>
+<!-- page title -->
+<section class="page-title-inner" data-bg-img='/client/assets/img/page-titlebg.png'>
     <div class="container">
         <div class="row">
-            <div class="col-md-6 copyright">
-                <p>Copyright &copy; Group 4.03</p>
-            </div>
-
-            <div class="col-md-6 template-by">
-                <a href="https://portal.ptit.edu.vn/">Posts and Telecommunications Institute of Technology</a>
+            <div class="col-12">
+                <!-- page title inner -->
+                <div class="page-title-wrap">
+                    <div class="page-title-heading"><h1 class="h2">My Account<span>Profile</span></h1></div>
+                    <ul class="list-unstyled mb-0">
+                        <li><a href="index.html">home</a></li>
+                        <li><a href="#">Shop</a></li>
+                        <li class="active"><a href="#">Check Out</a></li>
+                    </ul>
+                </div>
+                <!-- End of page title inner -->
             </div>
         </div>
     </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/lib/easing/easing.min.js}"></script>
-<script th:src="@{/lib/slick/slick.min.js}"></script>
-<script th:src="@{/images/main.js}"></script>
-<script th:inline="javascript">
-    function validatePhoneNumber(input) {
-        var phoneNumber = input.value;
-        var isValid = /^0[0-9]{6,12}$/.test(phoneNumber);
+</section>
 
-        if (!isValid) {
-            input.setCustomValidity('Số điện thoại phải bắt đầu từ 0 và có từ 7 - 13 chữ số.');
-        } else {
-            input.setCustomValidity('');
-        }
-    }
-    function validateInput(input) {
-        var inputField = input.value.trim();
+<!-- logout register wrap -->
+<section class="pt-30 pb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <!-- dash board nav-->
+                <div class="dashboard-inner">
+                    <nav>
+                        <ul class="nav-list nav">
+                            <li>
+                                <a class="dashboard-nav-item active" id="nav-dasboard" data-toggle="tab"
+                                   href="#dashboard"><span><img src="/client/assets/img/icons/dashboard.svg" class="svg"
+                                                                alt=""></span>Dashboard</a>
+                            </li>
+                            <li>
+                                <a class="dashboard-nav-item" id="nav-order" data-toggle="tab" href="#order"><span><img
+                                        src="/client/assets/img/icons/order.svg" class="svg" alt=""></span>Orders</a>
+                            </li>
+                            <li>
+                                <a class="dashboard-nav-item" id="nav-down" data-toggle="tab" href="#down"><span><img
+                                        src="/client/assets/img/icons/download.svg" class="svg" alt=""></span>Downloads</a>
+                            </li>
+                            <li>
+                                <a class="dashboard-nav-item" id="nav-address" data-toggle="tab"
+                                   href="#address"><span><img src="/client/assets/img/icons/address.svg" class="svg"
+                                                              alt=""></span>Address</a>
+                            </li>
+                            <li>
+                                <a class="dashboard-nav-item" id='nav-adetails' data-toggle="tab"
+                                   href="#adetails"><span><img src="/client/assets/img/icons/account3.svg" class="svg"
+                                                               alt=""></span>Account Details</a>
+                            </li>
+                            <li>
+                                <a class="dashboard-nav-item" href="logout.html"><span><img
+                                        src="/client/assets/img/icons/logout.svg" class="svg" alt=""></span>Log Out</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- End of dash board nav-->
+            </div>
+            <div class="col-lg-9">
+                <!-- dashboard content -->
+                <div class="deshboard-content-wrap">
+                    <div class="tab-content dashboad-tab-content">
+                        <div class="tab-pane fade show active" id="dashboard" role="tabpanel"
+                             aria-labelledby='nav-dasboard'>
+                            <!-- dashboard info -->
+                            <div class="dashboard-tab-info">
+                                <p>Hello [[${principalName}]], <span>(not [[${principalName}]]? <a href="/logout">Log out</a>)</span></p>
+                                <p>From your account dashboard you can view your <a href="#">recent orders</a>, <a
+                                        href="#">manage your shipping and billing<br>addresses</a>, and <a href="#">edit
+                                    your password and account details.</a></p>
+                            </div>
+                            <!--End of dashboard info -->
+                        </div>
 
-        if (inputField === '') {
-            input.setCustomValidity('Vui lòng điền vào đây!');
-        } else {
-            input.setCustomValidity('');
-        }
-    }
-    function check_pass(){
-        var passNow = document.getElementById("pass-now").value;
-        var pass1 = document.getElementById("pass-1").value;
-        var pass2 = document.getElementById("pass-2").value;
-        console.log(passNow)
-        var userId = ''
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            if (cookie.startsWith('userId=')) {
-                userId = cookie.substring('userId='.length, cookie.length);
-                break;
-            }
-        }
-        var url="/api/users/change-password/";
-        $.ajax({
-            type:"POST",
-            url:url,
-            data:{userId : userId, passNow : passNow, pass1 : pass1, pass2 : pass2},
-            success:function (res){
-                if(res == 0){
-                    alert("Đổi mật khẩu thành công!")
-                    window.location.href = 'http://localhost:3000/api/history-page/' + userId;
-                }
-                else if(res == 1 && pass1 != "" && pass2 != "" && passNow != ""){
-                    document.getElementById("error-pass-1").style.display = "block";
-                    document.getElementById("error-pass-2").style.display = "none";
-                }
-                else if(res == 2 && pass1 != "" && pass2 != "" && passNow != ""){
-                    document.getElementById("error-pass-1").style.display = "none";
-                    document.getElementById("error-pass-2").style.display = "block";
-                }
-            },
-            error:function (xhr,status,error){
-                console.log("nol");
-            }
-        })
-    }
-    getUserNameFromCookie();
-</script>
+                        <div class="tab-pane fade" id="order" role="tabpanel" aria-labelledby='nav-order'>
+                            <!-- dashboard order -->
+                            <div class="dashboard-tab-order">
+                                <!-- dashboard order table -->
+                                <table class="dashboard-order-table">
+                                    <tbody>
+                                    <tr>
+                                        <th>Order No</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <tr>
+                                        <td>#24567</td>
+                                        <td>20 August 2018</td>
+                                        <td>Processing</td>
+                                        <td>$458 .52 <span>(1 Items)</span></td>
+                                        <td><a href="#">View Details</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#24567</td>
+                                        <td>20 August 2018</td>
+                                        <td>Processing</td>
+                                        <td>$458 .52 <span>(1 Items)</span></td>
+                                        <td><a href="#">View Details</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#24567</td>
+                                        <td>20 August 2018</td>
+                                        <td>Processing</td>
+                                        <td>$458 .52 <span>(1 Items)</span></td>
+                                        <td><a href="#">View Details</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#24567</td>
+                                        <td>20 August 2018</td>
+                                        <td>Processing</td>
+                                        <td>$458 .52 <span>(1 Items)</span></td>
+                                        <td><a href="#">View Details</a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <!--End of dashboard order table -->
+                            </div>
+                            <!-- End of dashboard order -->
+                        </div>
+
+                        <div class="tab-pane fade" id="down" role="tabpanel" aria-labelledby='nav-down'>
+                            <!-- Download-->
+                            <div class="dashboard-tab-downlod">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p><span><i class="fa fa-warning"></i></span> No order has been made yet.</p>
+                                    <a href="#" class="go-shop-btn btn btn-fill-type">Go Shop</a>
+                                </div>
+                            </div>
+                            <!-- End of Download -->
+                        </div>
+
+                        <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby='nav-address'>
+                            <!-- address -->
+                            <div class="address-info">
+                                <p>The following addresses will be used on the checkout page by default.</p>
+                                <div class="address-info-inner clearfix">
+                                    <!-- Billing Information -->
+                                    <div class="billing-information">
+                                        <h5>Billing Information</h5>
+                                        <ul>
+                                            <li>
+                                                4968 Carolina Avenue
+                                            </li>
+                                            <li>Westminster CO</li>
+                                            <li>Colorado</li>
+                                            <li>80030</li>
+                                            <li>970-219-0067</li>
+                                            <li>Australia</li>
+                                            <li><a href="#">Edit</a></li>
+                                        </ul>
+                                    </div>
+                                    <!-- End of Billing Information -->
+
+                                    <!-- Shipping address -->
+                                    <div class="shipping-address">
+                                        <h5>Shipping address</h5>
+                                        <ul>
+                                            <li>
+                                                4968 Carolina Avenue
+                                            </li>
+                                            <li>Westminster CO</li>
+                                            <li>Colorado</li>
+                                            <li>80030</li>
+                                            <li>970-219-0067</li>
+                                            <li>Australia</li>
+                                            <li><a href="#">Edit</a></li>
+                                        </ul>
+                                    </div>
+                                    <!-- End of Shipping address -->
+                                </div>
+                            </div>
+                            <!-- End of address -->
+                        </div>
+
+                        <div class="tab-pane fade" id="adetails" role="tabpanel" aria-labelledby='nav-adetails'>
+                            <!-- Account details-->
+                            <div class="account-details">
+                                <form action="#" method="POST">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="text" class="theme-input-style" placeholder="First Name"
+                                                   required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="theme-input-style" placeholder="Last Name"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input type="text" class="theme-input-style" placeholder="Desplay Name"
+                                                   required>
+                                            <p>This will be how your name will be displayed in the account section and
+                                                in reviews</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <!-- password change -->
+                                            <div class="passwrd-change-wrap">
+                                                <h5>Password Change</h5>
+                                                <input type="number" class="theme-input-style"
+                                                       placeholder="Current Password" required>
+                                                <input type="number" class="theme-input-style"
+                                                       placeholder="New Password" required>
+                                                <input type="number" class="theme-input-style"
+                                                       placeholder="Confirm Password" required>
+                                                <div class="password-change-btn">
+                                                    <a href="#" class="go-shop-btn btn btn-fill-type">Submit</a>
+                                                </div>
+                                            </div>
+                                            <!-- End of password change -->
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- End of Account details -->
+                        </div>
+                    </div>
+                </div>
+                <!-- End of dashboard content -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of logout register wrap -->
+
+<!-- footer area -->
+<footer th:replace="/home/fragment :: footer"></footer>
+<!-- back to top -->
+<div th:replace="/home/fragment :: back_to_top"></div>
+<!-- Modal quick view-->
+<div th:replace="/home/fragment :: modal_quick_view"></div>
+<!-- add to cart notifacition 1-->
+<div th:replace="/home/fragment :: add_to_cart_noti_1"></div>
+<!-- add to cart notifacition 2-->
+<div th:replace="/home/fragment :: add_to_cart_noti_2"></div>
+
+<!-- JS Files -->
+<!-- ==== JQuery 3.3.1 js file==== -->
+<script src="/client/assets/js/jquery-3.3.1.min.js"></script>
+
+<!-- ==== Bootstrap js file==== -->
+<script src="/client/assets/js/bootstrap.bundle.min.js"></script>
+
+<!-- ==== JQuery Waypoint js file==== -->
+<script src="/client/assets/plugins/waypoints/jquery.waypoints.min.js"></script>
+
+<!-- ==== Parsley js file==== -->
+<script src="/client/assets/plugins/parsley/parsley.min.js"></script>
+
+<!-- ==== Ratina js file==== -->
+<script src="/client/assets/plugins/retinajs/retina.min.js"></script>
+
+<!--===parallax js file===-->
+<script src="/client/assets/plugins/parallax/parallax.js"></script>
+
+<!--=== hori parallax js file===-->
+<script src="/client/assets/plugins/parallax/parallaxh.min.js"></script>
+
+<!-- ==== Owl Carousel js file==== -->
+<script src="/client/assets/plugins/owl-carousel/owl.carousel.min.js"></script>
+
+<!-- ====Magnific-Popup js file==== -->
+<script src="/client/assets/plugins/Magnific-Popup/jquery.magnific-popup.min.js"></script>
+
+<!-- ====Counter js file=== -->
+<script src="/client/assets/plugins/waypoints/jquery.counterup.min.js"></script>
+
+<!-- ====packery==== -->
+<script src="/client/assets/plugins/isotope/packery.pkgd.min.js"></script>
+
+<!-- ====swiper==== -->
+<script src="/client/assets/plugins/swiper/swiper.min.js"></script>
+
+<!-- ====Count down js==== -->
+<script src="/client/assets/plugins/countdown/jquery.countdown.min.js"></script>
+
+<!-- ====zoom js==== -->
+<script src="/client/assets/plugins/Magnific-Popup/jquery.elevateZoom-3.0.8.min.js"></script>
+
+<!-- ====tweenMax==== -->
+<script src="/client/assets/plugins/tweenmax/TweenMax.min.js"></script>
+
+<!-- ====text animation==== -->
+<script src="/client/assets/plugins/text-animation/anime.min.js"></script>
+
+<!-- ====google map api key====-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2D8wrWMY3XZnuHO6C31uq90JiuaFzGws"></script>
+
+<!-- ==== Script js file==== -->
+<script src="/client/assets/js/scripts.js"></script>
+
+<!-- ==== Custom js file==== -->
+<script src="/client/assets/js/custom.js"></script>
 
 </body>
 </html>

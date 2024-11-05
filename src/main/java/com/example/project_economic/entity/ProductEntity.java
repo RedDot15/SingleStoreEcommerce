@@ -1,46 +1,54 @@
 package com.example.project_economic.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-import java.text.DecimalFormat;
 import java.util.Set;
 
-@Entity
-@Table(name = "products")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@SQLDelete(sql = "UPDATE product SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
+@Entity
+@Table(name = "product")
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
-    private Long id;
+    Long id;
+    String name;
+    String description;
+    Long costPrice;
+    Long salePrice;
+    Integer likes;
 
-    private String name;
-    @Column(columnDefinition = "TEXT")
-    private String description;
-    private Long costPrice;
-    private Long salePrice;
-    private Integer currentQuantity;
-    private Integer Likes;
-    private String image;
-    private String image_type;
+    Boolean isActive;
+    Boolean isDeleted;
 
-    @Lob
-    @Column(name = "data",columnDefinition = "LONGBLOB")
-    private byte[] data;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id",referencedColumnName = "id")
+    CategoryEntity categoryEntity;
 
-    @ManyToOne(fetch =FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id",referencedColumnName = "category_id")
-    private CategoryEntity categoryEntity;
+    @Where(clause = "is_active = true")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    Set<ProductImageEntity> activeProductImageEntitySet;
 
-    @ManyToOne(fetch =FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "seller_id",referencedColumnName = "id")
-    private UserEntity userEntity;
+    @Where(clause = "is_active = true")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    Set<ProductDetailEntity> activeProductDetailEntitySet;
 
-    private Boolean is_deteted;
-    private Boolean is_actived;
+    @PrePersist
+    void control(){
+        setLikes(0);
+        setIsActive(false);
+        setIsDeleted(false);
     }
+}

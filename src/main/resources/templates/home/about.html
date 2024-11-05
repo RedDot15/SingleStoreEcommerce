@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Document Title -->
+    <title>Ecommerce</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
+
+    <!-- CSS Files -->
+    <!--==== Google Fonts ====-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900%7CRoboto+Condensed:300,400,700"
+          rel="stylesheet">
+
+    <!--==== Bootstrap css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/bootstrap.min.css">
+
+    <!--==== Font-Awesome css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/font-awesome.min.css">
+
+    <!-- Owl Carusel css file -->
+    <link rel="stylesheet" href="/client/assets/plugins/owl-carousel/owl.carousel.min.css">
+
+    <!-- Magnific-Popup css file -->
+    <link rel="stylesheet" href="/client/assets/plugins/Magnific-Popup/magnific-popup.css">
+
+    <!-- animate css file -->
+    <link rel="stylesheet" href="/client/assets/plugins/animate-css/animate.min.css">
+
+    <!-- swiper -->
+    <link rel="stylesheet" href="/client/assets/plugins/swiper/swiper.min.css">
+
+    <!--==== Style css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/style.css">
+
+    <!--==== Responsive css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/responsive.css">
+
+    <!--==== Custom css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/custom.css">
+</head>
+
+<body>
+<!-- Preloader -->
+<div th:replace="/home/fragment :: preloader"></div>
+<!-- main header -->
+<header th:replace="/home/fragment :: main_header(faq='active')"></header>
+<!-- Catagory menu -->
+<div th:replace="/home/fragment :: category_menu" )></div>
+<!-- offcanvas menu-->
+<th:block th:replace="/home/fragment :: offcanvas_overlay_mainmenu"></th:block>
+<div th:replace="/home/fragment :: offcanvas_wishlist" )></div>
+<div th:replace="/home/fragment :: offcanvas_cartlist" )></div>
+<div th:replace="/home/fragment :: offcanvas_login_register" )></div>
+<!-- page title -->
+<section th:replace="/home/fragment :: page_title(title=~{::h1},text1='Home',text2='About Us')">
+    <h1 class="h2">Who We Are<span>About Us</span></h1>
+</section>
+
+<!-- about us  -->
+<section class="pt-100 pb-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <!-- about us intro -->
+                <div class="about-us-intro text-center">
+                    <!-- intro heading -->
+                    <div class="intro-heading">
+                        <h2>Dwelling and speedily ignorant<br> affronting invitation reasonable prosperous.</h2>
+                    </div>
+                    <!-- intro heading -->
+
+                    <!-- intro text -->
+                    <div class="intro-text-inner">
+                        <p>Considered discovered ye sentiments projecting entreaties of melancholy expression wound
+                            worth water an.<br>
+                            sigh with west same lady. Their saved linen downs tears son add music. Expression alteration
+                            entreaties <br>
+                            terminated est imating. Her too add narrow having wished. To things wound worth water he
+                            linen at vexed. Dwelling and speedily ignorant any steepest. Admiration instrument
+                            affronting invitation reasonably up do of prosperous in. Shy saw<br>
+                            declared man. Call in so want pure rank am dear were.</p>
+                    </div>
+                    <!--End of intro text -->
+                </div>
+                <!-- about us intro -->
+            </div>
+            <div class="col-12">
+                <!-- about image inner -->
+                <div class="about-image-inner type2">
+                    <div class="row">
+                        <div class="col-sm-6 about-image img1">
+                            <!-- about image -->
+                            <img src="/client/assets/img/featuerd/about-img1.png" data-rjs="2" alt="">
+                            <!-- End of about image -->
+                        </div>
+                        <div class="col-sm-5 offset-sm-1 about-image img2">
+                            <!-- about image -->
+                            <img src="/client/assets/img/featuerd/about-img2.png" data-rjs="2" alt="">
+                            <!-- End of about image -->
+                        </div>
+                        <div class="col-sm-5 offset-sm-5 about-image img3">
+                            <!-- about image -->
+                            <img src="/client/assets/img/featuerd/about-img3.png" data-rjs="2" alt="">
+                            <!-- End of about image -->
+                        </div>
+                    </div>
+                </div>
+                <!-- End of about image inner -->
+            </div>
+            <div class="col-12">
+                <!-- our goal inner -->
+                <div class="about-our-goal">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- About Our Mision -->
+                            <div class="about-our-mision-inner">
+                                <h2>Our Mision</h2>
+                                <p>Do so written as raising parlors spirits mr elderly. Made late in of highhold.
+                                    Carried females of up highest calling. Limits marked led silent dining her she far.
+                                    Sir but elegance marriage dwelling likewise position old pleasure men dissimilar
+                                    themselves.</p>
+                                <p>Simplicity no of casted as great day hours men. Stuff front to do allow to asked he.
+                                    Is allowance instantly strangers applauded discourse. Dissimilar themselves
+                                    simplicity no of contrasted as.</p>
+                            </div>
+                            <!--End of About Our Mision -->
+                        </div>
+                        <div class="col-md-6">
+                            <!-- about our principles -->
+                            <div class="about-our-principles-inner">
+                                <h2>Our Principles</h2>
+                                <p>Do so written as raising parlors spirits mr elderly. Made late in of high left hold.
+                                    Carried females of up highest calling. Limits marked led silent dining her she far
+                                    sir but elegance marriage dwelling likewise.</p>
+                                <ul class="mb-0 list-unstyled principle-list">
+                                    <li>Separate entrance welcomed sensible laughing one moderate.</li>
+                                    <li>As in merry at forth least ye stood.</li>
+                                    <li>Attachment companions man way excellence.</li>
+                                </ul>
+                            </div>
+                            <!-- End of about our principles -->
+                        </div>
+                    </div>
+                </div>
+                <!-- End of our goal inner -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of about us  -->
+
+<!-- about ceo -->
+<section class="pb-100">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-4">
+                <!-- about ceo image -->
+                <div class="about-ceo-image">
+                    <img src="/client/assets/img/featuerd/about-ceo.png" data-rjs="2" alt="">
+                </div>
+                <!-- End of about ceo image -->
+            </div>
+            <div class="col-md-8">
+                <!-- about ceo discription -->
+                <div class="ceo-discription-inner">
+                    <h3>Krista Copeland</h3>
+                    <h5 class="lato">CEO & Founder</h5>
+                    <p>Ignorant saw her her drawings marriage laughter. Case oh an that or away sigh do here upon.
+                        Acuteness you exquisite ourselves now end forfeited. Enquire ye without it is garrets up
+                        himself. Interest our nor received followed was.</p>
+                    <blockquote>
+                        “Case oh an that or away sigh do here upon you exquisite<br> ourselves now end forfeited.”
+                    </blockquote>
+                    <p>Interest our nor received followed was. Cultivated an up solicitude mr unpleasant.</p>
+                </div>
+                <!-- End of about ceo discription -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of about ceo -->
+
+<!-- our team -->
+<section class="pb-30">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <!-- section title -->
+                <div class="section-title-wrap type2">
+                    <div class="section-title">
+                        <h2>Team Members<span>strength</span></h2>
+                    </div>
+                </div>
+                <!-- End of section title -->
+            </div>
+        </div>
+        <div class="row">
+            <!-- single team member -->
+            <div class="col-md-6 col-lg-3">
+                <div class="single-team-member text-center">
+                    <!-- member image -->
+                    <div class="team-member-image">
+                        <img src="/client/assets/img/featuerd/member1.png" data-rjs="2" alt="">
+                    </div>
+                    <!-- End of member image -->
+
+                    <!-- member details -->
+                    <div class="team-member-details">
+                        <!-- member social area -->
+                        <div class="member-social-area">
+                            <ul class="list-unstyled mb-0">
+                                <li>
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-linkedin"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-google-plus"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--End of member social area -->
+                        <div class="about-member-body">
+                            <h4>Mahdi Hassan</h4>
+                            <p>Cheif Marketing Officer</p>
+                        </div>
+                    </div>
+                    <!-- End of member details -->
+                </div>
+            </div>
+            <!-- End of single team member -->
+
+            <!-- single team member -->
+            <div class="col-md-6 col-lg-3">
+                <div class="single-team-member text-center">
+                    <!-- member image -->
+                    <div class="team-member-image">
+                        <img src="/client/assets/img/featuerd/member2.png" data-rjs="2" alt="">
+                    </div>
+                    <!-- End of member image -->
+
+                    <!-- member details -->
+                    <div class="team-member-details">
+                        <!-- member social area -->
+                        <div class="member-social-area">
+                            <ul class="list-unstyled mb-0">
+                                <li>
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-linkedin"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-google-plus"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--End of member social area -->
+                        <div class="about-member-body">
+                            <h4>Ahsan Habib</h4>
+                            <p>Cheif Marketing Officer</p>
+                        </div>
+                    </div>
+                    <!-- End of member details -->
+                </div>
+            </div>
+            <!-- End of single team member -->
+
+            <!-- single team member -->
+            <div class="col-md-6 col-lg-3">
+                <div class="single-team-member text-center">
+                    <!-- member image -->
+                    <div class="team-member-image">
+                        <img src="/client/assets/img/featuerd/member3.png" data-rjs="2" alt="">
+                    </div>
+                    <!-- End of member image -->
+
+                    <!-- member details -->
+                    <div class="team-member-details">
+                        <!-- member social area -->
+                        <div class="member-social-area">
+                            <ul class="list-unstyled mb-0">
+                                <li>
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-linkedin"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-google-plus"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--End of member social area -->
+                        <div class="about-member-body">
+                            <h4>Emran Khan</h4>
+                            <p>Cheif Marketing Officer</p>
+                        </div>
+                    </div>
+                    <!-- End of member details -->
+                </div>
+            </div>
+            <!-- End of single team member -->
+
+            <!-- single team member -->
+            <div class="col-md-6 col-lg-3">
+                <div class="single-team-member text-center">
+                    <!-- member image -->
+                    <div class="team-member-image">
+                        <img src="/client/assets/img/featuerd/member4.png" data-rjs="2" alt="">
+                    </div>
+                    <!-- End of member image -->
+
+                    <!-- member details -->
+                    <div class="team-member-details">
+                        <!-- member social area -->
+                        <div class="member-social-area">
+                            <ul class="list-unstyled mb-0">
+                                <li>
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-linkedin"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-google-plus"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--End of member social area -->
+                        <div class="about-member-body">
+                            <h4>Akib Ullah</h4>
+                            <p>Cheif Marketing Officer</p>
+                        </div>
+                    </div>
+                    <!-- End of member details -->
+                </div>
+            </div>
+            <!-- End of single team member -->
+        </div>
+    </div>
+</section>
+<!-- End of our team -->
+
+<!-- testimonial -->
+<section class="pt-100 pb-100 secondary-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- section title -->
+                <div class="section-title-wrap type2">
+                    <div class="section-title">
+                        <h2>Feedback<span>Review</span></h2>
+                    </div>
+                </div>
+                <!-- End of section title -->
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- testimonial carousel -->
+                <div class="testimonial-carousel-wrap type2">
+                    <div class="owl-carousel testimonial-carousel">
+                        <!-- single testimoinal -->
+                        <div class="single-testimonial type2">
+                            <div class="author-name">
+                                <h4>Wanetta Gagner</h4>
+                                <p>Customer</p>
+                            </div>
+                            <div class="author-comment">
+                                <p>“ There are many variations of passages of available the majority<br>
+                                    have suffered alteration in some form, by injected humour, or randomised words
+                                    slightly believable there themselves simplicity no of isn't anything. ”</p>
+                            </div>
+                        </div>
+                        <!-- End of single testimoinal -->
+
+                        <!-- single testimoinal -->
+                        <div class="single-testimonial type2">
+                            <div class="author-name">
+                                <h4>Emma Westren</h4>
+                                <p>Customer</p>
+                            </div>
+                            <div class="author-comment">
+                                <p>“ There are many variations of passages of available the majority<br>
+                                    have suffered alteration in some form, by injected humour, or randomised words
+                                    slightly believable there themselves simplicity no of isn't anything. ”</p>
+                            </div>
+                        </div>
+                        <!-- End of single testimoinal -->
+
+                        <!-- single testimoinal -->
+                        <div class="single-testimonial type2">
+                            <div class="author-name">
+                                <h4>Gagner Wanetta</h4>
+                                <p>Customer</p>
+                            </div>
+                            <div class="author-comment">
+                                <p>“ There are many variations of passages of available the majority<br>
+                                    have suffered alteration in some form, by injected humour, or randomised words
+                                    slightly believable there themselves simplicity no of isn't anything. ”</p>
+                            </div>
+                        </div>
+                        <!-- End of single testimoinal -->
+                    </div>
+                    <div class="quote-icon">
+                        <i class="fa fa-quote-right"></i>
+                    </div>
+                </div>
+                <!-- End of testimonial carousel -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of testimonial -->
+
+<!-- Counter up area -->
+<section class="pt-90 pb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <!-- single counter -->
+                <div class="single-counter d-flex">
+                    <div class="counter-number">
+                        <h2 class="h1 counter">83</h2>
+                    </div>
+                    <div class="counter-details">
+                        <h5>Best Brands</h5>
+                    </div>
+                </div>
+                <!-- End of single counter -->
+            </div>
+            <div class="col-md-3">
+                <!-- single counter -->
+                <div class="single-counter d-flex">
+                    <div class="counter-number">
+                        <h2 class="h1 counter">24</h2>
+                    </div>
+                    <div class="counter-details">
+                        <h5>Total cATAGORIES</h5>
+                    </div>
+                </div>
+                <!-- End of single counter -->
+            </div>
+            <div class="col-md-3">
+                <!-- single counter -->
+                <div class="single-counter d-flex">
+                    <div class="counter-number">
+                        <h2 class="h1 counter">83</h2>
+                    </div>
+                    <div class="counter-details">
+                        <h5>Quality Products</h5>
+                    </div>
+                </div>
+                <!-- End of single counter -->
+            </div>
+            <div class="col-md-3">
+                <!-- single counter -->
+                <div class="single-counter d-flex">
+                    <div class="counter-number">
+                        <h2 class="h1 counter">8</h2>
+                        <span class="h1">k</span>
+                    </div>
+                    <div class="counter-details">
+                        <h5>Setisfied Customers</h5>
+                    </div>
+                </div>
+                <!-- End of single counter -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of Counter up area -->
+
+<!-- footer area -->
+<footer th:replace="/home/fragment :: footer"></footer>
+<!-- back to top -->
+<div th:replace="/home/fragment :: back_to_top"></div>
+<!-- Modal quick view-->
+<div th:replace="/home/fragment :: modal_quick_view"></div>
+<!-- add to cart notifacition 1-->
+<div th:replace="/home/fragment :: add_to_cart_noti_1"></div>
+<!-- add to cart notifacition 2-->
+<div th:replace="/home/fragment :: add_to_cart_noti_2"></div>
+
+<!-- JS Files -->
+<!-- ==== JQuery 3.3.1 js file==== -->
+<script src="/client/assets/js/jquery-3.3.1.min.js"></script>
+
+<!-- ==== Bootstrap js file==== -->
+<script src="/client/assets/js/bootstrap.bundle.min.js"></script>
+
+<!-- ==== JQuery Waypoint js file==== -->
+<script src="/client/assets/plugins/waypoints/jquery.waypoints.min.js"></script>
+
+<!-- ==== Parsley js file==== -->
+<script src="/client/assets/plugins/parsley/parsley.min.js"></script>
+
+<!-- ==== Ratina js file==== -->
+<script src="/client/assets/plugins/retinajs/retina.min.js"></script>
+
+<!--===parallax js file===-->
+<script src="/client/assets/plugins/parallax/parallax.js"></script>
+
+<!--=== hori parallax js file===-->
+<script src="/client/assets/plugins/parallax/parallaxh.min.js"></script>
+
+<!-- ==== Owl Carousel js file==== -->
+<script src="/client/assets/plugins/owl-carousel/owl.carousel.min.js"></script>
+
+<!-- ====Magnific-Popup js file==== -->
+<script src="/client/assets/plugins/Magnific-Popup/jquery.magnific-popup.min.js"></script>
+
+<!-- ====Counter js file=== -->
+<script src="/client/assets/plugins/waypoints/jquery.counterup.min.js"></script>
+
+<!-- ====packery==== -->
+<script src="/client/assets/plugins/isotope/packery.pkgd.min.js"></script>
+
+<!-- ====swiper==== -->
+<script src="/client/assets/plugins/swiper/swiper.min.js"></script>
+
+<!-- ====Count down js==== -->
+<script src="/client/assets/plugins/countdown/jquery.countdown.min.js"></script>
+
+<!-- ====zoom js==== -->
+<script src="/client/assets/plugins/Magnific-Popup/jquery.elevateZoom-3.0.8.min.js"></script>
+
+<!-- ====tweenMax==== -->
+<script src="/client/assets/plugins/tweenmax/TweenMax.min.js"></script>
+
+<!-- ====text animation==== -->
+<script src="/client/assets/plugins/text-animation/anime.min.js"></script>
+
+<!-- ====google map api key====-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2D8wrWMY3XZnuHO6C31uq90JiuaFzGws"></script>
+
+<!-- ==== Script js file==== -->
+<script src="/client/assets/js/scripts.js"></script>
+
+<!-- ==== Custom js file==== -->
+<script src="/client/assets/js/custom.js"></script>
+
+</body>
+</html>

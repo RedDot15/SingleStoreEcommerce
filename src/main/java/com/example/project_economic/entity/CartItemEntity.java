@@ -4,30 +4,28 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "cart_items")
-public class CartItemEntity {
+@Table(name = "cart_item")
+public class CartItemEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private ProductEntity product;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_detail_id")
+    private ProductDetailEntity productDetailEntity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private UserEntity user;
+    private UserEntity userEntity;
 
-    private String size;
-    private String color;
     private int quantity;
-    public Long totalInCartItem(){
-        return this.quantity*this.getProduct().getSalePrice();
-    }
+
+//    public Long totalInCartItem(){
+//        return quantity*this.getProduct().getSalePrice();
+//    }
 }

@@ -1,109 +1,970 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head">
+<head>
     <meta charset="utf-8">
-    <title>P Store</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Document Title -->
+    <title>Ecommerce</title>
+
     <!-- Favicon -->
-    <link th:href="@{/images/favicon.ico}" rel="icon">
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Source+Code+Pro:700,900&display=swap"
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
+
+    <!-- CSS Files -->
+    <!--==== Google Fonts ====-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900%7CRoboto+Condensed:300,400,700"
           rel="stylesheet">
-    <!-- CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link th:href="@{/lib/slick/slick.css}" rel="stylesheet">
-    <link th:href="@{/lib/slick/slick-theme.css}" rel="stylesheet">
-    <!--Stylesheet -->
-    <link th:href="@{/css/stylehome.css}" rel="stylesheet">
+
+    <!--==== Bootstrap css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/bootstrap.min.css">
+
+    <!--==== Font-Awesome css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/font-awesome.min.css">
+
+    <!-- Owl Carusel css file -->
+    <link rel="stylesheet" href="/client/assets/plugins/owl-carousel/owl.carousel.min.css">
+
+    <!-- Magnific-Popup css file -->
+    <link rel="stylesheet" href="/client/assets/plugins/Magnific-Popup/magnific-popup.css">
+
+    <!-- animate css file -->
+    <link rel="stylesheet" href="/client/assets/plugins/animate-css/animate.min.css">
+
+    <!-- swiper -->
+    <link rel="stylesheet" href="/client/assets/plugins/swiper/swiper.min.css">
+
+    <!--==== Style css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/style.css">
+
+    <!--==== Responsive css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/responsive.css">
+
+    <!--==== Custom css file ====-->
+    <link rel="stylesheet" href="/client/assets/css/custom.css">
 </head>
 
-<body>
-<!-- Nav Bar Start -->
-<div th:fragment="header_home" th:class="fixed-top">
-    <div class="nav" th:fragment="navbar">
-        <div class="container-fluid">
-            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-                <a href="#" class="navbar-brand">MENU</a>
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                    <div class="navbar-nav mr-auto">
-                        <a th:href="@{/api/products/all/1}" class="nav-item nav-link">Sản phẩm</a>
-                        <a href="#" class="nav-item nav-link" onclick="getNumberCartInEveryPage()">Giỏ hàng</a>
-                        <a th:href="@{/api/users/categories}" class="nav-item nav-link">Danh mục</a>
-                        <a href="#" class="nav-item nav-link" onclick="getCreateProduct()"> Tạo sản phẩm</a>
-                        <a href="#" class="nav-item nav-link" onclick="topageHistory()">Tài khoản</a>
-                    </div>
-                    <div class="navbar-nav ml-auto">
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="usernameweb"></a>
-                            <div class="dropdown-menu">
-                                <!--                                        <a href="#" class="dropdown-item">Login</a>-->
-                                <a href="/api/logout" class="dropdown-item" onclick="removeInfo()">Đăng xuất</a>
-                                <!--                                        <a href="#" class="dropdown-item">Register</a>-->
-                            </div>
-                        </div>
+<body>
+<!-- Preloader -->
+<div th:replace="~{/home/fragment :: preloader}"></div>
+
+<!-- main header -->
+<header class="header">
+    <div class="main-header-wraper main-header header-style3">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-4 col-sm-5 col-md-4">
+                    <div class="catagory-menu-left">
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <div class="main-menu-btn" title="main menu">
+                                    <a href="#">
+                                        <div id="menu-button"><i class="fa fa-bars"></i></div>
+                                    </a>
+                                    <!-- menu container -->
+                                    <div class="menu-container d-none">
+                                        <div class="menu-wraper">
+                                            <nav>
+                                                <!-- Header-menu -->
+                                                <div class="header-menu dosis">
+                                                    <div id="menu-button2"><i class="fa fa-bars"></i></div>
+                                                    <ul>
+                                                        <li class="active"><a href="/">Home</a></li>
+                                                        <li>
+                                                            <a href="/category">Category</a>
+                                                            <ul>
+                                                                <li><a href="categories-page1.html">Categories 1</a>
+                                                                </li>
+                                                                <li><a href="categories-page2.html">Categories 2</a>
+                                                                </li>
+                                                                <li><a href="categories-page3.html">Categories 3</a>
+                                                                </li>
+                                                                <li><a href="categories-page4.html">Categories 4</a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li><a href="/shop/1">Shop</a></li>
+                                                        <li><a href="/faq">FAQ</a></li>
+                                                        <li><a href="/about">About</a></li>
+                                                        <li><a href="/contact">Contact</a></li>
+                                                    </ul>
+                                                </div>
+                                                <!-- End of Header-menu -->
+                                            </nav>
+                                        </div>
+                                    </div>
+                                    <!--End of menu container -->
+                                </div>
+                            </li>
+                            <li>
+                                <div class="menu-btn" title="Category menu">
+                                    <a href="#">
+                                        <img src="/client/assets/img/icons/manu-button.svg" alt="" class="svg">
+                                    </a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="search-btn" title="search">
+                                    <a href="#">
+                                        <img src="/client/assets/img/icons/search-button.svg" alt="" class="svg">
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </nav>
-        </div>
-    </div>
-    <th:block th:fragment="search">
-        <div class="bottom-bar">
-            <div class="container-fluid">
-                <div class="row align-items-center">
-                    <div class="col-md-3">
+
+                <div class="col-5 col-sm-3 col-md-4">
+                    <div class="logo-container text-center">
+                        <!-- Logo -->
                         <div class="logo">
-                            <a th:href="@{/api/products/all/1}">
-                                <img th:src="@{/images/logoaut.png}" alt="Logo">
+                            <a href="index.html">
+                                <img class='default-logo' src="/client/assets/img/logo.png" data-rjs="2"
+                                     alt="ecommerce">
+                                <img class='sticky-logo' src="/client/assets/img/logo2.png" data-rjs="2"
+                                     alt="ecommerce">
                             </a>
                         </div>
+                        <!-- End of Logo -->
                     </div>
-                    <div class="col-md-6">
+                </div>
+                <div class="col-3 col-sm-4 col-md-4">
+                    <!-- modal menu -->
+                    <div class="modal-menu-container">
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <div class="cart-btn" title="Cart list">
+                                    <a href="#">
+                                        <img src="/client/assets/img/icons/add-bag.svg" alt="" class="svg">
+                                    </a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="wishlist-btn-off" title="Wish list">
+                                    <a href="#">
+                                        <img src="/client/assets/img/icons/wishlist.svg" alt="" class="svg">
+                                    </a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="account-btn" title="account list">
+                                    <a href="#">
+                                        <img src="/client/assets/img/icons/account.svg" alt="" class="svg">
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="col-md-3">
-                        <div class="user">
-                            <a href="#" class="btn cart" onclick="tocard()">
-                                <i class="fa fa-shopping-cart"></i>
-                                <span class="numbercart" th:text="${numbercart}"></span>
+                    <!-- End of modal menu -->
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- End of main header -->
+
+
+<!-- Catagory menu -->
+<div th:replace="~{/home/fragment :: category_menu}" )></div>
+<!-- offcanvas menu-->
+<!-- offcanvas overlay -->
+<div class="offcanvas-overlay"></div>
+<!-- offcanvas mainmenu -->
+<div class="offcanvas header-offcanvas2">
+    <div class="offcanvas-cancel">
+        <img src="/client/assets/img/icons/close-button.svg" class="svg" alt="">
+    </div>
+</div>
+<div th:replace="~{/home/fragment :: offcanvas_wishlist}" )></div>
+<div th:replace="~{/home/fragment :: offcanvas_cartlist}" )></div>
+<div th:replace="~{/home/fragment :: offcanvas_login_register}" )></div>
+
+<!-- sticky social area -->
+<div class="sticky-social-area">
+    <ul class="list-unstyled mb-0">
+        <li><a href="#"><span><i class="fa fa-facebook"></i></span>Facebook</a></li>
+        <li><a href="#"><span><i class="fa fa-twitter"></i></span>Twitter</a></li>
+        <li><a href="#"><span><i class="fa fa-instagram"></i></span>Instagram</a></li>
+        <li><a href="#"><span><i class="fa fa-pinterest"></i></span>Pinterest</a></li>
+    </ul>
+</div>
+<!-- End of sticky social area -->
+
+<!-- End of offcanvas menu-->
+
+<!-- banner area -->
+<section class="banner-slider banner-slider3">
+    <div class="slider-inner-wrap" data-bg-img='/client/assets/img/banner/bannar3-img1.png'>
+        <div class="owl-carousel banner-carousel3">
+            <!-- single slider wrap -->
+            <div class="single-slider-wrap">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <!-- banner image -->
+                            <div class="banner-image" data-trigger="parallax_layers">
+                                <img src="/client/assets/img/banner/men5.png" alt="" data-depth="0.2">
+                            </div>
+                            <!-- banner image -->
+
+                            <!-- image caption -->
+                            <a href="shop-details.html">
+                                <div class="image-caption">
+                                    <h6>$ 764.26</h6>
+                                    <h5>JOE Joseph Abboud Brown <br> Smart Blazer Set</h5>
+                                </div>
                             </a>
+                            <!-- image caption -->
+
+                            <!-- dress details -->
+                            <div class="dress-details">
+                                <ul class="list-unstyled mb-30">
+                                    <li><a href="shop-details.html">
+                                        <div class="dress-image">
+                                            <img src="/client/assets/img/banner/dress-details1.jpg" alt="">
+                                        </div>
+                                        <h6>Long Blazer <span>$150.38</span></h6>
+                                    </a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-details.html">
+                                            <div class="dress-image">
+                                                <img src="/client/assets/img/banner/dress-details2.jpg" alt="">
+                                            </div>
+                                            <h6>White Pant <span>$80.38</span></h6>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-details.html">
+                                            <div class="dress-image">
+                                                <img src="/client/assets/img/banner/dress-details3.jpg" alt="">
+                                            </div>
+                                            <h6>Leather Shoe <span>$50.38</span></h6>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <!-- End of dress details -->
+                        </div>
+                        <div class="col-md-6">
+                            <!-- slider text -->
+                            <div class="single-slider-text">
+                                <span>Expression Of Individuals</span>
+                                <h1>Fashion Is Nothing But Choise</h1>
+                                <a href="#" class="btn">Shop Now</a>
+                            </div>
+                            <!-- End of slider text -->
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- single slider wrap -->
+
+            <!-- single slider wrap -->
+            <div class="single-slider-wrap right-content">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <!-- slider text -->
+                            <div class="single-slider-text">
+                                <span>Expression Of Individuals</span>
+                                <h1>Fashion Is Nothing But Choise</h1>
+                                <a href="#" class="btn">Shop Now</a>
+                            </div>
+                            <!-- End of slider text -->
+                        </div>
+                        <div class="col-md-6">
+                            <!-- banner image -->
+                            <div class="banner-image" data-trigger="parallax_layers">
+                                <img src="/client/assets/img/banner/man4.png" alt="" data-depth="0.2">
+                            </div>
+                            <!-- banner image -->
+
+                            <!-- image caption -->
+                            <a href="shop-details.html">
+                                <div class="image-caption">
+                                    <h6>$ 764.26</h6>
+                                    <h5>JOE Joseph Abboud Brown <br> Smart Blazer Set</h5>
+                                </div>
+                            </a>
+                            <!-- image caption -->
+
+                            <!-- dress details -->
+                            <div class="dress-details">
+                                <ul class="list-unstyled mb-30">
+                                    <li>
+                                        <a href="shop-details.html">
+                                            <div class="dress-image">
+                                                <img src="/client/assets/img/banner/dress-details4.jpg" alt="">
+                                            </div>
+                                            <h6>Blue Shirt <span>$150.38</span></h6>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-details.html">
+                                            <div class="dress-image">
+                                                <img src="/client/assets/img/banner/dress-details5.jpg" alt="">
+                                            </div>
+                                            <h6>Blue Jeans <span>$80.38</span></h6>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-details.html">
+                                            <div class="dress-image">
+                                                <img src="/client/assets/img/banner/dress-details6.jpg" alt="">
+                                            </div>
+                                            <h6>Green Convrs <span>$50.38</span></h6>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- End of dress details -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- single slider wrap -->
         </div>
-    </th:block>
-<!--    <script th:inline="javascript">-->
-<!--        /* Truyền username từ model xuống */-->
-<!--        var username = [[${username}]];-->
-<!--        var userId = [[${userId}]];-->
-<!--        var numbercart = [[${numbercart}]];-->
+    </div>
+</section>
+<!-- End of banner area -->
 
-<!--        /* Lưu username vào cookie */-->
-<!--        // document.cookie = "username=2; expires=Thu, 01 Jan 2025 00:00:00 UTC; path=/;";-->
-<!--        // document.cookie = "userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";-->
-<!--        // document.cookie = "numbercart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";-->
+<!-- our partner -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- partner inner -->
+                <div class="our-partner our-partner_inner">
+                    <ul class="list-unstyled mb-0">
+                        <li>
+                            <img src="/client/assets/img/partner/partner1.png" alt="">
+                        </li>
+                        <li>
+                            <img src="/client/assets/img/partner/partner2.png" alt="">
+                        </li>
+                        <li>
+                            <img src="/client/assets/img/partner/partner3.png" alt="">
+                        </li>
+                        <li>
+                            <img src="/client/assets/img/partner/partner4.png" alt="">
+                        </li>
+                        <li>
+                            <img src="/client/assets/img/partner/partner5.png" alt="">
+                        </li>
+                        <li>
+                            <img src="/client/assets/img/partner/partner6.png" alt="">
+                        </li>
+                    </ul>
+                </div>
+                <!-- partner inner -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ENd of our partner -->
 
-<!--        document.cookie = "userId=" + userId + "; expires=Wed, 18 Dec 2024 12:00:00 UTC; path=/"-->
-<!--        document.cookie = "username=" + username + "; expires=Wed, 18 Dec 2024 12:00:00 UTC; path=/";-->
-<!--        document.cookie = "numbercart=" + numbercart + "; expires=Wed, 18 Dec 2024 12:00:00 UTC; path=/";-->
-<!--        console.log(document.cookie);-->
-<!--        // console.log(document.cookie);-->
-<!--        getUserNameFromCookie();-->
-<!--    </script>-->
-</div>
+<!-- featured section -->
+<section class="pb-70">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- single feature area -->
+                <div class="single-featured-inner type2">
+                    <div class="featured-item-image">
+                        <img src="/client/assets/img/featuerd/featured-h3.jpg" data-rjs="2" alt="">
+                    </div>
+                    <div class="featured-content text-right">
+                        <div class="single-add">
+                            <p>#womenhat</p>
+                            <h3>Women's Faux<br> Leather Band Felt Floppy Hat</h3>
+                            <a href="#" class="btn">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+                <!--End of single feature area -->
+            </div>
+            <div class="col-md-6">
+                <!-- single feature area -->
+                <div class="single-featured-inner type2">
+                    <div class="featured-item-image">
+                        <img src="/client/assets/img/featuerd/featured2.jpg" data-rjs="2" alt="">
+                    </div>
+                    <div class="featured-content text-left">
+                        <div class="single-add">
+                            <p>#womenhat</p>
+                            <h3>Women's Faux<br> Leather Band Felt Floppy Hat</h3>
+                            <a href="#" class="btn">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+                <!--End of  single feature area -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <!-- single feature area -->
+                <div class="single-featured-inner type2 callto-action-inner"
+                     data-bg-img='/client/assets/img/add/cta-1.jpg'>
+                    <h3>All New #Summer Collection</h3>
+                    <h5>is <a href="#" class="btn">Available Here</a></h5>
+                </div>
+                <!--End of single feature area -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of featured section -->
 
-<!-- JavaScript -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-<script src="/lib/easing/easing.min.js"></script>
-<script src="/lib/slick/slick.min.js"></script>
-<!-- Template Javascript -->
-<script src="/images/main.js"></script>
+<!-- New Arrival -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <!-- section title -->
+                <div class="section-title-wrap">
+                    <div class="section-title">
+                        <h2>New Arrival<span>This Season</span></h2>
+                    </div>
+                </div>
+                <!-- End of section title -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-12 col-lg-3" th:each="productResponse : ${productResponseList}"
+                 th:object="${productResponse}">
+                <!-- single product -->
+                <div class="single-product" >
+                    <div class="product-item">
+                        <div class="product-thumb" >
+                            <!-- Product Image -->
+                            <div class="product-image" >
+                                <a th:href="@{*{'/product-detail/' + id}}" th:id="*{id}">
+                                    <img class='normal-state' data-rjs="2"
+                                         th:src="@{*{'/file/download/'+ productImageResponseSet[0].name}}" alt="">
+                                    <img class='hover-state' data-rjs="2"
+                                         th:src="@{*{'/file/download/'+ productImageResponseSet[productImageResponseSet.size()-1].name}}" alt="">
+                                </a>
+                            </div>
+                            <!-- End of Product Image -->
+
+                            <!-- product button -->
+                            <div class="product-buttons">
+<!--                                <div class="quick-btn">-->
+<!--                                    <div class="quick-icon-btn">-->
+<!--                                        <a href="#" class="quick_view">-->
+<!--                                            <span class="product-icon"><i class="fa fa-eye"-->
+<!--                                                                          aria-hidden="true"></i></span>-->
+<!--                                            <span class="icon-title">Quick View</span>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+                                <div class="addto-cart-btn">
+                                    <div class="addto-icon-btn">
+                                        <a href="#" th:data-id="*{id}">
+                                            <span class="product-icon"><img src="/client/assets/img/icons/add-bag.svg"
+                                                                            alt="" class="svg"></span>
+                                            <span class="icon-title">Add To Cart</span>
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <div class="wishlist-btn">
+                                    <div class="wishlist-icon-btn">
+                                        <a href="#">
+                                            <span class="product-icon"><img src="/client/assets/img/icons/wishlist.svg"
+                                                                            alt="" class="svg"></span>
+                                            <span class="icon-title">See Wish List</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="copmare-btn">
+                                    <div class="compare-icon-btn">
+                                        <a href="#">
+                                            <span class="product-icon"><img src="/client/assets/img/icons/compare.svg"
+                                                                            alt="" class="svg"></span>
+                                            <span class="icon-title">Compare</span>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- End of product button -->
+
+                            <!-- product title -->
+                            <div class="product-title">
+                                <h4><a th:href="@{*{'/product-detail/' + id}}" th:text="*{name}">Woven Throw Pillow</a></h4>
+                            </div>
+                            <!-- end of product title -->
+                        </div>
+
+                        <!-- product info -->
+                        <div class="product-info">
+                            <div class="product-price"><h5 th:text="*{#numbers.formatDecimal(salePrice,3,'POINT',0,'COMMA')} + ' VND'" ></h5></div>
+                            <div class="product-rating">
+                                <div class="star-rating">
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of product info -->
+                    </div>
+                </div>
+                <!-- End of single product -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of New Arrival -->
+
+<!-- quick service  -->
+<section class="pt-70 pb-40 pattern bdr-top bdr-btm">
+    <div class="quick-service-wrap">
+        <div class="container">
+            <div class="row">
+                <!-- single quick service -->
+                <div class="col-md-4">
+                    <div class="single-quick-service d-flex align-items-center">
+                        <img src="/client/assets/img/icons/car.svg" class="svg" alt="">
+                        <div class="single-quick-text">
+                            <h5>Free Shipping</h5>
+                            <p>Variations of passages of lorem isum is available here.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- enn of quick service -->
+
+                <!-- single quick service -->
+                <div class="col-md-4">
+                    <div class="single-quick-service d-flex align-items-center">
+                        <img src="/client/assets/img/icons/retry.svg" class="svg" alt="">
+                        <div class="single-quick-text">
+                            <h5>Return Gerantee</h5>
+                            <p>Variations of passages of lorem isum is available here.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- enn of quick service -->
+
+                <!-- single quick service -->
+                <div class="col-md-4">
+                    <div class="single-quick-service d-flex align-items-center">
+                        <img src="/client/assets/img/icons/card.svg" class="svg" alt="">
+                        <div class="single-quick-text">
+                            <h5>Easy Payment Policy</h5>
+                            <p>Variations of passages of lorem isum is available here.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- enn of quick service -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of quick service  -->
+
+<!-- About area -->
+<section class="pt-100 pb-70">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- about area -->
+                <div class="about-area-inner">
+                    <!-- about header -->
+                    <div class="about-header">
+                        <span>About Us</span>
+                        <h3>Best Brand Best Quality</h3>
+                    </div>
+                    <!--End of about header -->
+                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered
+                        alteration in some form words.</p>
+                    <p>
+                        If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything
+                        embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend
+                        to repeat predefined chunks as necessary, making this the first true generator on the Inter net.
+                        It uses a dictionary of over 200 Latin words.</p>
+                    <a href="#">More About Us <span><i class="fa fa-angle-right"></i></span></a>
+                </div>
+                <!--End of about area -->
+            </div>
+            <div class="col-md-6">
+                <div class="about-image-inner">
+                    <div class="about-image">
+                        <img src="/client/assets/img/featuerd/about1.jpg" alt="" class="about-image1">
+                        <img src="/client/assets/img/featuerd/about2.jpg" alt="" class="about-image2">
+                        <img src="/client/assets/img/featuerd/about3.jpg" alt="" class="about-image3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of About area -->
+
+<!-- Counter up area -->
+<section class="pb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <!-- single counter -->
+                <div class="single-counter d-flex">
+                    <div class="counter-number">
+                        <h2 class="h1 counter">83</h2>
+                    </div>
+                    <div class="counter-details">
+                        <h5>Best Brands</h5>
+                    </div>
+                </div>
+                <!-- End of single counter -->
+            </div>
+            <div class="col-md-3">
+                <!-- single counter -->
+                <div class="single-counter d-flex">
+                    <div class="counter-number">
+                        <h2 class="h1 counter">24</h2>
+                    </div>
+                    <div class="counter-details">
+                        <h5>Total actegories</h5>
+                    </div>
+                </div>
+                <!-- End of single counter -->
+            </div>
+            <div class="col-md-3">
+                <!-- single counter -->
+                <div class="single-counter d-flex">
+                    <div class="counter-number">
+                        <h2 class="h1 counter">83</h2>
+                    </div>
+                    <div class="counter-details">
+                        <h5>Quality Products</h5>
+                    </div>
+                </div>
+                <!-- End of single counter -->
+            </div>
+            <div class="col-md-3">
+                <!-- single counter -->
+                <div class="single-counter d-flex">
+                    <div class="counter-number">
+                        <h2 class="h1 counter">8</h2>
+                        <span class="h1">k</span>
+                    </div>
+                    <div class="counter-details">
+                        <h5>Setisfied Customers</h5>
+                    </div>
+                </div>
+                <!-- End of single counter -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of Counter up area -->
+
+<!-- testimonial -->
+<section class="secondary-bg">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <!-- testimonial image -->
+                <div class="testimonial-image">
+                    <img src="/client/assets/img/clients/testimonial.jpg" alt="">
+                </div>
+                <!-- End of testimonial image -->
+            </div>
+            <div class="col-md-6">
+                <!-- section title -->
+                <div class="section-title-wrap">
+                    <div class="section-title">
+                        <h2>Feedback<span>Review</span></h2>
+                    </div>
+                </div>
+                <!-- End of section title -->
+
+                <!-- testimonial carousel -->
+                <div class="testimonial-carousel-wrap">
+                    <div class="owl-carousel testimonial-carousel">
+                        <!-- single testimoinal -->
+                        <div class="single-testimonial">
+                            <div class="author-name">
+                                <h4>Wanetta Gagner</h4>
+                                <p>Customer</p>
+                            </div>
+                            <div class="author-comment">
+                                <p>“ There are many variations of passages of available the majority
+                                    have suffered alteration in some form, by injected humour, or randomised words
+                                    slightly believable there isn't anything. ”</p>
+                            </div>
+                        </div>
+                        <!-- End of single testimoinal -->
+
+                        <!-- single testimoinal -->
+                        <div class="single-testimonial">
+                            <div class="author-name">
+                                <h4>Emma Westren</h4>
+                                <p>Customer</p>
+                            </div>
+                            <div class="author-comment">
+                                <p>“ There are many variations of passages of available the majority
+                                    have suffered alteration in some form, by injected humour, or randomised words
+                                    slightly believable there isn't anything. ”</p>
+                            </div>
+                        </div>
+                        <!-- End of single testimoinal -->
+
+                        <!-- single testimoinal -->
+                        <div class="single-testimonial">
+                            <div class="author-name">
+                                <h4>Gagner Wanetta</h4>
+                                <p>Customer</p>
+                            </div>
+                            <div class="author-comment">
+                                <p>“ There are many variations of passages of available the majority
+                                    have suffered alteration in some form, by injected humour, or randomised words
+                                    slightly believable there isn't anything. ”</p>
+                            </div>
+                        </div>
+                        <!-- End of single testimoinal -->
+                    </div>
+                    <div class="quote-icon">
+                        <i class="fa fa-quote-right"></i>
+                    </div>
+                </div>
+                <!-- End of testimonial carousel -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of testimonial -->
+
+
+<!-- our outlate -->
+<section class="pt-100 pb-60 secondary-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <!-- section title -->
+                <div class="section-title-wrap">
+                    <div class="section-title">
+                        <h2>Kinen Outlets<span>Showroom</span></h2>
+
+                    </div>
+                </div>
+                <!-- End of section title -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <!-- out late inner -->
+                <div class="outlate-inner">
+                    <ul class="list-unstyled mb-0">
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+
+                        <!-- single outlate -->
+                        <li>
+                            <p>Swamp Drive</p>
+                            <span>363 Cedar Lincoln Park,</span>
+                            <span>MI 48146</span>
+                        </li>
+                        <!--End of single outlate -->
+                    </ul>
+                </div>
+                <!-- ENd of out late inner -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of our outlate -->
+
+<!-- footer area -->
+<footer th:replace="~{/home/fragment :: footer}"></footer>
+<!-- back to top -->
+<div th:replace="~{/home/fragment :: back_to_top}"></div>
+<!-- Modal ads-->
+<div th:replace="~{/home/fragment :: modal_ads}"></div>
+<!-- Modal quick view-->
+<div th:replace="~{/home/fragment :: modal_quick_view}"></div>
+<!-- add to cart notifacition 1-->
+<div th:replace="~{/home/fragment :: add_to_cart_noti_1}"></div>
+<!-- add to cart notifacition 2-->
+<div th:replace="~{/home/fragment :: add_to_cart_noti_2}"></div>
+
+<!-- JS Files -->
+<!-- ==== JQuery 3.3.1 js file==== -->
+<script src="/client/assets/js/jquery-3.3.1.min.js"></script>
+
+<!-- ==== Bootstrap js file==== -->
+<script src="/client/assets/js/bootstrap.bundle.min.js"></script>
+
+<!-- ==== JQuery Waypoint js file==== -->
+<script src="/client/assets/plugins/waypoints/jquery.waypoints.min.js"></script>
+
+<!-- ==== Parsley js file==== -->
+<script src="/client/assets/plugins/parsley/parsley.min.js"></script>
+
+<!-- ==== Ratina js file==== -->
+<script src="/client/assets/plugins/retinajs/retina.min.js"></script>
+
+<!--===parallax js file===-->
+<script src="/client/assets/plugins/parallax/parallax.js"></script>
+
+<!--=== hori parallax js file===-->
+<script src="/client/assets/plugins/parallax/parallaxh.min.js"></script>
+
+<!-- ==== Owl Carousel js file==== -->
+<script src="/client/assets/plugins/owl-carousel/owl.carousel.min.js"></script>
+
+<!-- ====Magnific-Popup js file==== -->
+<script src="/client/assets/plugins/Magnific-Popup/jquery.magnific-popup.min.js"></script>
+
+<!-- ====Counter js file=== -->
+<script src="/client/assets/plugins/waypoints/jquery.counterup.min.js"></script>
+
+<!-- ====packery==== -->
+<script src="/client/assets/plugins/isotope/packery.pkgd.min.js"></script>
+
+<!-- ====swiper==== -->
+<script src="/client/assets/plugins/swiper/swiper.min.js"></script>
+
+<!-- ====Count down js==== -->
+<script src="/client/assets/plugins/countdown/jquery.countdown.min.js"></script>
+
+<!-- ====zoom js==== -->
+<script src="/client/assets/plugins/Magnific-Popup/jquery.elevateZoom-3.0.8.min.js"></script>
+
+<!-- ====tweenMax==== -->
+<script src="/client/assets/plugins/tweenmax/TweenMax.min.js"></script>
+
+<!-- ====text animation==== -->
+<script src="/client/assets/plugins/text-animation/anime.min.js"></script>
+
+<!-- ====google map api key====-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2D8wrWMY3XZnuHO6C31uq90JiuaFzGws"></script>
+
+<!-- ==== Script js file==== -->
+<script src="/client/assets/js/scripts.js"></script>
+
+<!-- ==== Custom js file==== -->
+<script src="/client/assets/js/custom.js"></script>
 
 </body>
 </html>

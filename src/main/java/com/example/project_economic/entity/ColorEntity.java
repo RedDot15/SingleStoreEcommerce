@@ -1,0 +1,43 @@
+package com.example.project_economic.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+import java.util.List;
+import java.util.Set;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@SQLDelete(sql = "UPDATE color SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
+@Entity
+@Table(name = "color")
+public class ColorEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+    String name;
+    String hexCode;
+
+    Boolean isDeleted;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "color_id")
+    Set<ProductDetailEntity> productDetailEntitySet;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "color_id")
+    Set<ProductImageEntity> productImageEntitySet;
+
+    @PrePersist
+    void control(){
+        setIsDeleted(false);
+    }
+}

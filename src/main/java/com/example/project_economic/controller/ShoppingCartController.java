@@ -1,15 +1,12 @@
 package com.example.project_economic.controller;
 
-import com.example.project_economic.entity.CartItemEntity;
 import com.example.project_economic.entity.DiscountEntity;
 import com.example.project_economic.entity.UserEntity;
-import com.example.project_economic.response.CartItemResponse;
+import com.example.project_economic.dto.response.CartItemResponse;
 import com.example.project_economic.service.CartItemService;
 import com.example.project_economic.service.DiscountService;
 import com.example.project_economic.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +25,10 @@ public class ShoppingCartController {
     @GetMapping("/{userId}")
     public String showShoppingCart(Model model,
             @PathVariable Long userId){
-        List<CartItemResponse> cartItemEntities = this.cartItemService.listCartItem(userId);
-        UserEntity userEntity = userService.findUserById(userId);
-        model.addAttribute("user", userEntity);
-        model.addAttribute("cartItems",cartItemEntities);
+//        List<CartItemResponse> cartItemEntities = this.cartItemService.listCartItem(userId);
+//        UserEntity userEntity = userService.findUserById(userId);
+//        model.addAttribute("user", userEntity);
+//        model.addAttribute("cartItems",cartItemEntities);
         return "home/cart";
     }
     @PostMapping("/{discountName}")
