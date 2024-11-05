@@ -92,11 +92,11 @@
                                     <td>
                                         <div type="button" class="btn btn-outline-success"
                                                 style="color: #34ce57; border:1.5px solid #34ce57;background: #34ce57;color: black"
-                                                disabled th:if="${category.is_actived()}">Active
+                                                 th:if="${category.is_actived()}">Active
                                         </div>
                                         <a th:href="@{/api/categories/update/active/(id=${category.id})}" th:unless="${category.is_actived()}">
                                             <div type="button" class="btn btn-outline-success"
-                                                    style="color: #34ce57; border:1.5px solid #34ce57" disabled
+                                                    style="color: #34ce57; border:1.5px solid #34ce57"
                                                     >Active
                                             </div>
                                         </a>
@@ -104,11 +104,11 @@
                                     <td>
                                         <div type="button" class="btn btn-outline-success"
                                                 style="color: red; border:1.5px solid red;background: red ;color: black"
-                                                disabled th:unless="${category.is_actived()}">Hidden
+                                                 th:unless="${category.is_actived()}">Hidden
                                         </div>
                                         <a th:href="@{/api/categories/update/delete/(id=${category.id})}" th:if="${category.is_actived()}">
                                             <div type="button" class="btn btn-outline-danger"
-                                                    style="color: red; border:1.5px solid red" disabled
+                                                    style="color: red; border:1.5px solid red"
                                                     >Hidden
                                             </div>
                                         </a>

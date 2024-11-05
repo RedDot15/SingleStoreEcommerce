@@ -1,6 +1,6 @@
 package com.example.project_economic.controller;
 
-import com.example.project_economic.dto.CommentDTO;
+import com.example.project_economic.dto.request.CommentDTO;
 import com.example.project_economic.entity.Comment;
 import com.example.project_economic.service.CommentService;
 import com.example.project_economic.service.UserService;
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,7 +29,7 @@ public class WebSocketController {
                     .productId(comment.getProductId())
                     .content(comment.getContent())
                     .userId(comment.getUserId())
-                    .userName(userService.findUserById(comment.getUserId()).getUsername())
+//                    .userName(userService.findUserById(comment.getUserId()).getUsername())
                     .step(comment.getStep())
                     .star(comment.getStar())
                     .build();
@@ -48,7 +47,7 @@ public class WebSocketController {
                     .userId(comment1.getUserId())
                     .step(comment1.getStep())
                     .star(comment1.getStar())
-                    .userName(userService.findUserById(comment.getUserId()).getUsername())
+//                    .userName(userService.findUserById(comment.getUserId()).getUsername())
                     .commentParentId(commentDTO.getCommentParentId())
                     .build();
             return commentDTO1;

@@ -1,7 +1,7 @@
 package com.example.project_economic.utils;
 
 import com.example.project_economic.entity.ProductEntity;
-import com.example.project_economic.response.ProductResponse;
+import com.example.project_economic.dto.response.ProductResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -14,9 +14,9 @@ public class ProductUtils {
         productResponse.setDescription(productSaved.getDescription());
         productResponse.setCostPrice(productSaved.getCostPrice());
         productResponse.setSalePrice(productSaved.getSalePrice());
-        productResponse.setCurrentQuantity(productSaved.getCurrentQuantity());
+//        productResponse.setCurrentQuantity(productSaved.getCurrentQuantity());
         productResponse.setLikes(productSaved.getLikes());
-        productResponse.setImage(productSaved.getImage());
+//        productResponse.setImage(productSaved.getImage());
         //url
         String url = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
@@ -24,11 +24,11 @@ public class ProductUtils {
                 .path("/get/")
                 .path(productSaved.getId().toString())
                 .toUriString();
-        productResponse.setImage_url(url);
-        productResponse.setImage_type(productSaved.getImage_type());
-        productResponse.setCategoryEntity(productSaved.getCategoryEntity());
-        productResponse.setIs_deleted(productSaved.getIs_deteted());
-        productResponse.setIs_actived(productSaved.getIs_actived());
+//        productResponse.setImage_url(url);
+//        productResponse.setImage_type(productSaved.getImage_type());
+//        productResponse.setCategoryEntity(productSaved.getCategoryEntity());
+//        productResponse.setIs_deleted(productSaved.getIs_deteted());
+        productResponse.setIsActive(productSaved.getIsActive());
         return productResponse;
     }
 }

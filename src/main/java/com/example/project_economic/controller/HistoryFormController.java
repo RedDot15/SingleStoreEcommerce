@@ -25,7 +25,7 @@ public class HistoryFormController {
     @GetMapping("/{userId}")
     public String showPageHistory(Model model, @PathVariable Long userId){
         model.addAttribute("history_card",this.historyCardService.findByUserId(userId));
-        model.addAttribute("user",this.userService.findUserById(userId));
+//        model.addAttribute("user",this.userService.findUserById(userId));
         model.addAttribute("users", new UserEntity());
         return "home/my-account";
     }

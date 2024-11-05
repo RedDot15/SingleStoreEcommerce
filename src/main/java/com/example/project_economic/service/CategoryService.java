@@ -1,19 +1,32 @@
 package com.example.project_economic.service;
 
-import com.example.project_economic.dto.CategoryDto;
-import com.example.project_economic.entity.CategoryEntity;
+import com.example.project_economic.dto.request.CategoryRequest;
+import com.example.project_economic.dto.response.CategoryResponse;
 
-import java.util.List;
+import java.util.Set;
 
 public interface CategoryService {
-    //admin
-    List<CategoryEntity>findAll();
-    CategoryEntity save(CategoryEntity categoryEntity);
-    CategoryEntity findById(Long id);
-    CategoryEntity update(CategoryEntity categoryEntity,Long id);
-    void deleteById(Long id);
-    void enableById(Long id);
-    List<CategoryEntity>findAllByActived();
-    //customer
-    List<CategoryDto>getCategoryAndProduct();
+    Set<CategoryResponse> getAllForAdmin();
+
+    Set<CategoryResponse> getAllActive();
+
+    Boolean existsById(Long id);
+
+    Boolean existsByName(String name);
+
+    Boolean existsByNameExceptId(String name, Long id);
+
+    CategoryResponse getFirstById(Long id);
+
+    CategoryResponse create(CategoryRequest categoryRequest);
+
+    CategoryResponse update(CategoryRequest categoryRequest);
+
+    void delete(Long id);
+
+    Boolean activateCheck(Long id);
+
+    CategoryResponse activate(Long id);
+
+    CategoryResponse deactivate(Long id);
 }

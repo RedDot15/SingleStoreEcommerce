@@ -1,38 +1,44 @@
 package com.example.project_economic.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@SQLDelete(sql = "UPDATE category SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
 @Entity
-@Table(name = "categories")
+@Table(name = "category")
 public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id")
-    private Long id;
+    Long id;
     @Column(name = "name",unique = true)
-    private String name;
-    private String createdDate;
-    private boolean is_deleted = false;
-    private boolean is_actived=true;
-    public CategoryEntity(String name){
-        this.name=name;
-        this.is_actived=true;
-        this.is_deleted=false;
-        DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("HH:mm:ss,dd/MM/yyyy");
-        this.createdDate=dateTimeFormatter.format(LocalDateTime.now());
-    }
-    public void updateTime(){
-        DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("HH:mm:ss,dd/MM/yyyy");
-        this.createdDate=dateTimeFormatter.format(LocalDateTime.now());
+    String name;
+    String createdDate;
+
+    Boolean isActive;
+    Boolean isDeleted;
+
+    @Where(clause = "is_active = true")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    Set<ProductEntity> activeProductEntitySet;
+
+    @PrePersist
+    public void control() {
+        setCreatedDate(DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy").format(LocalDateTime.now()));
+        setIsActive(false);
+        setIsDeleted(false);
     }
 }
