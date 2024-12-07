@@ -1,32 +1,27 @@
 package com.example.project_economic.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.project_economic.utils.CurrencyFormatter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartItemResponse {
-    private Long id;
-    private ProductDetailResponse productDetailResponse;
-    @JsonIgnore
-    private UserResponse userResponse;
-    private int quantity;
-//    public String totalInCartItem(){
-//        String formattedNumber = String.valueOf((this.quantity*this.productResponse.getSalePrice()));
-//        StringBuilder result = new StringBuilder();
-//        for (int i = 0; i < formattedNumber.length(); i++) {
-//            char currentChar = formattedNumber.charAt(i);
-//            if (Character.isDigit(currentChar) && i > 0 && (formattedNumber.length() - i) % 3 == 0) result.append('.');
-//            result.append(currentChar);
-//        }
-//        System.out.println(result.toString());
-//        return result.toString();
-//    }
+    Long id;
 
-    public Long totalInCartItem(){
-        return quantity * productDetailResponse.getProductResponse().getSalePrice();
+    ProductDetailResponse productDetailResponse;
+
+    Integer quantity;
+
+    public String totalMoney(){
+        return CurrencyFormatter.getFormattedCurrency(
+                productDetailResponse.getProductResponse().getSalePrice()
+                        .multiply(new BigDecimal(quantity)).toString()
+        );
     }
 }

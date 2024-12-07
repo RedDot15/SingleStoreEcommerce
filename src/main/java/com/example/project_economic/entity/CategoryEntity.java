@@ -7,7 +7,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 @Data
@@ -23,11 +22,14 @@ public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     @Column(name = "name",unique = true)
     String name;
-    String createdDate;
+
+    LocalDateTime createdDate;
 
     Boolean isActive;
+
     Boolean isDeleted;
 
     @Where(clause = "is_active = true")
@@ -37,8 +39,9 @@ public class CategoryEntity {
 
     @PrePersist
     public void control() {
-        setCreatedDate(DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy").format(LocalDateTime.now()));
+        setCreatedDate(LocalDateTime.now());
         setIsActive(false);
         setIsDeleted(false);
     }
 }
+

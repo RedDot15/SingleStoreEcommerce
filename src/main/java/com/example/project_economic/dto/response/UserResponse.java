@@ -1,21 +1,30 @@
 package com.example.project_economic.dto.response;
 
-import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
+public class UserResponse implements Comparable{
     Long id;
+
     String username;
-    String password;
+
     String role;
+
     String email;
+
     String phoneNumber;
+
     String address;
+
     Boolean isActive;
+
+    @Override
+    public int compareTo(Object o) {
+        return id.compareTo(((UserResponse)o).getId());
+    }
 }

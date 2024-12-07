@@ -1,60 +1,46 @@
 package com.example.project_economic.dto.response;
 
+import com.example.project_economic.utils.CurrencyFormatter;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductResponse {
+public class ProductResponse implements Comparable{
     Long id;
+
     String name;
+
     String description;
-    Long costPrice;
-    Long salePrice;
+
+    BigDecimal costPrice;
+
+    BigDecimal salePrice;
+
     Integer likes;
+
     Boolean isActive;
 
     CategoryResponse categoryResponse;
-    Set<ColorResponse> colorResponseSet;
-    Set<SizeResponse> sizeResponseSet;
-    Set<ProductImageResponse> activeProductImageResponseSet;
-    Set<ProductDetailResponse> activeProductDetailResponseSet;
 
-    public String getSalePriceFormat(){
-        try{
-            String formattedNumber = this.salePrice.toString();
-            StringBuilder result = new StringBuilder();
-            for (int i = 0; i < formattedNumber.length(); i++) {
-                char currentChar = formattedNumber.charAt(i);
-                if (Character.isDigit(currentChar) && i > 0 && (formattedNumber.length() - i) % 3 == 0) result.append('.');
-                result.append(currentChar);
-            }
-            return result.toString() + '₫';
-        }
-        catch(Exception e){
-            return "123";
-        }
+    Set<ProductImageResponse> activeProductImageResponseSet;
+
+    public String getFormattedSalePrice(){
+        return CurrencyFormatter.getFormattedCurrency(salePrice.toString());
     }
 
-    public String getCostPriceFormat(){
-        try{
-            String formattedNumber = this.costPrice.toString();
-            StringBuilder result = new StringBuilder();
-            for (int i = 0; i < formattedNumber.length(); i++) {
-                char currentChar = formattedNumber.charAt(i);
-                if (Character.isDigit(currentChar) && i > 0 && (formattedNumber.length() - i) % 3 == 0) result.append('.');
-                result.append(currentChar);
-            }
-            return result.toString() + '₫';
-        }
-        catch (Exception e){
-            return "1234";
-        }
+    public String getFormattedCostPrice(){
+        return CurrencyFormatter.getFormattedCurrency(costPrice.toString());
+    }
 
+    @Override
+    public int compareTo(Object o) {
+        return id.compareTo(((ProductResponse)o).getId());
     }
 }

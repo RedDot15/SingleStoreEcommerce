@@ -1,115 +1,100 @@
 package com.example.project_economic.impl;
 
+import com.amazonaws.services.dlm.model.ResourceNotFoundException;
+import com.example.project_economic.dto.request.CartItemRequest;
 import com.example.project_economic.entity.*;
 import com.example.project_economic.mapper.CartItemMapper;
 import com.example.project_economic.repository.*;
 import com.example.project_economic.dto.response.CartItemResponse;
 import com.example.project_economic.service.CartItemService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.project_economic.service.UserService;
+import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Transactional
 @Service
 public class CartItemServiceImpl implements CartItemService {
-    @Autowired
-    private CartItemRepository cartItemRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private ProductDetailRepository productDetailRepository;
-    @Autowired
-    private SizeRepository sizeRepository;
-    @Autowired
-    private ColorRepository colorRepository;
-    @Autowired
-    private CartItemMapper cartItemMapper;
-
-//    @Override
-//    public List<CartItemResponse> listCartItem(Long userId) {
-//        UserEntity user=this.userRepository.findById(userId).get();
-//        List<CartItemEntity>cartItemEntities=this.cartItemRepository.findByUser(user);
-//        List<CartItemResponse>cartItemResponses=cartItemEntities.stream()
-//                .map(cartITemEntity->{
-//                    CartItemResponse cartItemResponse=new CartItemResponse();
-//                    cartItemResponse.setId(cartITemEntity.getId());
-//                    cartItemResponse.setProductResponse(productUtils.enity_to_response(cartITemEntity.getProduct()));
-//                    cartItemResponse.setQuantity(cartITemEntity.getQuantity());
-//                    cartItemResponse.setUser(cartITemEntity.getUser());
-//                    cartItemResponse.setSize(cartITemEntity.getSize());
-//                    cartItemResponse.setColor(cartITemEntity.getColor());
-//                    return cartItemResponse;
-//                }).collect(Collectors.toList());
-//
-//        return cartItemResponses;
-//    }
-
-//    @Override
-//    public CartItemEntity updateCard(Long cardId, Integer quantity) {
-//        Optional<CartItemEntity> cartItemEntityP =this.cartItemRepository.findById(cardId);
-//        if (cartItemEntityP.isPresent()){
-//            CartItemEntity cartItemEntity = cartItemEntityP.get();
-//            cartItemEntity.setQuantity(quantity);
-//            return this.cartItemRepository.save(cartItemEntity);
-//        }
-//        return null;
-//    }
+    CartItemRepository cartItemRepository;
+    UserRepository userRepository;
+    ProductDetailRepository productDetailRepository;
+    CartItemMapper cartItemMapper;
 
     @Override
-    public Set<CartItemResponse> getCartItemByUserId(Long userId) {
+    public List<CartItemResponse> getAllByUserId(Long userId) {
+        // Return result
         return cartItemRepository.findAllByUserId(userId)
                 .stream().map(cartItemMapper::toCartItemResponse)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override
-    public CartItemEntity addProduct(Long productId, Integer quantity, Long userId, Long sizeId, Long colorId) {
-        //find user
-        UserEntity userEntity = userRepository.findById(userId).get();
-
-        //find product
-        ProductDetailEntity productDetailEntity = productDetailRepository
-                .findFirstByProductIdAndColorIdAndSizeId(productId,colorId,sizeId);
-
-        CartItemEntity cartItemEntity = cartItemRepository.findByUserAndProductDetail(userEntity.getId(), productDetailEntity.getId());
-
-        if(cartItemEntity==null){
-            CartItemEntity cartItemEntity1 = new CartItemEntity();
-            cartItemEntity1.setQuantity(quantity);
-            cartItemEntity1.setProductDetailEntity(productDetailEntity);
-            cartItemEntity1.setUserEntity(userEntity);
-            return cartItemRepository.save(cartItemEntity1);
-        }
-        else{
-            int quantityNew = cartItemEntity.getQuantity()+quantity;
-            cartItemEntity.setQuantity(quantityNew);
-        }
-        return cartItemRepository.save(cartItemEntity);
+    public Long countAllByUserId(Long userId) {
+        // Return cart's size by user ID
+        return cartItemRepository.countAllByUserId(userId);
     }
 
     @Override
-    public void deleteCart(Long cartId) {
-        this.cartItemRepository.deleteById(cartId);
+    public CartItemResponse add(CartItemRequest cartItemRequest) {
+        // Checking if a matching cart-item exists
+        CartItemEntity cartItemEntity = cartItemRepository.findFirstByUserIdAndProductDetailId(
+                cartItemRequest.getUserId(),
+                cartItemRequest.getProductDetailId()
+        );
+        // If exist: Update cart-item
+        if (cartItemEntity != null){
+            // Calculate up new quantity
+            cartItemEntity.setQuantity(cartItemEntity.getQuantity() + cartItemRequest.getQuantity());
+            // Return result
+            return cartItemMapper.toCartItemResponse(
+                    cartItemRepository.save(cartItemEntity)
+            );
+        }
+        // Create new cart-item
+        CartItemEntity newCartItemEntity = CartItemEntity.builder()
+                .userEntity(userRepository.getReferenceById(cartItemRequest.getUserId()))
+                .productDetailEntity(productDetailRepository.getReferenceById(cartItemRequest.getProductDetailId()))
+                .quantity(cartItemRequest.getQuantity())
+                .build();
+        // Save and Return
+        return cartItemMapper.toCartItemResponse(
+                cartItemRepository.save(newCartItemEntity)
+        );
     }
 
-//    @Override
-//    public Long countCart(Long userId) {
-//        return this.cartItemRepository.countCart(userId);
-//    }
+    @Override
+    public CartItemResponse update(CartItemRequest cartItemRequest) {
+        // Get old & Not found/Deleted exception
+        CartItemEntity oldCartItemEntity = cartItemRepository.findById(cartItemRequest.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Cart-item to update not found"));
+        // Update
+        oldCartItemEntity.setQuantity(cartItemRequest.getQuantity());
+        // Save & Return
+        return cartItemMapper.toCartItemResponse(
+                cartItemRepository.save(oldCartItemEntity)
+        );
+    }
 
-//    @Override
-//    public boolean findCartByProductId(Long productId,Long userId) {
-//        Long cnt=this.cartItemRepository.countCartByProductIdAndUserId(productId,userId);
-//        if(cnt==0)return false;
-//        return true;
-//    }
-//
-//    @Override
-//    public void deleteAllCartByUserId(Long userId) {
-////        UserEntity user=this.userRepository.findById(userId).get();
-//        this.cartItemRepository.deleteAllCartByUserId(userId);
-//    }
+    @Override
+    public Long delete(Long id) {
+        // Delete cart-item
+        cartItemRepository.deleteById(id);
+        // Return id
+        return id;
+    }
+
+    @Override
+    public Long deleteAllByUserId(Long id) {
+        // Delete cart-item
+        cartItemRepository.deleteAllByUserId(id);
+        // Return id
+        return id;
+    }
 }

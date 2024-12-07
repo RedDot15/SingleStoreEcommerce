@@ -1,39 +1,37 @@
 package com.example.project_economic.controller;
 
-import com.example.project_economic.entity.Comment;
+import com.example.project_economic.dto.response.wrap.ResponseObject;
 import com.example.project_economic.service.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
-@RequestMapping(path = "/api/comments")
+@RequestMapping(path = "/comment")
 public class CommentController {
-    @Autowired
-    private CommentService commentService;
-    @PostMapping("/rep/")
-    public ResponseEntity<?>createComment(
-            @RequestParam("parentId")Long parentId,
-            @RequestParam("productId")Long productId,
-            @RequestParam("userId")Long userId,
-            @RequestBody Comment comment
-            ){
-        return ResponseEntity.ok(this.commentService.addReplyComment(comment,userId,productId,parentId));
+    CommentService commentService;
+
+    @GetMapping("/list/all/by/product/{productId}")
+    public ResponseEntity<ResponseObject> showAllCommentOfAProduct(@PathVariable Long productId){
+        return buildResponse(
+                HttpStatus.OK,
+                "All comments fetch successfully.",
+                commentService.getAllByProductId(productId)
+        );
     }
-    @PostMapping("/add/")
-    public ResponseEntity<Comment>addComment(
-            @RequestParam("productId")Long productId,
-            @RequestParam("userId")Long userId,
-            @RequestBody Comment commentEntity
-    ){
-        return ResponseEntity.ok(this.commentService.addComment(commentEntity,userId,productId));
-    }
-    @GetMapping("/{productId}")
-    public ResponseEntity<?>getAllComment(
-            @PathVariable Long productId
-    ){
-        return ResponseEntity.ok(this.commentService.findByPostId(productId));
+
+    private ResponseEntity<ResponseObject> buildResponse(HttpStatus status, String message, Object data) {
+        return ResponseEntity.status(status).body(
+                new ResponseObject(
+                        status.is2xxSuccessful() ? "ok" : "failed",
+                        message,
+                        data
+                )
+        );
     }
 }

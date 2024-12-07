@@ -1,13 +1,11 @@
 package com.example.project_economic.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -23,7 +21,9 @@ public class ColorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     String name;
+
     String hexCode;
 
     Boolean isDeleted;

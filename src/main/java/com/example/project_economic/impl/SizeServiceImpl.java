@@ -1,10 +1,11 @@
 package com.example.project_economic.impl;
 
+import com.amazonaws.services.dlm.model.ResourceNotFoundException;
 import com.example.project_economic.dto.request.SizeRequest;
 import com.example.project_economic.dto.response.SizeResponse;
 import com.example.project_economic.entity.*;
+import com.example.project_economic.exception.DuplicateException;
 import com.example.project_economic.mapper.SizeMapper;
-import com.example.project_economic.repository.ProductRepository;
 import com.example.project_economic.repository.ProductDetailRepository;
 import com.example.project_economic.repository.SizeRepository;
 import com.example.project_economic.service.ProductDetailService;
@@ -16,8 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -30,7 +29,6 @@ public class SizeServiceImpl implements SizeService {
     SizeRepository sizeRepository;
     SizeMapper sizeMapper;
     ProductService productService;
-    ProductRepository productRepository;
     ProductDetailRepository productDetailRepository;
     ProductDetailService productDetailService;
 
@@ -44,38 +42,30 @@ public class SizeServiceImpl implements SizeService {
     }
 
     @Override
-    public Set<SizeResponse> getAllSizeByProductId(Long productId) {
-        Boolean exist = productRepository.existsById(productId);
-        if (exist){
-            Set<ProductDetailEntity> productDetailEntitySet = productDetailRepository.findAllByProductId(productId);
-            Set<SizeEntity> sizeEntitySet = new HashSet<>();
-            for (ProductDetailEntity productDetailEntity : productDetailEntitySet){
-                sizeEntitySet.add(productDetailEntity.getSizeEntity());
-            }
-            return sizeEntitySet.stream().map(sizeMapper::toSizeResponse).collect(Collectors.toSet());
+    public Set<SizeResponse> getActiveByProductId(Long productId) {
+        // Product inactive exception
+        productService.validateProductIsActive(productId);
+        // Get product detail
+        Set<ProductDetailEntity> productDetailEntitySet = productDetailRepository.findActiveByProductId(productId);
+        // Get size
+        Set<SizeEntity> sizeEntitySet = new TreeSet<>();
+        for(ProductDetailEntity productDetailEntity : productDetailEntitySet){
+            sizeEntitySet.add(productDetailEntity.getSizeEntity());
         }
-        else{
-            return null;
-        }
+        // Return result
+        return new TreeSet<>(
+                sizeEntitySet
+                .stream().map(sizeMapper::toSizeResponse)
+                .collect(Collectors.toSet())
+        );
     }
 
     @Override
-    public Boolean existsById(Long id) {
-        return sizeRepository.existsById(id);
-    }
-
-    @Override
-    public Boolean existsByName(String name) {
-        return sizeRepository.existsByName(name);
-    }
-
-    @Override
-    public Boolean existsByNameExceptId(String name, Long id) {
-        return sizeRepository.existsByNameExceptId(name,id);
-    }
-
-    @Override
-    public SizeResponse create(SizeRequest sizeRequest) {
+    public SizeResponse add(SizeRequest sizeRequest) {
+        // Name duplicate exception
+        if (sizeRepository.existsByName(sizeRequest.getName()))
+            throw new DuplicateException("Size name duplicate.");
+        // Add & Return
         return sizeMapper.toSizeResponse(
                 sizeRepository.save(sizeMapper.toSizeEntity(sizeRequest))
         );
@@ -83,8 +73,12 @@ public class SizeServiceImpl implements SizeService {
 
     @Override
     public SizeResponse update(SizeRequest sizeRequest) {
-        //Get old
-        SizeEntity foundSizeEntity = sizeRepository.findFirstById(sizeRequest.getId());
+        // Name duplicate exception
+        if (sizeRepository.existsByNameExceptId(sizeRequest.getName(),sizeRequest.getId()))
+            throw new DuplicateException("Size name duplicate.");
+        // Get Entity & Not found/Deleted exception
+        SizeEntity foundSizeEntity = sizeRepository.findById(sizeRequest.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Size not found."));
         //Update
         sizeMapper.updateSizeEntityFromRequest(foundSizeEntity, sizeRequest);
         //Save
@@ -92,16 +86,17 @@ public class SizeServiceImpl implements SizeService {
     }
 
     @Override
-    public void delete(Long id) {
-        //Get entity
-        SizeEntity foundSizeEntity = sizeRepository.findFirstById(id);
-        //Also delete every product detail relate to this size
+    public Long delete(Long id) {
+        // Get entity
+        SizeEntity foundSizeEntity = sizeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Size not found."));
+        // Also delete every product detail relate to this size
         for (ProductDetailEntity productDetailEntity : foundSizeEntity.getProductDetailEntitySet()){
             productDetailService.delete(productDetailEntity.getId());
         }
-        //Delete color
+        // Delete color
         sizeRepository.delete(foundSizeEntity);
-        return;
+        // Return ID
+        return id;
     }
-
 }

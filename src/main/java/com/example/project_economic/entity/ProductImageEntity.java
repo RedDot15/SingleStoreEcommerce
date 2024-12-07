@@ -1,6 +1,5 @@
 package com.example.project_economic.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -20,17 +19,19 @@ public class ProductImageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     ProductEntity productEntity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "color_id")
     ColorEntity colorEntity;
 
     Boolean isActive;
+
     Boolean isDeleted;
 
     @PrePersist

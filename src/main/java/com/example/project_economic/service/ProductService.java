@@ -1,56 +1,41 @@
 package com.example.project_economic.service;
 
+import com.example.project_economic.dto.request.filter.ProductFilterRequest;
 import com.example.project_economic.dto.request.ProductRequest;
-import com.example.project_economic.dto.response.PageProductResponse;
-import com.example.project_economic.dto.response.ProductImageResponse;
 import com.example.project_economic.dto.response.ProductResponse;
-import org.springframework.web.multipart.MultipartFile;
+import com.example.project_economic.entity.ProductEntity;
+import org.springframework.data.domain.Page;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 
 public interface ProductService {
-    Set<ProductResponse> getAllActive();
+    // Fetch
+    Set<ProductResponse> getAll();
 
-    Set<ProductResponse> getAllForAdmin();
+    Set<ProductResponse> getActiveByCategoryId(Long categoryId);
 
-    List<ProductResponse> getAllIsActiveByPage(int pageSize, int pageNumber);
+    Page<ProductResponse> getActiveByFilter(Integer pageNumber, Integer pageSize,
+                                            ProductFilterRequest productFilterRequest);
 
-    Boolean existsById(Long id);
+    ProductResponse getActiveById(Long id);
 
-    Boolean existsByName(String name);
-
-    Boolean existsByNameExceptId(String name, Long id);
-
-    ProductResponse getFirstById(Long id);
-
-    ProductResponse create(ProductRequest productRequest);
+    // Create/Update/Delete
+    ProductResponse add(ProductRequest productRequest);
 
     ProductResponse update(ProductRequest productRequest);
 
-    void delete(Long id);
+    Long delete(Long id);
 
-    Boolean activateCheck(Long id);
-
+    // Change status
     ProductResponse activate(Long id);
 
     String getDeactivateCheckMessage(Long id);
 
     ProductResponse deactivate(Long id);
 
-    void likeById(Long productId);
+    // Update number of like
+    ProductResponse like(Long id);
 
-    List<Object[]> countProductByCategoryId();
-
-    ProductImageResponse findProductImageResponseById(Long id);
-
-    PageProductResponse findAllPagination(int pageNumber, int pageSize);
-
-    PageProductResponse findAllProductByKeyword(String keyword, Integer pageSize, Integer offsetNumber);
-
-    PageProductResponse findAllProductByCategory(Long id, int pageSize, int pageNumber);
-
-    PageProductResponse findAllProductByCostPrice(int first_price, int second_price, int pageSize, int offsetNumber);
-
+    // Validate
+    ProductEntity validateProductIsActive(Long id);
 }

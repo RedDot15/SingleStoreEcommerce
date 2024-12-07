@@ -6,20 +6,17 @@ import com.example.project_economic.dto.response.ProductDetailResponse;
 import java.util.Set;
 
 public interface ProductDetailService {
+    // Fetch
     Set<ProductDetailResponse> getAllByProductId(Long productId);
 
-    ProductDetailResponse getFirstById(Long id);
-
-    ProductDetailResponse getFirstByProductIdAndColorIdAndSizeId(Long productId, Long colorId, Long sizeId);
-
-    ProductDetailResponse create(ProductDetailRequest productDetailRequest);
+    // Create/Update/Delete
+    ProductDetailResponse add(ProductDetailRequest productDetailRequest);
 
     ProductDetailResponse update(ProductDetailRequest productDetailRequest);
 
-    void delete(Long id);
+    Long delete(Long id);
 
-    ProductDetailResponse calculateUp(ProductDetailRequest productDetailRequest);
-
+    // Change status
     ProductDetailResponse activate(Long id);
 
     String getDeactivateCheckMessage(Long id);

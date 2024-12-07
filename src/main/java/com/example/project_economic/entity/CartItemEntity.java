@@ -1,31 +1,28 @@
 package com.example.project_economic.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "cart_item")
 public class CartItemEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_detail_id")
-    private ProductDetailEntity productDetailEntity;
+    Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private UserEntity userEntity;
+    UserEntity userEntity;
 
-    private int quantity;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_detail_id")
+    ProductDetailEntity productDetailEntity;
 
-//    public Long totalInCartItem(){
-//        return quantity*this.getProduct().getSalePrice();
-//    }
+    Integer quantity;
 }

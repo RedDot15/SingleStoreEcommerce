@@ -1,13 +1,18 @@
 package com.example.project_economic.service;
 
-
-import com.example.project_economic.dto.request.CommentDTO;
-import com.example.project_economic.entity.Comment;
+import com.example.project_economic.dto.request.CommentRequest;
+import com.example.project_economic.dto.response.CommentResponse;
 
 import java.util.List;
 
 public interface CommentService {
-    List<CommentDTO>findByPostId(Long postId);
-    Comment addComment(Comment comment,Long userId,Long productId);
-    Comment addReplyComment(Comment comment,Long userId,Long productId,Long parentId);
+    // Fetch
+    List<CommentResponse> getAllByProductId(Long productId);
+
+    // Add/Edit/Delete
+    CommentResponse add(CommentRequest commentRequest);
+
+    CommentResponse edit(CommentRequest commentRequest);
+
+    Long delete(Long id);
 }

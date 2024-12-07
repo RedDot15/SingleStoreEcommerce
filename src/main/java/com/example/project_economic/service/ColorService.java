@@ -2,27 +2,22 @@ package com.example.project_economic.service;
 
 import com.example.project_economic.dto.request.ColorRequest;
 import com.example.project_economic.dto.response.ColorResponse;
-import com.example.project_economic.dto.response.ResponseObject;
-import org.springframework.http.ResponseEntity;
 
-import java.awt.*;
-import java.util.List;
 import java.util.Set;
 
 public interface ColorService {
+    // Fetch
     Set<ColorResponse> getAll();
 
-    Boolean existsById(Long id);
+    Set<ColorResponse> getAllByProductId(Long productId);
 
-    Boolean existsByNameOrHexCode(String name, String hexCode);
+    Set<ColorResponse> getActiveByProductId(Long productId);
 
-    Boolean existsByNameOrHexCodeExceptId(String name, String hexCode, Long id);
-
-    ColorResponse create(ColorRequest colorRequest);
+    // Create/Update/Delete
+    ColorResponse add(ColorRequest colorRequest);
 
     ColorResponse update(ColorRequest colorRequest);
 
-    void delete(Long id);
+    Long delete(Long id);
 
-    Set<ColorResponse> getAllColorOfAProduct(Long productId);
 }

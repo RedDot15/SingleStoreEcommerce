@@ -5,20 +5,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Set;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity,Long> {
+    // Fetch
     @Query(value = "SELECT * FROM category c WHERE c.is_active = true AND c.is_deleted = false",nativeQuery = true)
-    Set<CategoryEntity> findAllActive();
+    Set<CategoryEntity> findActive();
 
-    @Query("SELECT EXISTS (" +
-            "   SELECT 1 FROM CategoryEntity c" +
-            "   WHERE c.id = :id AND c.isDeleted = false" +
-            ")")
-    boolean existsById(Long id);
-
+    // Exist
     @Query("SELECT EXISTS (" +
             "   SELECT 1 FROM CategoryEntity c" +
             "   WHERE c.name = :name AND c.isDeleted = false" +
@@ -31,6 +26,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity,Long> {
             ")")
     Boolean existsByNameExceptId(String name, Long id);
 
-    CategoryEntity findFirstById(Long categoryId);
-
+    // Fetch 1 include deleted
+    @Query("SELECT c FROM CategoryEntity c WHERE c.id = :id")
+    CategoryEntity findIncludingDeletedById(Long id);
 }

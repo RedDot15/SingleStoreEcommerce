@@ -4,18 +4,17 @@ import com.example.project_economic.dto.request.SizeRequest;
 import com.example.project_economic.dto.response.SizeResponse;
 import com.example.project_economic.entity.SizeEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface SizeMapper {
-    //create
+    // Add
     SizeEntity toSizeEntity(SizeRequest sizeRequest);
 
-    //update
+    // Update
     void updateSizeEntityFromRequest(@MappingTarget SizeEntity sizeEntity, SizeRequest sizeRequest);
 
-    //result
+    // Response
     SizeResponse toSizeResponse(SizeEntity sizeEntity);
 }
