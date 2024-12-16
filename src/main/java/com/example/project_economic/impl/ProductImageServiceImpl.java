@@ -1,24 +1,20 @@
 package com.example.project_economic.impl;
 
+import com.amazonaws.services.dlm.model.ResourceNotFoundException;
 import com.example.project_economic.dto.request.ProductImageRequest;
-import com.example.project_economic.dto.response.ProductDetailResponse;
 import com.example.project_economic.dto.response.ProductImageResponse;
-import com.example.project_economic.entity.CategoryEntity;
-import com.example.project_economic.entity.ProductDetailEntity;
 import com.example.project_economic.entity.ProductEntity;
 import com.example.project_economic.entity.ProductImageEntity;
+import com.example.project_economic.exception.DuplicateException;
 import com.example.project_economic.mapper.ProductImageMapper;
-import com.example.project_economic.repository.CategoryRepository;
-import com.example.project_economic.repository.ColorRepository;
-import com.example.project_economic.repository.ProductImageRepository;
-import com.example.project_economic.repository.ProductRepository;
+import com.example.project_economic.repository.*;
 import com.example.project_economic.service.ProductImageService;
+import com.example.project_economic.service.ProductService;
 import com.example.project_economic.service.StorageService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -35,31 +31,43 @@ public class ProductImageServiceImpl implements ProductImageService {
     StorageService storageService;
     ProductRepository productRepository;
     ColorRepository colorRepository;
-    CategoryRepository categoryRepository;
+    ProductService productService;
 
     @Override
     public Set<ProductImageResponse> getAllByProductId(Long productId) {
+        // Product not found/deleted exception
+        productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product is not found."));
+        // Find all product-detail by product ID
+        Set<ProductImageEntity> productImageEntitySet = productImageRepository.findAllByProductId(productId);
+        // Return result
         return new TreeSet<>(
-                productImageRepository.findAllByProductId(productId)
+                productImageEntitySet
                 .stream().map(productImageMapper::toProductImageResponse)
                 .collect(Collectors.toSet())
         );
     }
 
     @Override
-    public Boolean existsByProductIdAndColorId(Long productId, Long colorId) {
-        return productImageRepository.existsByProductIdAndColorId(productId,colorId);
-    }
-
-    @Override
-    public ProductImageResponse getFirstById(Long id) {
+    public ProductImageResponse getFirstActiveByProductIdAndColorId(Long productId, Long colorId) {
+        // Validate product is active
+        productService.validateProductIsActive(productId);
+        // Fetch & Return
         return productImageMapper.toProductImageResponse(
-                productImageRepository.findFirstById(id)
+                productImageRepository.findFirstActiveByProductIdAndColorId(productId,colorId)
         );
     }
 
     @Override
-    public ProductImageResponse create(ProductImageRequest productImageRequest) {
+    public ProductImageResponse add(ProductImageRequest productImageRequest) {
+        // Product image duplicate exception
+        if (productImageRepository.existsByProductIdAndColorId(
+                productImageRequest.getProductId(),
+                productImageRequest.getColorId()
+        )){
+            throw new DuplicateException("Product Image already exists for this color.");
+        }
+        // Create new product-image
         String imageName = storageService.uploadFile(productImageRequest.getFileImage());
         ProductImageEntity newProductImageEntity =
                 ProductImageEntity.builder()
@@ -67,6 +75,7 @@ public class ProductImageServiceImpl implements ProductImageService {
                         .productEntity(productRepository.getReferenceById(productImageRequest.getProductId()))
                         .colorEntity(colorRepository.getReferenceById(productImageRequest.getColorId()))
                         .build();
+        // Save & Return
         return productImageMapper.toProductImageResponse(
                 productImageRepository.save(newProductImageEntity)
         );
@@ -75,7 +84,8 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Override
     public ProductImageResponse update(ProductImageRequest productImageRequest) {
         //Get old
-        ProductImageEntity foundProductImageEntity = productImageRepository.findFirstById(productImageRequest.getId());
+        ProductImageEntity foundProductImageEntity = productImageRepository.findById(productImageRequest.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Product image not found to update."));
         //Delete old image
         storageService.deleteFile(foundProductImageEntity.getName());
         //Store new image
@@ -89,35 +99,30 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public void delete(Long id) {
-        //Get entity
-        ProductImageEntity foundProductImageEntity = productImageRepository.findFirstById(id);
+    public Long delete(Long id) {
+        // Get entity
+        ProductImageEntity foundProductImageEntity = productImageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product image not found."));
         ProductEntity foundProductEntity = foundProductImageEntity.getProductEntity();
-        CategoryEntity foundCategoryEntity = foundProductEntity.getCategoryEntity();
-        //Delete this product image
+        // Delete this product image
         productImageRepository.deleteById(id);
-        //if product image inactive then product (owner of this product detail) wont be affect
+        // if product image inactive then product (owner of this product detail) wont be affect
         if (!foundProductImageEntity.getIsActive())
-            return;
-        //Handle case product (owner of this product image) inactive or still having at least 1 product image
+            return id;
+        // Handle case product (owner of this product image) inactive or still having at least 1 product image
         if (!foundProductEntity.getIsActive() || foundProductEntity.getActiveProductDetailEntitySet().size() != 1)
-            return;
-        //Deactivate product (owner of this product image)
-        foundProductEntity.setIsActive(false);
-        productRepository.save(foundProductEntity);
-        //Handle case category (owner of above product) inactive or still having at least 3 product
-        if (!foundCategoryEntity.getIsActive() || foundCategoryEntity.getActiveProductEntitySet().size() != 3)
-            return;
-        //Deactivate category (owner of above product)
-        foundCategoryEntity.setIsActive(false);
-        categoryRepository.save(foundCategoryEntity);
-        return;
+            return id;
+        // Deactivate product (owner of this product image)
+        productService.deactivate(foundProductEntity.getId());
+        // Return id
+        return id;
     }
 
     @Override
     public ProductImageResponse activate(Long id) {
         //Get old
-        ProductImageEntity oldProductImageEntity = productImageRepository.findFirstById(id);
+        ProductImageEntity oldProductImageEntity = productImageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product image not found."));
         //Activate
         oldProductImageEntity.setIsActive(true);
         //Save & Return
@@ -128,13 +133,13 @@ public class ProductImageServiceImpl implements ProductImageService {
 
     @Override
     public String getDeactivateCheckMessage(Long id) {
-        //Init message
+        // Init message
         String msg = "";
-        //Get Entity
-        ProductImageEntity foundProductImageEntity = productImageRepository.findFirstById(id);
+        // Get Entity
+        ProductImageEntity foundProductImageEntity = productImageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product image not found."));
         ProductEntity foundProductEntity = foundProductImageEntity.getProductEntity();
-        CategoryEntity foundCategoryEntity = foundProductEntity.getCategoryEntity();
-        //Handle case product image already inactive
+        // Handle case product image already inactive
         if (!foundProductImageEntity.getIsActive()){
             return "";
         }
@@ -142,25 +147,20 @@ public class ProductImageServiceImpl implements ProductImageService {
         at least one active product image after deactivate this image */
         if (!foundProductEntity.getIsActive() || foundProductEntity.getActiveProductImageEntitySet().size() != 1)
             return "";
-        //Notify user their action will also deactivate a product
+        // Notify user their action will also deactivate a product
         msg += "This action will also deactivate product: " +
                 foundProductEntity.getName() + " because it doesn't have at least 1 active image<br/>";
-        // Return without notify about category may be deactivated
-        if (!foundCategoryEntity.getIsActive() || foundCategoryEntity.getActiveProductEntitySet().size() != 3)
-            return msg;
-        //Notify user their action will also deactivate a category
-        msg += "This action will also deactivate category: " +
-                foundCategoryEntity.getName() + " because it doesn't have at least 3 active product";
+        msg += productService.getDeactivateCheckMessage(foundProductEntity.getId());
         return msg;
     }
 
     @Override
     public ProductImageResponse deactivate(Long id) {
-        //Get Entity
-        ProductImageEntity foundProductImageEntity = productImageRepository.findFirstById(id);
+        // Get Entity
+        ProductImageEntity foundProductImageEntity = productImageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product image not found."));
         ProductEntity foundProductEntity = foundProductImageEntity.getProductEntity();
-        CategoryEntity foundCategoryEntity =  foundProductEntity.getCategoryEntity();
-        //Deactivate this product image
+        // Deactivate this product image
         foundProductImageEntity.setIsActive(false);
         productImageRepository.save(foundProductImageEntity);
         ProductImageResponse updatedProductImageResponse = productImageMapper.toProductImageResponse(foundProductImageEntity);
@@ -168,16 +168,9 @@ public class ProductImageServiceImpl implements ProductImageService {
         still have at least 3 active product image after deactivate this image */
         if (!foundProductEntity.getIsActive() || foundProductEntity.getActiveProductImageEntitySet().size() != 1)
             return updatedProductImageResponse;
-        //Deactivate product (owner of this product detail)
-        foundProductEntity.setIsActive(false);
-        productRepository.save(foundProductEntity);
-        // Return if category (owner of the above product) wont be deactivate
-        if (!foundCategoryEntity.getIsActive() || foundCategoryEntity.getActiveProductEntitySet().size() != 3)
-            return updatedProductImageResponse;
-        //Deactivate category (owner of the above product)
-        foundCategoryEntity.setIsActive(false);
-        categoryRepository.save(foundCategoryEntity);
-        //Return updated
+        // Deactivate product (owner of this product detail)
+        productService.deactivate(foundProductEntity.getId());
+        // Return updated
         return updatedProductImageResponse;
     }
 }

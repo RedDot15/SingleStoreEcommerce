@@ -4,18 +4,17 @@ import com.example.project_economic.dto.request.ColorRequest;
 import com.example.project_economic.dto.response.ColorResponse;
 import com.example.project_economic.entity.ColorEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ColorMapper {
-    //Create
+    // Add
     ColorEntity toColorEntity(ColorRequest colorRequest);
 
-    //Update
+    // Update
     void updateColorEntityFromRequest(@MappingTarget ColorEntity colorEntity, ColorRequest colorRequest);
 
-    //Result
+    // Response
     ColorResponse toColorResponse(ColorEntity colorEntity);
 }

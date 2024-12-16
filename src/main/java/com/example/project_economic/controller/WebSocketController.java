@@ -1,56 +1,66 @@
 package com.example.project_economic.controller;
 
-import com.example.project_economic.dto.request.CommentDTO;
-import com.example.project_economic.entity.Comment;
+import com.example.project_economic.dto.request.CommentRequest;
+import com.example.project_economic.dto.response.wrap.ResponseObject;
 import com.example.project_economic.service.CommentService;
-import com.example.project_economic.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.project_economic.validation_group.Create;
+import com.example.project_economic.validation_group.Update;
+import jakarta.validation.groups.Default;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 public class WebSocketController {
-    @Autowired
-    private CommentService commentService;
-    @Autowired
-    private UserService userService;
-    @MessageMapping("/message")
-    @SendTo("/topic/return-to")
-    public CommentDTO comment(@RequestBody CommentDTO commentDTO){
-        if(commentDTO.getCommentParentId()==null){
-            Comment commentEntity=new Comment();
-            commentEntity.setContent(commentDTO.getContent());
-            commentEntity.setStar(commentDTO.getStar());
-            Comment comment=this.commentService.addComment(commentEntity, commentDTO.getUserId(), commentDTO.getProductId());
-            CommentDTO commentDTO1=CommentDTO.builder()
-                    .id(comment.getId())
-                    .productId(comment.getProductId())
-                    .content(comment.getContent())
-                    .userId(comment.getUserId())
-//                    .userName(userService.findUserById(comment.getUserId()).getUsername())
-                    .step(comment.getStep())
-                    .star(comment.getStar())
-                    .build();
-            System.out.println(comment.getStar());
-            return commentDTO1;
-        }
-        else{
-            Comment comment=new Comment();
-            comment.setContent(commentDTO.getContent());
-            Comment comment1=this.commentService.addReplyComment(comment, commentDTO.getUserId(), commentDTO.getProductId(), commentDTO.getCommentParentId());
-            CommentDTO commentDTO1=CommentDTO.builder()
-                    .id(comment1.getId())
-                    .productId(comment1.getProductId())
-                    .content(comment1.getContent())
-                    .userId(comment1.getUserId())
-                    .step(comment1.getStep())
-                    .star(comment1.getStar())
-//                    .userName(userService.findUserById(comment.getUserId()).getUsername())
-                    .commentParentId(commentDTO.getCommentParentId())
-                    .build();
-            return commentDTO1;
-        }
+    CommentService commentService;
+
+    @MessageMapping("/send/new-comment")
+    @SendTo("/topic/new-comment")
+    public ResponseEntity<ResponseObject> handleCommentAddRequest(@Validated({Create.class, Default.class}) @RequestBody CommentRequest commentRequest){
+        return buildResponse(
+                HttpStatus.OK,
+                "New comment added.",
+                commentService.add(commentRequest)
+        );
+    }
+
+    @MessageMapping("/send/edit-comment")
+    @SendTo("/topic/edit-comment")
+    public ResponseEntity<ResponseObject> handleCommentEditRequest(@Validated({Update.class,Default.class}) @RequestBody CommentRequest commentRequest){
+        return buildResponse(
+                HttpStatus.OK,
+                "A comment is edited.",
+                commentService.edit(commentRequest)
+        );
+    }
+
+    @MessageMapping("/send/delete-comment/{commentId}")
+    @SendTo("/topic/delete-comment")
+    public ResponseEntity<ResponseObject> handleCommentDeleteRequest(@PathVariable Long commentId){
+        return buildResponse(
+                HttpStatus.OK,
+                "A comment is deleted.",
+                commentService.delete(commentId)
+        );
+    }
+
+    private ResponseEntity<ResponseObject> buildResponse(HttpStatus status, String message, Object data) {
+        return ResponseEntity.status(status).body(
+                new ResponseObject(
+                        status.is2xxSuccessful() ? "ok" : "failed",
+                        message,
+                        data
+                )
+        );
     }
 }

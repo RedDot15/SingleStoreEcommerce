@@ -1,7 +1,5 @@
 package com.example.project_economic.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -36,8 +34,17 @@ public class ProductDetailEntity {
     SizeEntity sizeEntity;
 
     Integer stock;
+
     Boolean isActive;
+
     Boolean isDeleted;
+
+    @Column(name = "product_id", insertable = false, updatable = false)
+    Long productId;
+    @Column(name = "color_id", insertable = false, updatable = false)
+    Long colorId;
+    @Column(name = "size_id", insertable = false, updatable = false)
+    Long sizeId;
 
     @PrePersist
     void control(){
