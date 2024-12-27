@@ -5,7 +5,7 @@ import com.example.project_economic.dto.request.ProductImageRequest;
 import com.example.project_economic.dto.response.ProductImageResponse;
 import com.example.project_economic.entity.ProductEntity;
 import com.example.project_economic.entity.ProductImageEntity;
-import com.example.project_economic.exception.DuplicateException;
+import com.example.project_economic.exception.custom.DuplicateException;
 import com.example.project_economic.mapper.ProductImageMapper;
 import com.example.project_economic.repository.*;
 import com.example.project_economic.service.ProductImageService;
@@ -52,10 +52,14 @@ public class ProductImageServiceImpl implements ProductImageService {
     public ProductImageResponse getFirstActiveByProductIdAndColorId(Long productId, Long colorId) {
         // Validate product is active
         productService.validateProductIsActive(productId);
+        // Fetch
+        ProductImageEntity productImageEntity = productImageRepository.findFirstActiveByProductIdAndColorId(productId,colorId);
+        // Not found exception
+        if (productImageEntity == null) {
+            throw new ResourceNotFoundException("Product image is not found.");
+        }
         // Fetch & Return
-        return productImageMapper.toProductImageResponse(
-                productImageRepository.findFirstActiveByProductIdAndColorId(productId,colorId)
-        );
+        return productImageMapper.toProductImageResponse(productImageEntity);
     }
 
     @Override

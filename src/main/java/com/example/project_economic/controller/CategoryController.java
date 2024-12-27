@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/category")
 public class CategoryController {
     CategoryService categoryService;
-    ProductService productService;
 
     @GetMapping("/list/all")
     public ResponseEntity<ResponseObject> showAll(){

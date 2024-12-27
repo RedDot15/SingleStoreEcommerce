@@ -1,4 +1,4 @@
-package com.example.project_economic.exception;
+package com.example.project_economic.exception.custom;
 
 public class ActivationException extends RuntimeException{
     public ActivationException(String message) {

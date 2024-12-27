@@ -1,5 +1,8 @@
 package com.example.project_economic.config;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,15 +17,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    UserDetailsService userDetailsService;
 
-    @Autowired
-    UserDetailServiceIpl userDetailServiceIpl;
-
-    private final String[] PUBLIC_ENDPOINTS = {"/","/shop/**","/product-detail/**","/category","/faq","/about","/contact","/client/**","/isAuthenticated","/api/product-image/get/**", "/client/user/register-handle","/api/shoppingcarts/*", "/file/**"};
-    private final String[] ADMIN_ENDPOINTS = {"/admin/**"};
+    String[] PUBLIC_ENDPOINTS = {"/","/shop/**","/product-detail/**","/category","/faq","/about","/contact","/client/**","/isAuthenticated","/api/product-image/get/**", "/client/user/register-handle","/api/shoppingcarts/*", "/file/**"};
+    String[] ADMIN_ENDPOINTS = {"/admin/**"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -56,18 +59,12 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    //Service get user in the database
-    @Bean
-    public UserDetailsService userDetailsService(){
-        return userDetailServiceIpl;
-    }
-
     @Bean
     public AuthenticationProvider authenticationProvider(){
         //Ngoai DaoAuthenticationProvider con co OAuth2Login AP, LDAP AP
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(this.userDetailsService());
-        daoAuthenticationProvider.setPasswordEncoder(this.passwordEncoder());
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
 }

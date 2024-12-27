@@ -6,7 +6,7 @@ import com.example.project_economic.dto.response.ColorResponse;
 import com.example.project_economic.entity.ColorEntity;
 import com.example.project_economic.entity.ProductDetailEntity;
 import com.example.project_economic.entity.ProductImageEntity;
-import com.example.project_economic.exception.DuplicateException;
+import com.example.project_economic.exception.custom.DuplicateException;
 import com.example.project_economic.mapper.ColorMapper;
 import com.example.project_economic.repository.ColorRepository;
 import com.example.project_economic.repository.ProductDetailRepository;

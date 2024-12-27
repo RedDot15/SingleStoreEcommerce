@@ -2,6 +2,9 @@ package com.example.project_economic.exception;
 
 import com.amazonaws.services.dlm.model.ResourceNotFoundException;
 import com.example.project_economic.dto.response.wrap.ResponseObject;
+import com.example.project_economic.exception.custom.ActivationException;
+import com.example.project_economic.exception.custom.DuplicateException;
+import com.example.project_economic.exception.custom.WrongPasswordException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

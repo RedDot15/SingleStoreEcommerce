@@ -4,7 +4,7 @@ import com.amazonaws.services.dlm.model.ResourceNotFoundException;
 import com.example.project_economic.dto.request.SizeRequest;
 import com.example.project_economic.dto.response.SizeResponse;
 import com.example.project_economic.entity.*;
-import com.example.project_economic.exception.DuplicateException;
+import com.example.project_economic.exception.custom.DuplicateException;
 import com.example.project_economic.mapper.SizeMapper;
 import com.example.project_economic.repository.ProductDetailRepository;
 import com.example.project_economic.repository.SizeRepository;

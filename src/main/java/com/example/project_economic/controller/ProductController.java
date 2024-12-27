@@ -21,10 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/product")
 public class ProductController {
     ProductService productService;
-    ProductDetailService productDetailService;
-    ProductImageService productImageService;
-    ColorService colorService;
-    SizeService sizeService;
 
     @GetMapping("/list/all")
     public ResponseEntity<ResponseObject> showAll() {
