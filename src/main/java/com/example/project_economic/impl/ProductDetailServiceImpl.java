@@ -1,10 +1,11 @@
 package com.example.project_economic.impl;
 
-import com.amazonaws.services.dlm.model.ResourceNotFoundException;
 import com.example.project_economic.dto.request.ProductDetailRequest;
 import com.example.project_economic.dto.response.ProductDetailResponse;
 import com.example.project_economic.entity.ProductDetailEntity;
 import com.example.project_economic.entity.ProductEntity;
+import com.example.project_economic.exception.ErrorCode;
+import com.example.project_economic.exception.custom.AppException;
 import com.example.project_economic.mapper.ProductDetailMapper;
 import com.example.project_economic.repository.*;
 import com.example.project_economic.service.ProductDetailService;
@@ -13,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -25,18 +27,19 @@ import java.util.stream.Collectors;
 @Service
 public class ProductDetailServiceImpl implements ProductDetailService {
     ProductDetailRepository productDetailRepository;
-    ProductDetailMapper productDetailMapper;
     ProductRepository productRepository;
     ColorRepository colorRepository;
     SizeRepository sizeRepository;
     CartItemRepository cartItemRepository;
+    ProductDetailMapper productDetailMapper;
     ProductService productService;
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_PRODUCT_DETAIL')")
     @Override
     public Set<ProductDetailResponse> getAllByProductId(Long productId) {
         // Product not found/deleted exception
         productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product is not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         // Find all product-detail by product ID
         Set<ProductDetailEntity> productDetailEntitySet = productDetailRepository.findAllByProductId(productId);
         // Return result
@@ -47,6 +50,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('ADD_PRODUCT_DETAIL')")
     @Override
     public ProductDetailResponse add(ProductDetailRequest productDetailRequest) {
         // Check if a matching ProductDetail exists
@@ -82,11 +86,12 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         return productDetailResponse;
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_PRODUCT_DETAIL')")
     @Override
     public ProductDetailResponse update(ProductDetailRequest productDetailRequest) {
         // Get old & Not found/Deleted exception
         ProductDetailEntity oldProductDetailEntity = productDetailRepository.findById(productDetailRequest.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product-detail to update not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_DETAIL_NOT_FOUND));
         // Update
         oldProductDetailEntity.setStock(productDetailRequest.getStock());
         // Save & Return
@@ -95,11 +100,12 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_PRODUCT_DETAIL')")
     @Override
     public Long delete(Long id) {
         // Get entity
         ProductDetailEntity foundProductDetailEntity = productDetailRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product detail not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_DETAIL_NOT_FOUND));
         ProductEntity foundProductEntity = foundProductDetailEntity.getProductEntity();
         // Delete this product detail from all user's cart
         cartItemRepository.deleteAllByProductDetailId(id);
@@ -117,11 +123,12 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         return id;
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('ACTIVATE_PRODUCT_DETAIL')")
     @Override
     public ProductDetailResponse activate(Long id) {
         //Get Entity
         ProductDetailEntity foundProductDetailEntity = productDetailRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product-detail not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_DETAIL_NOT_FOUND));
         //Activate
         foundProductDetailEntity.setIsActive(true);
         //Save & Return
@@ -130,13 +137,14 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DEACTIVATE_PRODUCT_DETAIL')")
     @Override
     public String getDeactivateCheckMessage(Long id) {
         //Init message
         String msg = "This action will delete this product detail from all user's cart\n";
         //Get Entity
         ProductDetailEntity foundProductDetailEntity = productDetailRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product-detail not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_DETAIL_NOT_FOUND));
         ProductEntity foundProductEntity = foundProductDetailEntity.getProductEntity();
         //Handle case product detail already inactive
         if (!foundProductDetailEntity.getIsActive()){
@@ -154,11 +162,12 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         return msg;
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DEACTIVATE_PRODUCT_DETAIL')")
     @Override
     public ProductDetailResponse deactivate(Long id) {
         //Get Entity
         ProductDetailEntity foundProductDetailEntity = productDetailRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product-detail not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_DETAIL_NOT_FOUND));
         ProductEntity foundProductEntity = foundProductDetailEntity.getProductEntity();
         //Remove this product-detail from all user's cart
         cartItemRepository.deleteAllByProductDetailId(id);

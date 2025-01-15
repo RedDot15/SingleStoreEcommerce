@@ -5,9 +5,8 @@ import com.example.project_economic.dto.response.CategoryResponse;
 import com.example.project_economic.entity.CategoryEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface CategoryMapper {
     // Add
     CategoryEntity toCategoryEntity(CategoryRequest categoryRequest);

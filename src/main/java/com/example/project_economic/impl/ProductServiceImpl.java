@@ -1,13 +1,13 @@
 package com.example.project_economic.impl;
 
-import com.amazonaws.services.dlm.model.ResourceNotFoundException;
-import com.example.project_economic.dto.request.filter.ProductFilterRequest;
 import com.example.project_economic.dto.request.ProductRequest;
-import com.example.project_economic.dto.response.*;
-import com.example.project_economic.entity.*;
-import com.example.project_economic.exception.custom.ActivationException;
-import com.example.project_economic.exception.custom.DuplicateException;
-import com.example.project_economic.mapper.*;
+import com.example.project_economic.dto.request.filter.ProductFilterRequest;
+import com.example.project_economic.dto.response.ProductResponse;
+import com.example.project_economic.entity.CategoryEntity;
+import com.example.project_economic.entity.ProductEntity;
+import com.example.project_economic.exception.ErrorCode;
+import com.example.project_economic.exception.custom.AppException;
+import com.example.project_economic.mapper.ProductMapper;
 import com.example.project_economic.repository.*;
 import com.example.project_economic.service.CategoryService;
 import com.example.project_economic.service.ProductService;
@@ -19,9 +19,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,22 +34,21 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
     ProductImageRepository productImageRepository;
-    ProductMapper productMapper;
     ProductDetailRepository productDetailRepository;
     CategoryRepository categoryRepository;
     CartItemRepository cartItemRepository;
+    ProductMapper productMapper;
     CategoryService categoryService;
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_PRODUCT')")
     @Override
     public Set<ProductResponse> getAll() {
         // Find all products
         List<ProductEntity> productEntityList = productRepository.findAll();
         // Return result
-        return new TreeSet<>(
-            productEntityList
-            .stream().map(productMapper::toProductResponse)
-            .collect(Collectors.toSet())
-        );
+        return productEntityList
+                .stream().map(productMapper::toProductResponse)
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
     @Override
@@ -56,11 +58,9 @@ public class ProductServiceImpl implements ProductService {
         // Find active products by categoryId
         List<ProductEntity> productEntityList = productRepository.findActiveByCategoryId(categoryId);
         // Return result
-        return new TreeSet<>(
-            productEntityList
-            .stream().map(productMapper::toProductResponse)
-            .collect(Collectors.toSet())
-        );
+        return productEntityList
+                .stream().map(productMapper::toProductResponse)
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
 
@@ -94,11 +94,12 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductResponse(productEntity);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('ADD_PRODUCT')")
     @Override
     public ProductResponse add(ProductRequest productRequest) {
         // Name duplicate exception
         if (productRepository.existsByName(productRequest.getName()))
-            throw new DuplicateException("Product name already exists.");
+            throw new AppException(ErrorCode.PRODUCT_DUPLICATE);
         // Mapping
         ProductEntity newProductEntity = productMapper.toProductEntity(productRequest);
         newProductEntity.setCategoryEntity(categoryRepository.getReferenceById(productRequest.getCategoryId()));
@@ -106,15 +107,16 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductResponse(productRepository.save(newProductEntity));
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_PRODUCT')")
     @Override
     public ProductResponse update(ProductRequest productRequest) {
         // Name duplicate exception
         if (productRepository.existsByNameExceptId(productRequest.getName(), productRequest.getId())){
-            throw new DuplicateException("Product name already exists.");
+            throw new AppException(ErrorCode.PRODUCT_DUPLICATE);
         }
         // Get old
         ProductEntity foundProductEntity = productRepository.findById(productRequest.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product to update not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         // Update
         productMapper.updateProductEntityFromRequest(foundProductEntity, productRequest);
         foundProductEntity.setCategoryEntity(categoryRepository.getReferenceById(productRequest.getCategoryId()));
@@ -122,27 +124,24 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductResponse(productRepository.save(foundProductEntity));
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_PRODUCT')")
     @Override
     public Long delete(Long id) {
         // Get entity
         ProductEntity foundProductEntity = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         CategoryEntity foundCategoryEntity = foundProductEntity.getCategoryEntity();
         // Delete this product from all user's cart
         cartItemRepository.deleteAllByProductId(id);
         // Delete every product detail and product image of this product
-        for (ProductDetailEntity productDetailEntity : productDetailRepository.findAllByProductId(id)){
-            productDetailRepository.delete(productDetailEntity);
-        }
-        for (ProductImageEntity productImageEntity : productImageRepository.findAllByProductId(id)){
-            productImageRepository.delete(productImageEntity);
-        }
+        productDetailRepository.deleteAll(productDetailRepository.findAllByProductId(id));
+        productImageRepository.deleteAll(productImageRepository.findAllByProductId(id));
         // Delete this product
         productRepository.delete(foundProductEntity);
         // Handle case if product already inactive
         if (!foundProductEntity.getIsActive())
             return id;
-        // Handle case if category already inactive or dont need to deactivate due to still appropriate
+        // Handle case if category already inactive or don't need to deactivate due to still appropriate
         if (!foundCategoryEntity.getIsActive() || foundCategoryEntity.getActiveProductEntitySet().size() != 3)
             return id;
         // Deactivate category (owner of this product)
@@ -151,15 +150,16 @@ public class ProductServiceImpl implements ProductService {
         return id;
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('ACTIVATE_PRODUCT')")
     @Override
     public ProductResponse activate(Long id) {
         // Product deleted/not found exception
         ProductEntity foundProductEntity = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         // Check activation criteria
-        if (foundProductEntity.getActiveProductDetailEntitySet().size() == 0 ||
-                foundProductEntity.getActiveProductImageEntitySet().size() == 0){
-            throw new ActivationException("This product does not have at leats 1 active product detail & 1 active image.");
+        if (foundProductEntity.getActiveProductDetailEntitySet().isEmpty() ||
+                foundProductEntity.getActiveProductImageEntitySet().isEmpty()){
+            throw new AppException(ErrorCode.PRODUCT_ACTIVATION_FAIL);
         }
         // Activate
         foundProductEntity.setIsActive(true);
@@ -169,18 +169,19 @@ public class ProductServiceImpl implements ProductService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DEACTIVATE_PRODUCT')")
     @Override
     public String getDeactivateCheckMessage(Long id) {
         //Init message
         String msg = "This action will remove this product from all user's cart<br/>";
         //Get entity
         ProductEntity foundProductEntity = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         CategoryEntity foundCategoryEntity = foundProductEntity.getCategoryEntity();
         //Handle case this product is inactive
         if (!foundProductEntity.getIsActive())
             return msg;
-        //Return empty if category (owner of this product) already inactive
+        //Return empty if category (owner of this product) already inactive,
         // or it does not have at least 3 product
         if (!foundCategoryEntity.getIsActive() || foundCategoryEntity.getActiveProductEntitySet().size() != 3)
             return msg;
@@ -191,11 +192,12 @@ public class ProductServiceImpl implements ProductService {
         return msg;
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DEACTIVATE_PRODUCT')")
     @Override
     public ProductResponse deactivate(Long id) {
         // Get entity
         ProductEntity foundProductEntity = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         CategoryEntity foundCategoryEntity = foundProductEntity.getCategoryEntity();
         // Delete this product from all user's cart
         cartItemRepository.deleteAllByProductId(id);
@@ -203,7 +205,7 @@ public class ProductServiceImpl implements ProductService {
         foundProductEntity.setIsActive(false);
         productRepository.save(foundProductEntity);
         ProductResponse updatedProductResponse = productMapper.toProductResponse(foundProductEntity);
-        /* Return if category (owner of this product) already inactive
+        /* Return if category (owner of this product) already inactive,
         or it does not have at least 3 product */
         if (!foundCategoryEntity.getIsActive() || foundCategoryEntity.getActiveProductEntitySet().size() != 3)
             return updatedProductResponse;
@@ -226,14 +228,14 @@ public class ProductServiceImpl implements ProductService {
     public ProductEntity validateProductIsActive(Long id) {
         // Product not found/deleted exception
         ProductEntity foundProductEntity = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("This product is not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         // Product inactive exception
         if (!foundProductEntity.getIsActive()) {
-            throw new IllegalArgumentException("This product is inactive.");
+            throw new AppException(ErrorCode.PRODUCT_INACTIVE);
         }
         // Category inactive exception
         if (!foundProductEntity.getCategoryEntity().getIsActive()) {
-            throw new IllegalArgumentException("This category is inactive");
+            throw new AppException(ErrorCode.CATEGORY_INACTIVE);
         }
         // Return
         return foundProductEntity;

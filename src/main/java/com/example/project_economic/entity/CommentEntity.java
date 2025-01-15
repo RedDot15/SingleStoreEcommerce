@@ -22,7 +22,7 @@ public class CommentEntity {
 
     Integer star;
 
-    Integer like;
+    Integer likeCount;
 
     Integer dislike;
 
@@ -40,7 +40,7 @@ public class CommentEntity {
 
     @PrePersist
     void control(){
-        setLike(0);
+        setLikeCount(0);
         setDislike(0);
         setCreatedAt(LocalDateTime.now());
         setUpdatedAt(LocalDateTime.now());

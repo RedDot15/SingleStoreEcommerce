@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,15 +28,16 @@ public class OrderItemServiceImpl implements OrderItemService {
     SizeRepository sizeRepository;
     ColorRepository colorRepository;
     CategoryRepository categoryRepository;
+    OrderRepository orderRepository;
+    UserRepository userRepository;
     CategoryMapper categoryMapper;
     ProductMapper productMapper;
     ProductDetailMapper productDetailMapper;
     ColorMapper colorMapper;
     SizeMapper sizeMapper;
     OrderItemMapper orderItemMapper;
-    OrderRepository orderRepository;
-    UserRepository userRepository;
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_ORDER_ITEM') or (#userId == authentication.principal.claims['id'])")
     @Override
     public List<OrderItemResponse> getAllByUserId(Long userId) {
         // Fetch order-item list
@@ -71,6 +73,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         return orderItemResponseList;
     }
 
+    @PreAuthorize("#userId == (#userId == authentication.principal.claims['id'])")
     @Override
     public List<OrderItemResponse> addWithUserId(Long userId) {
         // Fetch

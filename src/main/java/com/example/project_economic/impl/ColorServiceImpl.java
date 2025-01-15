@@ -1,12 +1,12 @@
 package com.example.project_economic.impl;
 
-import com.amazonaws.services.dlm.model.ResourceNotFoundException;
 import com.example.project_economic.dto.request.ColorRequest;
 import com.example.project_economic.dto.response.ColorResponse;
 import com.example.project_economic.entity.ColorEntity;
 import com.example.project_economic.entity.ProductDetailEntity;
 import com.example.project_economic.entity.ProductImageEntity;
-import com.example.project_economic.exception.custom.DuplicateException;
+import com.example.project_economic.exception.ErrorCode;
+import com.example.project_economic.exception.custom.AppException;
 import com.example.project_economic.mapper.ColorMapper;
 import com.example.project_economic.repository.ColorRepository;
 import com.example.project_economic.repository.ProductDetailRepository;
@@ -19,9 +19,12 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -30,13 +33,14 @@ import java.util.stream.Collectors;
 @Service
 public class ColorServiceImpl implements ColorService {
     ColorRepository colorRepository;
-    ColorMapper colorMapper;
     ProductDetailRepository productDetailRepository;
+    ProductRepository productRepository;
+    ColorMapper colorMapper;
     ProductDetailService productDetailService;
     ProductImageService productImageService;
     ProductService productService;
-    ProductRepository productRepository;
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_COLOR')")
     @Override
     public Set<ColorResponse> getAll() {
         return new TreeSet<>(
@@ -46,11 +50,12 @@ public class ColorServiceImpl implements ColorService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_COLOR')")
     @Override
     public Set<ColorResponse> getAllByProductId(Long productId) {
         // Product not found/deleted exception
         productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         // Get product detail
         Set<ProductDetailEntity> productDetailEntitySet = productDetailRepository.findAllByProductId(productId);
         // Get color
@@ -85,36 +90,39 @@ public class ColorServiceImpl implements ColorService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('ADD_COLOR')")
     @Override
     public ColorResponse add(ColorRequest colorRequest) {
         // Name or hexcode duplicate exception
         if (colorRepository.existsByNameOrHexCode(colorRequest.getName(),colorRequest.getHexCode()))
-            throw new DuplicateException("Color name or hexcode duplicate.");
+            throw new AppException(ErrorCode.COLOR_DUPLICATE);
         // Add & Return
         return colorMapper.toColorResponse(
                 colorRepository.save(colorMapper.toColorEntity(colorRequest))
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_COLOR')")
     @Override
     public ColorResponse update(ColorRequest colorRequest) {
         // Name duplicate exception
         if (colorRepository.existsByNameOrHexCodeExceptId(colorRequest.getName(),colorRequest.getHexCode(),colorRequest.getId()))
-            throw new DuplicateException("Color name duplicate.");
+            throw new AppException(ErrorCode.COLOR_DUPLICATE);
         // Get Entity & Not found/Deleted exception
         ColorEntity foundColorEntity = colorRepository.findById(colorRequest.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Color not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.COLOR_NOT_FOUND));
         // Update
         colorMapper.updateColorEntityFromRequest(foundColorEntity, colorRequest);
         // Save
         return colorMapper.toColorResponse(colorRepository.save(foundColorEntity));
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_COLOR')")
     @Override
     public Long delete(Long id) {
         // Get entity
         ColorEntity foundColorEntity = colorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Color not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.COLOR_NOT_FOUND));
         // Also delete every product detail relate to this color
         for (ProductDetailEntity productDetailEntity : foundColorEntity.getProductDetailEntitySet()){
             productDetailService.delete(productDetailEntity.getId());

@@ -1,7 +1,7 @@
 server:
   port: 3000
   servlet:
-    context-path: /main
+    context-path: /store
 
 spring:
   datasource:
@@ -11,6 +11,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: update
   config:
     import: env.properties
   servlet:
@@ -35,3 +37,6 @@ application:
     name: dyg4oa4f8q8zk
   bucket:
     name: mysinglestore3
+
+jwt:
+  signer-key: ${SIGNER_KEY}

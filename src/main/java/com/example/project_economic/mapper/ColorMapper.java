@@ -5,9 +5,8 @@ import com.example.project_economic.dto.response.ColorResponse;
 import com.example.project_economic.entity.ColorEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface ColorMapper {
     // Add
     ColorEntity toColorEntity(ColorRequest colorRequest);

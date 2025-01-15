@@ -1,5 +1,6 @@
 package com.example.project_economic.service;
 
+import com.example.project_economic.dto.request.UserChangePasswordRequest;
 import com.example.project_economic.dto.request.UserRequest;
 import com.example.project_economic.dto.response.UserResponse;
 
@@ -9,7 +10,9 @@ public interface UserService {
     // Fetch
     Set<UserResponse> getAll();
 
-    // Create/Update/Delete
+    UserResponse getMyInfo();
+
+    // Add/Update/Delete
     UserResponse add(UserRequest userRequest);
 
     UserResponse update(UserRequest userRequest);
@@ -26,6 +29,6 @@ public interface UserService {
 
     UserResponse updateInformation(UserRequest userRequest);
 
-    UserResponse changePassword(UserRequest userRequest);
+    UserResponse changePassword(UserChangePasswordRequest request);
 
 }

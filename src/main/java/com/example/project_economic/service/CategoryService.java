@@ -12,7 +12,7 @@ public interface CategoryService {
 
     Set<CategoryResponse> getActive();
 
-    // Create/Update/Delete
+    // Add/Update/Delete
     CategoryResponse add(CategoryRequest categoryRequest);
 
     CategoryResponse update(CategoryRequest categoryRequest);

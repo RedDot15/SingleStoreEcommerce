@@ -1,7 +1,7 @@
 package com.example.project_economic.dto.request;
 
-import com.example.project_economic.validation_group.Create;
-import com.example.project_economic.validation_group.Update;
+import com.example.project_economic.validation.group.Create;
+import com.example.project_economic.validation.group.Update;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;

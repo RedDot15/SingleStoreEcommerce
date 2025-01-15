@@ -1,6 +1,6 @@
 package com.example.project_economic.dto.request;
-import com.example.project_economic.validation_group.Create;
-import com.example.project_economic.validation_group.Update;
+import com.example.project_economic.validation.group.Create;
+import com.example.project_economic.validation.group.Update;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -16,11 +16,11 @@ public class ProductRequest {
     Long id;
 
     @NotBlank(groups = {Create.class,Update.class}, message = "Product name is required.")
-    @Size(max = 100, message = "Product name must not exceed 100 characters.")
+    @Size(max = 100, message = "Product name must not exceed {max} characters.")
     String name;
 
     @NotNull(groups = {Create.class,Update.class}, message = "Description is required.")
-    @Size(max = 500, message = "Description must not exceed 500 characters.")
+    @Size(max = 500, message = "Description must not exceed {max} characters.")
     String description;
 
     @NotNull(groups = {Create.class,Update.class}, message = "Cost price is required.")

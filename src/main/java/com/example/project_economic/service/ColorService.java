@@ -13,7 +13,7 @@ public interface ColorService {
 
     Set<ColorResponse> getActiveByProductId(Long productId);
 
-    // Create/Update/Delete
+    // Add/Update/Delete
     ColorResponse add(ColorRequest colorRequest);
 
     ColorResponse update(ColorRequest colorRequest);

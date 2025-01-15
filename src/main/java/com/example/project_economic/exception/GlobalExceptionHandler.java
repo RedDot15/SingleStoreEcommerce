@@ -1,65 +1,87 @@
 package com.example.project_economic.exception;
 
-import com.amazonaws.services.dlm.model.ResourceNotFoundException;
+import com.example.project_economic.dto.response.validation.ValidationResponse;
 import com.example.project_economic.dto.response.wrap.ResponseObject;
-import com.example.project_economic.exception.custom.ActivationException;
-import com.example.project_economic.exception.custom.DuplicateException;
-import com.example.project_economic.exception.custom.WrongPasswordException;
+import com.example.project_economic.exception.custom.AppException;
+import jakarta.validation.ConstraintViolation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    public static final String FIELDS_ATTRIBUTE = "fields";
+    public static final String MIN_ATTRIBUTE = "min";
+    public static final String MAX_ATTRIBUTE = "max";
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseObject> handleGeneralException(Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("failed", "An unexpected error occurred.", null));
+        ErrorCode errorCode = ErrorCode.UNCATEGORIZED;
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(new ResponseObject("failed", errorCode.getMessage(), null));
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ResponseObject> handleResourceNotFoundException(ResourceNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ResponseObject("failed", e.getMessage(), null));
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<ResponseObject> handleAppException(AppException e) {
+        ErrorCode errorCode = e.getErrorCode();
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(new ResponseObject("failed", errorCode.getMessage(), null));
     }
 
-    // Used in fetch inactive entity
-    // Used in confirm password unmatch
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ResponseObject> handleIllegalArgumentException(IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ResponseObject("failed", e.getMessage(), null));
-    }
-
-    // Used in entity not meet requirement to activate
-    @ExceptionHandler(ActivationException.class)
-    public ResponseEntity<ResponseObject> handleActivationException(ActivationException e) {
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .body(new ResponseObject("failed", e.getMessage(), null));
-    }
-
-    @ExceptionHandler(WrongPasswordException.class)
-    public ResponseEntity<ResponseObject> handleWrongPasswordException(WrongPasswordException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ResponseObject("failed", e.getMessage(), null));
-    }
-
-    @ExceptionHandler(DuplicateException.class)
-    public ResponseEntity<ResponseObject> handleDuplicateException(DuplicateException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ResponseObject("failed", e.getMessage(), null));
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ResponseObject> handleAccessDeniedException(AccessDeniedException e) {
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(new ResponseObject("failed", errorCode.getMessage(), null));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseObject> handleValidationException(MethodArgumentNotValidException ex) {
-        String errorMessage = ex.getBindingResult().getFieldErrors()
-                .stream().map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .collect(Collectors.joining(",\n"));
+        List<ValidationResponse> validationResponseSet = ex.getBindingResult().getAllErrors()
+                .stream()
+                .map(error -> {
+                    Map<String,Object> attributes =
+                            error.unwrap(ConstraintViolation.class).getConstraintDescriptor().getAttributes();
+                    if (error instanceof FieldError) {
+                        FieldError fieldError = (FieldError) error;
+                        return new ValidationResponse(
+                                fieldError.getField(),
+                                Objects.nonNull(attributes)
+                                    ? mapAttribute(Objects.requireNonNull(fieldError.getDefaultMessage()),attributes)
+                                    : fieldError.getDefaultMessage()
+                        );
+                    } else { // Handle ObjectError (class-level constraints)
+                        String[] fields = (String[]) attributes.get(FIELDS_ATTRIBUTE);
+                        return new ValidationResponse(
+                                Arrays.asList(fields),
+                                Objects.nonNull(attributes)
+                                        ? mapAttribute(Objects.requireNonNull(error.getDefaultMessage()),attributes)
+                                        : error.getDefaultMessage()
+                        );
+                    }
+                })
+                .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ResponseObject("failed", errorMessage, null));
+                .body(new ResponseObject("failed", "Validation failed.", validationResponseSet));
+    }
+
+    private String mapAttribute(String message, Map<String, Object> attributes) {
+        String minValue = String.valueOf(attributes.get(MIN_ATTRIBUTE));
+        String maxValue = String.valueOf(attributes.get(MAX_ATTRIBUTE));
+        String[] fields = (String[]) attributes.get(FIELDS_ATTRIBUTE);
+
+        message = message.replace("{" + MIN_ATTRIBUTE + "}", minValue);
+        message = message.replace("{" + MAX_ATTRIBUTE + "}", maxValue);
+        if (Objects.nonNull(fields))
+            message = message.replace("{" + FIELDS_ATTRIBUTE + "}",
+                    "[" + String.join(", ", fields) + "]");
+        return message;
     }
 }

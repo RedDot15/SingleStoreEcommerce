@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class OrderItemController {
     OrderItemService orderItemService;
 
-    // TODO: User can only access to their own api
     @GetMapping("/list/all/by/user/{userId}")
     public ResponseEntity<ResponseObject> showAll(@PathVariable Long userId){
         // Fetch & Return all users
@@ -27,7 +26,6 @@ public class OrderItemController {
         );
     }
 
-    // TODO: User can only access to their own api
     @PostMapping("/add/with/user/{userId}")
     public ResponseEntity<ResponseObject> addWithUserId(@PathVariable Long userId){
         return buildResponse(

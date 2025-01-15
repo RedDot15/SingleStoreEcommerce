@@ -3,8 +3,8 @@ package com.example.project_economic.controller;
 import com.example.project_economic.dto.request.ProductImageRequest;
 import com.example.project_economic.dto.response.wrap.ResponseObject;
 import com.example.project_economic.service.ProductImageService;
-import com.example.project_economic.validation_group.Create;
-import com.example.project_economic.validation_group.Update;
+import com.example.project_economic.validation.group.Create;
+import com.example.project_economic.validation.group.Update;
 import jakarta.validation.groups.Default;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -32,12 +32,12 @@ public class ProductImageController {
     }
 
     @GetMapping("/get/by/product/{productId}/color/{colorId}")
-    public ResponseEntity<ResponseObject> showFirstActiveByProductIdAndColorId(@PathVariable Long productId, @PathVariable Long colorId){
+    public ResponseEntity<ResponseObject> showActiveByProductIdAndColorId(@PathVariable Long productId, @PathVariable Long colorId){
         // Return active color by productId
         return buildResponse(
                 HttpStatus.OK,
                 "Active product-image fetch successfully.",
-                productImageService.getFirstActiveByProductIdAndColorId(productId,colorId)
+                productImageService.getActiveByProductIdAndColorId(productId,colorId)
         );
     }
 

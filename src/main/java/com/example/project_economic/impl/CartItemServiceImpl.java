@@ -1,17 +1,21 @@
 package com.example.project_economic.impl;
 
-import com.amazonaws.services.dlm.model.ResourceNotFoundException;
 import com.example.project_economic.dto.request.CartItemRequest;
-import com.example.project_economic.entity.*;
-import com.example.project_economic.mapper.CartItemMapper;
-import com.example.project_economic.repository.*;
 import com.example.project_economic.dto.response.CartItemResponse;
+import com.example.project_economic.entity.CartItemEntity;
+import com.example.project_economic.exception.ErrorCode;
+import com.example.project_economic.exception.custom.AppException;
+import com.example.project_economic.mapper.CartItemMapper;
+import com.example.project_economic.repository.CartItemRepository;
+import com.example.project_economic.repository.ProductDetailRepository;
+import com.example.project_economic.repository.UserRepository;
 import com.example.project_economic.service.CartItemService;
-import com.example.project_economic.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +23,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 @Transactional
 @Service
 public class CartItemServiceImpl implements CartItemService {
@@ -27,6 +32,7 @@ public class CartItemServiceImpl implements CartItemService {
     ProductDetailRepository productDetailRepository;
     CartItemMapper cartItemMapper;
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_CART_ITEM') or (#userId == authentication.principal.claims['id'])")
     @Override
     public List<CartItemResponse> getAllByUserId(Long userId) {
         // Return result
@@ -35,12 +41,14 @@ public class CartItemServiceImpl implements CartItemService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_CART_ITEM') or (#userId == authentication.principal.claims['id'])")
     @Override
     public Long countAllByUserId(Long userId) {
         // Return cart's size by user ID
         return cartItemRepository.countAllByUserId(userId);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('ADD_CART_ITEM') or (#cartItemRequest.userId == authentication.principal.claims['id'])")
     @Override
     public CartItemResponse add(CartItemRequest cartItemRequest) {
         // Checking if a matching cart-item exists
@@ -69,11 +77,12 @@ public class CartItemServiceImpl implements CartItemService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_CART_ITEM') or @securityService.isCartItemOwner(#cartItemRequest.id, authentication.principal.claims['id'])")
     @Override
     public CartItemResponse update(CartItemRequest cartItemRequest) {
         // Get old & Not found/Deleted exception
         CartItemEntity oldCartItemEntity = cartItemRepository.findById(cartItemRequest.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Cart-item to update not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.CART_ITEM_NOT_FOUND));
         // Update
         oldCartItemEntity.setQuantity(cartItemRequest.getQuantity());
         // Save & Return
@@ -82,19 +91,24 @@ public class CartItemServiceImpl implements CartItemService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_CART_ITEM') or @securityService.isCartItemOwner(#id, authentication.principal.claims['id'])")
     @Override
     public Long delete(Long id) {
+        // Retrieve the cart item to check ownership
+        CartItemEntity cartItemEntity = cartItemRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.CART_ITEM_NOT_FOUND));
         // Delete cart-item
         cartItemRepository.deleteById(id);
         // Return id
         return id;
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_CART_ITEM') or (#userId == authentication.principal.claims['id'])")
     @Override
-    public Long deleteAllByUserId(Long id) {
+    public Long deleteAllByUserId(Long userId) {
         // Delete cart-item
-        cartItemRepository.deleteAllByUserId(id);
+        cartItemRepository.deleteAllByUserId(userId);
         // Return id
-        return id;
+        return userId;
     }
 }

@@ -1,12 +1,13 @@
 package com.example.project_economic.controller;
 
+import com.example.project_economic.dto.request.UserChangePasswordRequest;
 import com.example.project_economic.dto.request.UserRequest;
 import com.example.project_economic.dto.response.wrap.ResponseObject;
-import com.example.project_economic.service.*;
-import com.example.project_economic.validation_group.ChangePassword;
-import com.example.project_economic.validation_group.Client;
-import com.example.project_economic.validation_group.Create;
-import com.example.project_economic.validation_group.Update;
+import com.example.project_economic.service.UserService;
+import com.example.project_economic.validation.group.Admin;
+import com.example.project_economic.validation.group.Client;
+import com.example.project_economic.validation.group.Create;
+import com.example.project_economic.validation.group.Update;
 import jakarta.validation.groups.Default;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +34,18 @@ public class UserController {
         );
     }
 
+    @GetMapping("/my-info/get")
+    public ResponseEntity<ResponseObject> showMyInfo(){
+        // Fetch & Return all users
+        return buildResponse(
+                HttpStatus.OK,
+                "My information fetch successfully.",
+                userService.getMyInfo()
+        );
+    }
+
     @PostMapping("/add")
-    public ResponseEntity<ResponseObject> add(@Validated({Create.class, Default.class}) @RequestBody UserRequest userRequest) {
+    public ResponseEntity<ResponseObject> add(@Validated({Create.class, Admin.class, Default.class}) @RequestBody UserRequest userRequest) {
         // Create & Return user
         return buildResponse(
                 HttpStatus.OK,
@@ -44,7 +55,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseObject> update(@Validated({Update.class, Default.class}) @RequestBody UserRequest userRequest) {
+    public ResponseEntity<ResponseObject> update(@Validated({Update.class, Admin.class, Default.class}) @RequestBody UserRequest userRequest) {
         //Update & Return
         return buildResponse(
                 HttpStatus.OK,
@@ -104,12 +115,12 @@ public class UserController {
     }
 
     @PutMapping("/change-password")
-    public ResponseEntity<ResponseObject> changePassword(@Validated({Update.class, Client.class, ChangePassword.class, Default.class}) @RequestBody UserRequest userRequest){
+    public ResponseEntity<ResponseObject> changePassword(@Validated({Update.class, Default.class}) @RequestBody UserChangePasswordRequest request){
         // Update & Return user
         return buildResponse(
                 HttpStatus.OK,
-                "Updated user successfully.",
-                userService.changePassword(userRequest)
+                "Changed password successfully.",
+                userService.changePassword(request)
         );
     }
 

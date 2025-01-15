@@ -1,11 +1,11 @@
 package com.example.project_economic.controller;
 
-import com.example.project_economic.dto.request.*;
+import com.example.project_economic.dto.request.ProductRequest;
 import com.example.project_economic.dto.request.filter.ProductFilterRequest;
 import com.example.project_economic.dto.response.wrap.ResponseObject;
-import com.example.project_economic.service.*;
-import com.example.project_economic.validation_group.Create;
-import com.example.project_economic.validation_group.Update;
+import com.example.project_economic.service.ProductService;
+import com.example.project_economic.validation.group.Create;
+import com.example.project_economic.validation.group.Update;
 import jakarta.validation.groups.Default;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +32,16 @@ public class ProductController {
         );
     }
 
+    @GetMapping("/list/active/by/category/{categoryId}")
+    public ResponseEntity<ResponseObject> showActiveProductOfACategory(@PathVariable Long categoryId){
+        // Fetch & Return the active products
+        return buildResponse(
+                HttpStatus.OK,
+                "Active products fetched successfully.",
+                productService.getActiveByCategoryId(categoryId)
+        );
+    }
+
     @GetMapping("/list/active/filter-by")
     public ResponseEntity<ResponseObject> showActiveByFilter(
             @RequestParam(required = false) Integer pageNumber, @RequestParam(required = false) Integer pageSize,
@@ -48,18 +58,8 @@ public class ProductController {
         );
     }
 
-    @GetMapping("/list/active/by/category/{categoryId}")
-    public ResponseEntity<ResponseObject> showActiveProductOfACategory(@PathVariable Long categoryId){
-        // Fetch & Return the active products
-        return buildResponse(
-                HttpStatus.OK,
-                "Active products fetched successfully.",
-                productService.getActiveByCategoryId(categoryId)
-        );
-    }
-
     @GetMapping("/{productId}/get/active")
-    public ResponseEntity<ResponseObject> getActiveById(@PathVariable Long productId){
+    public ResponseEntity<ResponseObject> showActiveById(@PathVariable Long productId){
         // Return active product by productId
         return buildResponse(
                 HttpStatus.OK,

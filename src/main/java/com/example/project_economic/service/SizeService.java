@@ -11,7 +11,7 @@ public interface SizeService {
 
     Set<SizeResponse> getActiveByProductId(Long productId);
 
-    // Create/Update/Delete
+    // Add/Update/Delete
     SizeResponse add(SizeRequest sizeRequest);
 
     SizeResponse update(SizeRequest sizeRequest);

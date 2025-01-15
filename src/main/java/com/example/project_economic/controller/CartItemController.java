@@ -3,8 +3,8 @@ package com.example.project_economic.controller;
 import com.example.project_economic.dto.request.CartItemRequest;
 import com.example.project_economic.dto.response.wrap.ResponseObject;
 import com.example.project_economic.service.CartItemService;
-import com.example.project_economic.validation_group.Create;
-import com.example.project_economic.validation_group.Update;
+import com.example.project_economic.validation.group.Create;
+import com.example.project_economic.validation.group.Update;
 import jakarta.validation.groups.Default;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 public class CartItemController {
     CartItemService cartItemService;
 
-    // TODO: User can only access to their own cart
     @GetMapping("/list/all/by/user/{userId}")
     public ResponseEntity<ResponseObject> showAllCartItemOfAnUser(@PathVariable Long userId){
         // Fetch & Return all cart-item by userId
@@ -32,7 +31,6 @@ public class CartItemController {
         );
     }
 
-    // TODO: User can only access to their own cart
     @GetMapping("/cart-size/get/by/user/{userId}")
     public ResponseEntity<ResponseObject> showCartSizeOfAnUser(@PathVariable Long userId){
         // Fetch & Return cart-size by userId
@@ -74,7 +72,7 @@ public class CartItemController {
     public ResponseEntity<ResponseObject> deleteAllByUserId(@PathVariable Long userId){
         return buildResponse(
                 HttpStatus.OK,
-                "Deleted cart-item successfully",
+                "Deleted cart-items successfully",
                 cartItemService.deleteAllByUserId(userId)
         );
     }

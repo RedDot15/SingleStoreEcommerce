@@ -6,13 +6,14 @@ import com.example.project_economic.entity.ProductEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface ProductMapper {
     // Add
+    @Mapping(target = "categoryEntity", ignore = true)
     ProductEntity toProductEntity(ProductRequest productRequest);
     // Update
+    @Mapping(target = "categoryEntity", ignore = true)
     void updateProductEntityFromRequest(@MappingTarget ProductEntity productEntity, ProductRequest productRequest);
     // Response
     @Mapping(target = "categoryResponse", source = "categoryEntity")

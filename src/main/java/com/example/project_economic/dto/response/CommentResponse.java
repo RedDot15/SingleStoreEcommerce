@@ -17,7 +17,7 @@ public class CommentResponse {
 
     Integer star;
 
-    Integer like;
+    Integer likeCount;
 
     Integer dislike;
 

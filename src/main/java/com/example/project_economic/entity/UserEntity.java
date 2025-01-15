@@ -5,13 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -22,17 +17,22 @@ import java.util.List;
 @Where(clause = "is_deleted = false")
 @Entity
 @Table(name = "user")
-public class UserEntity implements UserDetails {
+public class UserEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "username", unique = true, nullable = false)
     String username;
 
     String password;
 
-    String role;
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    Set<RoleEntity> roleEntitySet;
 
     String email;
 
@@ -48,43 +48,5 @@ public class UserEntity implements UserDetails {
     public void control() {
         setIsActive(true);
         setIsDeleted(false);
-        if (role == null)
-            setRole("USER");
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
-        grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_" + role));
-        return grantedAuthorityList;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-    @Override
-    public String getUsername() {
-        return this.username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return isActive && !isDeleted;
     }
 }

@@ -3,6 +3,8 @@ package com.example.project_economic.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +15,7 @@ public class UserResponse implements Comparable{
 
     String username;
 
-    String role;
+    Set<RoleResponse> roleResponseSet;
 
     String email;
 

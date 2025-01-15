@@ -9,14 +9,22 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity,Long> {
-    Optional<UserEntity> findByUsername(String username);
+    @Query("SELECT u FROM UserEntity u " +
+           "WHERE u.username = :username AND u.isActive = true AND u.isDeleted = false")
+    Optional<UserEntity> findActiveByUsername(String username);
 
     // Exist
     @Query("SELECT EXISTS (" +
             "   SELECT 1 FROM UserEntity u" +
-            "   WHERE (u.username = :username OR u.email = :email) AND u.isDeleted = false" +
+            "   WHERE u.username = :username AND u.isDeleted = false" +
             ")")
-    Boolean existsByUsernameOrEmail(String username, String email);
+    Boolean existsByUsername(String username);
+
+    @Query("SELECT EXISTS (" +
+            "   SELECT 1 FROM UserEntity u" +
+            "   WHERE u.email = :email AND u.isDeleted = false" +
+            ")")
+    Boolean existsByEmail(String email);
 
     @Query("SELECT EXISTS (" +
             "   SELECT 1 FROM UserEntity u" +

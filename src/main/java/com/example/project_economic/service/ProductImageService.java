@@ -9,9 +9,9 @@ public interface ProductImageService {
     // Fetch
     Set<ProductImageResponse> getAllByProductId(Long productId);
 
-    ProductImageResponse getFirstActiveByProductIdAndColorId(Long productId, Long colorId);
+    ProductImageResponse getActiveByProductIdAndColorId(Long productId, Long colorId);
 
-    // Create/Update/Delete
+    // Add/Update/Delete
     ProductImageResponse add(ProductImageRequest productImageRequest);
 
     ProductImageResponse update(ProductImageRequest productImageRequest);

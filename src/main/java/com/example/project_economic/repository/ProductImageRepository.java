@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -28,5 +29,5 @@ public interface ProductImageRepository extends JpaRepository<ProductImageEntity
             "SELECT * FROM product_image " +
             "WHERE product_id = :productId AND color_id = :colorId AND is_active = true AND is_deleted = false " +
             "LIMIT 1", nativeQuery = true)
-    ProductImageEntity findFirstActiveByProductIdAndColorId(@Param("productId") Long productId, @Param("colorId") Long colorId);
+    Optional<ProductImageEntity> findActiveByProductIdAndColorId(@Param("productId") Long productId, @Param("colorId") Long colorId);
 }

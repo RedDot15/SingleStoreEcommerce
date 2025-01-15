@@ -1,9 +1,10 @@
 package com.example.project_economic.impl;
 
-import com.amazonaws.services.dlm.model.ResourceNotFoundException;
 import com.example.project_economic.dto.request.CommentRequest;
 import com.example.project_economic.dto.response.CommentResponse;
 import com.example.project_economic.entity.CommentEntity;
+import com.example.project_economic.exception.ErrorCode;
+import com.example.project_economic.exception.custom.AppException;
 import com.example.project_economic.mapper.CommentMapper;
 import com.example.project_economic.repository.CommentRepository;
 import com.example.project_economic.repository.ProductRepository;
@@ -14,6 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,10 +28,10 @@ import java.util.stream.Collectors;
 @Service
 public class CommentServiceImpl implements CommentService {
     CommentRepository commentRepository;
-    CommentMapper commentMapper;
-    ProductService productService;
     UserRepository userRepository;
     ProductRepository productRepository;
+    CommentMapper commentMapper;
+    ProductService productService;
 
     @Override
     public List<CommentResponse> getAllByProductId(Long productId) {
@@ -41,6 +43,7 @@ public class CommentServiceImpl implements CommentService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('ADD_COMMENT') or #commentRequest.userId == authentication.principal.claims['id']")
     @Override
     public CommentResponse add(CommentRequest commentRequest) {
         // Create new comment
@@ -56,11 +59,12 @@ public class CommentServiceImpl implements CommentService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_COMMENT') or #commentRequest.userId == authentication.principal.claims['id']")
     @Override
     public CommentResponse edit(CommentRequest commentRequest) {
         // Fetch old
         CommentEntity foundCommentEntity = commentRepository.findById(commentRequest.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Comment not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
         // Update comment
         foundCommentEntity.setContent(commentRequest.getContent());
         foundCommentEntity.setStar(commentRequest.getStar());
@@ -71,11 +75,12 @@ public class CommentServiceImpl implements CommentService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_COMMENT') or @securityService.isCommentOwner(#id, authentication.principal.claims['id'])")
     @Override
     public Long delete(Long id) {
         // Fetch
         CommentEntity foundCommentEntity = commentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Comment not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
         // Delete
         commentRepository.delete(foundCommentEntity);
         // Return ID

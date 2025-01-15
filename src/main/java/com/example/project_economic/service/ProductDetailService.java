@@ -9,7 +9,7 @@ public interface ProductDetailService {
     // Fetch
     Set<ProductDetailResponse> getAllByProductId(Long productId);
 
-    // Create/Update/Delete
+    // Add/Update/Delete
     ProductDetailResponse add(ProductDetailRequest productDetailRequest);
 
     ProductDetailResponse update(ProductDetailRequest productDetailRequest);

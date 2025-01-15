@@ -1,7 +1,7 @@
 package com.example.project_economic.service;
 
-import com.example.project_economic.dto.request.filter.ProductFilterRequest;
 import com.example.project_economic.dto.request.ProductRequest;
+import com.example.project_economic.dto.request.filter.ProductFilterRequest;
 import com.example.project_economic.dto.response.ProductResponse;
 import com.example.project_economic.entity.ProductEntity;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,7 @@ public interface ProductService {
 
     ProductResponse getActiveById(Long id);
 
-    // Create/Update/Delete
+    // Add/Update/Delete
     ProductResponse add(ProductRequest productRequest);
 
     ProductResponse update(ProductRequest productRequest);
