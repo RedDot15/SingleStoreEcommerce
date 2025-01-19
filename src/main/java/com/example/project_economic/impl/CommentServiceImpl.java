@@ -43,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority('ADD_COMMENT') or #commentRequest.userId == authentication.principal.claims['id']")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('ADD_COMMENT') or #commentRequest.userId == authentication.principal.claims['uid']")
     @Override
     public CommentResponse add(CommentRequest commentRequest) {
         // Create new comment
@@ -59,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
         );
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_COMMENT') or #commentRequest.userId == authentication.principal.claims['id']")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_COMMENT') or @securityService.isCommentOwner(#commentRequest.id, authentication.principal.claims['uid'])")
     @Override
     public CommentResponse edit(CommentRequest commentRequest) {
         // Fetch old
@@ -75,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
         );
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_COMMENT') or @securityService.isCommentOwner(#id, authentication.principal.claims['id'])")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_COMMENT') or @securityService.isCommentOwner(#id, authentication.principal.claims['uid'])")
     @Override
     public Long delete(Long id) {
         // Fetch

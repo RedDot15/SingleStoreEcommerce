@@ -1,8 +1,12 @@
 package com.example.project_economic.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.Date;
 
 @Getter
 @Setter
@@ -11,13 +15,10 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "permission")
-public class PermissionEntity {
+@Table(name = "invalidated_token")
+public class InvalidatedTokenEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    String id;
 
-    String name;
-
-    String description;
+    Date expiryTime;
 }

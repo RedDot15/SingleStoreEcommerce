@@ -32,7 +32,7 @@ public class CartItemServiceImpl implements CartItemService {
     ProductDetailRepository productDetailRepository;
     CartItemMapper cartItemMapper;
 
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_CART_ITEM') or (#userId == authentication.principal.claims['id'])")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_CART_ITEM') or (#userId == authentication.principal.claims['uid'])")
     @Override
     public List<CartItemResponse> getAllByUserId(Long userId) {
         // Return result
@@ -41,14 +41,14 @@ public class CartItemServiceImpl implements CartItemService {
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_CART_ITEM') or (#userId == authentication.principal.claims['id'])")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_CART_ITEM') or (#userId == authentication.principal.claims['uid'])")
     @Override
     public Long countAllByUserId(Long userId) {
         // Return cart's size by user ID
         return cartItemRepository.countAllByUserId(userId);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority('ADD_CART_ITEM') or (#cartItemRequest.userId == authentication.principal.claims['id'])")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('ADD_CART_ITEM') or (#cartItemRequest.userId == authentication.principal.claims['uid'])")
     @Override
     public CartItemResponse add(CartItemRequest cartItemRequest) {
         // Checking if a matching cart-item exists
@@ -77,7 +77,7 @@ public class CartItemServiceImpl implements CartItemService {
         );
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_CART_ITEM') or @securityService.isCartItemOwner(#cartItemRequest.id, authentication.principal.claims['id'])")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_CART_ITEM') or @securityService.isCartItemOwner(#cartItemRequest.id, authentication.principal.claims['uid'])")
     @Override
     public CartItemResponse update(CartItemRequest cartItemRequest) {
         // Get old & Not found/Deleted exception
@@ -91,7 +91,7 @@ public class CartItemServiceImpl implements CartItemService {
         );
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_CART_ITEM') or @securityService.isCartItemOwner(#id, authentication.principal.claims['id'])")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_CART_ITEM') or @securityService.isCartItemOwner(#id, authentication.principal.claims['uid'])")
     @Override
     public Long delete(Long id) {
         // Retrieve the cart item to check ownership
@@ -103,7 +103,7 @@ public class CartItemServiceImpl implements CartItemService {
         return id;
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_CART_ITEM') or (#userId == authentication.principal.claims['id'])")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_CART_ITEM') or (#userId == authentication.principal.claims['uid'])")
     @Override
     public Long deleteAllByUserId(Long userId) {
         // Delete cart-item

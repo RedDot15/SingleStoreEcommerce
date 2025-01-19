@@ -2,14 +2,17 @@ package com.example.project_economic.impl;
 
 import com.example.project_economic.dto.request.authentication.AuthenticationRequest;
 import com.example.project_economic.dto.response.authentication.AuthenticationResponse;
+import com.example.project_economic.entity.InvalidatedTokenEntity;
 import com.example.project_economic.entity.UserEntity;
 import com.example.project_economic.exception.ErrorCode;
 import com.example.project_economic.exception.custom.AppException;
+import com.example.project_economic.repository.InvalidatedTokenRepository;
 import com.example.project_economic.repository.UserRepository;
 import com.example.project_economic.service.AuthenticationService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +20,10 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -25,6 +31,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -34,6 +41,7 @@ import java.util.StringJoiner;
 public class AuthenticationServiceImpl implements AuthenticationService {
     PasswordEncoder passwordEncoder;
     UserRepository userRepository;
+    InvalidatedTokenRepository invalidatedTokenRepository;
 
     @NonFinal
     @Value("${jwt.signer-key}")
@@ -57,6 +65,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
+    public void logout() {
+        // Get Jwt token from Context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        // Get token information
+        String jti = jwt.getClaim("jti");
+        Date expiryTime = Date.from(jwt.getClaim("exp"));
+        // Save invalid token
+        InvalidatedTokenEntity invalidatedTokenEntity = InvalidatedTokenEntity.builder()
+                .id(jti)
+                .expiryTime(expiryTime)
+                .build();
+
+        invalidatedTokenRepository.save(invalidatedTokenEntity);
+    }
+
     private String generateToken(UserEntity userEntity) {
         // Define Header
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
@@ -68,8 +92,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
+                .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(userEntity))
-                .claim("id", userEntity.getId())
+                .claim("uid", userEntity.getId())
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         // Define JWSObject

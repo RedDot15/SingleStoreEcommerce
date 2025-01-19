@@ -26,12 +26,12 @@ public class OrderItemController {
         );
     }
 
-    @PostMapping("/add/with/user/{userId}")
-    public ResponseEntity<ResponseObject> addWithUserId(@PathVariable Long userId){
+    @PostMapping("/my-item/add")
+    public ResponseEntity<ResponseObject> addMyItem(){
         return buildResponse(
                 HttpStatus.OK,
                 "Added order-items successfully.",
-                orderItemService.addWithUserId(userId)
+                orderItemService.addMyItem()
         );
     }
 

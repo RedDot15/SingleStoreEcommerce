@@ -9,9 +9,10 @@ import org.hibernate.annotations.Where;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SQLDelete(sql = "UPDATE category SET is_deleted = true WHERE id = ?")

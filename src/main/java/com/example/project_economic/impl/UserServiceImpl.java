@@ -163,6 +163,7 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_INFORMATION') or (#userRequest.id == authentication.principal.claims['uid'])")
     @Override
     public UserResponse updateInformation(UserRequest userRequest){
         // Username or Email duplicate exception
@@ -179,6 +180,7 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('CHANGE_PASSWORD') or (#request.id == authentication.principal.claims['uid'])")
     @Override
     public UserResponse changePassword(UserChangePasswordRequest request) {
         // Get old

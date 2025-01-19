@@ -6,4 +6,7 @@ import com.example.project_economic.dto.response.authentication.AuthenticationRe
 public interface AuthenticationService {
     // Authenticate
     AuthenticationResponse authenticate(AuthenticationRequest request);
+
+    // Logout
+    void logout();
 }

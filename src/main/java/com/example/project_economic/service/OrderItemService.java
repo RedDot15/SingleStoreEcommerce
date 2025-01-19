@@ -9,5 +9,5 @@ public interface OrderItemService {
     List<OrderItemResponse> getAllByUserId(Long userId);
 
     // Add
-    List<OrderItemResponse> addWithUserId(Long userId);
+    List<OrderItemResponse> addMyItem();
 }
