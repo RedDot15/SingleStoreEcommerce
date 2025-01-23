@@ -1,6 +1,7 @@
 package com.example.project_economic.controller;
 
 import com.example.project_economic.dto.request.authentication.AuthenticationRequest;
+import com.example.project_economic.dto.request.authentication.RefreshRequest;
 import com.example.project_economic.dto.response.wrap.ResponseObject;
 import com.example.project_economic.service.AuthenticationService;
 import jakarta.validation.Valid;
@@ -24,6 +25,15 @@ public class AuthenticationController {
                 HttpStatus.OK,
                 "Authenticate successfully.",
                 authenticationService.authenticate(request)
+        );
+    }
+
+    @PostMapping("/token/refresh")
+    public ResponseEntity<ResponseObject> refreshToken(@Valid @RequestBody RefreshRequest request) {
+        return buildResponse(
+                HttpStatus.OK,
+                "Authenticate successfully.",
+                authenticationService.refresh(request)
         );
     }
 
