@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.example.project_economic.helper.ResponseBuilder.buildResponse;
+
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
@@ -25,16 +27,6 @@ public class CommentController {
                 HttpStatus.OK,
                 "All comments fetch successfully.",
                 commentService.getAllByProductId(productId)
-        );
-    }
-
-    private ResponseEntity<ResponseObject> buildResponse(HttpStatus status, String message, Object data) {
-        return ResponseEntity.status(status).body(
-                new ResponseObject(
-                        status.is2xxSuccessful() ? "ok" : "failed",
-                        message,
-                        data
-                )
         );
     }
 }

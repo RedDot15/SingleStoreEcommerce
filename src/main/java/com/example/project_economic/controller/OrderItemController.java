@@ -9,13 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.example.project_economic.helper.ResponseBuilder.buildResponse;
+
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @RequestMapping(path = "/order-item")
 public class OrderItemController {
     OrderItemService orderItemService;
-
+    
     @GetMapping("/list/all/by/user/{userId}")
     public ResponseEntity<ResponseObject> showAll(@PathVariable Long userId){
         // Fetch & Return all users
@@ -32,16 +34,6 @@ public class OrderItemController {
                 HttpStatus.OK,
                 "Added order-items successfully.",
                 orderItemService.addMyItem()
-        );
-    }
-
-    private ResponseEntity<ResponseObject> buildResponse(HttpStatus status, String message, Object data) {
-        return ResponseEntity.status(status).body(
-                new ResponseObject(
-                        status.is2xxSuccessful() ? "ok" : "failed",
-                        message,
-                        data
-                )
         );
     }
 }

@@ -1,6 +1,7 @@
 package com.example.project_economic.config.security;
 
 import com.example.project_economic.service.AuthenticationService;
+import com.example.project_economic.service.TokenService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,10 +15,10 @@ import org.springframework.stereotype.Component;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Component
 public class CustomJwtDecoder implements JwtDecoder {
-    AuthenticationService authenticationService;
+    TokenService tokenService;
 
     @Override
     public Jwt decode(String accessToken){
-        return authenticationService.verifyToken(accessToken, false);
+        return tokenService.verifyToken(accessToken, false);
     }
 }

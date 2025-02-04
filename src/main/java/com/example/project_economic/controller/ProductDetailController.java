@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.example.project_economic.helper.ResponseBuilder.buildResponse;
+
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
@@ -94,16 +96,6 @@ public class ProductDetailController {
                 HttpStatus.OK,
                 "Deactivated product-detail successfully.",
                 productDetailService.deactivate(productDetailId)
-        );
-    }
-
-    private ResponseEntity<ResponseObject> buildResponse(HttpStatus status, String message, Object data) {
-        return ResponseEntity.status(status).body(
-                new ResponseObject(
-                        status.is2xxSuccessful() ? "ok" : "failed",
-                        message,
-                        data
-                )
         );
     }
 }

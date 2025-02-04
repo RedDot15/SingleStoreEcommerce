@@ -59,6 +59,6 @@ public enum ErrorCode {
     FILE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "File upload failed."),
     ;
 
-    HttpStatusCode statusCode;
+    HttpStatus httpStatus;
     String message;
 }

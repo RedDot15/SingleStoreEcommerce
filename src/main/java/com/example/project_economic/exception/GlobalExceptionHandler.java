@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.example.project_economic.helper.ResponseBuilder.buildResponse;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     public static final String FIELDS_ATTRIBUTE = "fields";
@@ -25,29 +27,37 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseObject> handleGeneralException(Exception e) {
         ErrorCode errorCode = ErrorCode.UNCATEGORIZED;
-        return ResponseEntity.status(errorCode.getStatusCode())
-                .body(new ResponseObject("failed", errorCode.getMessage(), null));
+        return buildResponse(
+                errorCode.getHttpStatus(),
+                errorCode.getMessage(),
+                null);
     }
 
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ResponseObject> handleAppException(AppException e) {
         ErrorCode errorCode = e.getErrorCode();
-        return ResponseEntity.status(errorCode.getStatusCode())
-                .body(new ResponseObject("failed", errorCode.getMessage(), null));
+        return buildResponse(
+                errorCode.getHttpStatus(),
+                errorCode.getMessage(),
+                null);
     }
 
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ResponseObject> handleJwtException(JwtException e) {
         ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
-        return ResponseEntity.status(errorCode.getStatusCode())
-                .body(new ResponseObject("failed", errorCode.getMessage(), null));
+        return buildResponse(
+                errorCode.getHttpStatus(),
+                errorCode.getMessage(),
+                null);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ResponseObject> handleAccessDeniedException(AccessDeniedException e) {
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
-        return ResponseEntity.status(errorCode.getStatusCode())
-                .body(new ResponseObject("failed", errorCode.getMessage(), null));
+        return buildResponse(
+                errorCode.getHttpStatus(),
+                errorCode.getMessage(),
+                null);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -76,8 +86,10 @@ public class GlobalExceptionHandler {
                     }
                 })
                 .collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ResponseObject("failed", "Validation failed.", validationResponseSet));
+        return buildResponse(
+                HttpStatus.BAD_REQUEST,
+                "Validation failed.",
+                validationResponseSet);
     }
 
     private String mapAttribute(String message, Map<String, Object> attributes) {
