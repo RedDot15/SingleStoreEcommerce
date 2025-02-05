@@ -1,9 +1,8 @@
 package com.example.project_economic.dto.response;
 
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -11,11 +10,11 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RoleResponse {
-    Long id;
+  Long id;
 
-    String name;
+  String name;
 
-    String description;
+  String description;
 
-    Set<PermissionResponse> permissionResponseSet;
+  Set<PermissionResponse> permissionResponseSet;
 }

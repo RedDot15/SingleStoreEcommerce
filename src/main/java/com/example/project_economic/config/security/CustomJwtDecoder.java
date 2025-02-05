@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Component
 public class CustomJwtDecoder implements JwtDecoder {
-    TokenService tokenService;
+  TokenService tokenService;
 
-    @Override
-    public Jwt decode(String accessToken){
-        return tokenService.verifyToken(accessToken, false);
-    }
+  @Override
+  public Jwt decode(String accessToken) {
+    return tokenService.verifyToken(accessToken, false);
+  }
 }

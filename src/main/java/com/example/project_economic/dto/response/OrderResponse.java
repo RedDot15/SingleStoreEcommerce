@@ -1,9 +1,8 @@
 package com.example.project_economic.dto.response;
 
+import java.time.LocalDateTime;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -11,9 +10,9 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderResponse {
-    Long id;
+  Long id;
 
-    LocalDateTime boughtAt;
+  LocalDateTime boughtAt;
 
-    Boolean received;
+  Boolean received;
 }

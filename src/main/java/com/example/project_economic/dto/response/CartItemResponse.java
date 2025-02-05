@@ -1,10 +1,9 @@
 package com.example.project_economic.dto.response;
 
 import com.example.project_economic.utils.CurrencyFormatter;
+import java.math.BigDecimal;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -12,16 +11,18 @@ import java.math.BigDecimal;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartItemResponse {
-    Long id;
+  Long id;
 
-    ProductDetailResponse productDetailResponse;
+  ProductDetailResponse productDetailResponse;
 
-    Integer quantity;
+  Integer quantity;
 
-    public String totalMoney(){
-        return CurrencyFormatter.getFormattedCurrency(
-                productDetailResponse.getProductResponse().getSalePrice()
-                        .multiply(new BigDecimal(quantity)).toString()
-        );
-    }
+  public String totalMoney() {
+    return CurrencyFormatter.getFormattedCurrency(
+        productDetailResponse
+            .getProductResponse()
+            .getSalePrice()
+            .multiply(new BigDecimal(quantity))
+            .toString());
+  }
 }

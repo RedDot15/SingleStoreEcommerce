@@ -9,14 +9,14 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ColorResponse implements Comparable {
-    Long id;
+  Long id;
 
-    String name;
+  String name;
 
-    String hexCode;
+  String hexCode;
 
-    @Override
-    public int compareTo(Object o) {
-        return id.compareTo(((ColorResponse)o).getId());
-    }
+  @Override
+  public int compareTo(Object o) {
+    return id.compareTo(((ColorResponse) o).getId());
+  }
 }

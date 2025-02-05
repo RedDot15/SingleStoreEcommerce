@@ -17,38 +17,40 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "product_detail")
 public class ProductDetailEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id")
-    ProductEntity productEntity;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "product_id")
+  ProductEntity productEntity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "color_id")
-    ColorEntity colorEntity;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "color_id")
+  ColorEntity colorEntity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "size_id")
-    SizeEntity sizeEntity;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "size_id")
+  SizeEntity sizeEntity;
 
-    Integer stock;
+  Integer stock;
 
-    Boolean isActive;
+  Boolean isActive;
 
-    Boolean isDeleted;
+  Boolean isDeleted;
 
-    @Column(name = "product_id", insertable = false, updatable = false)
-    Long productId;
-    @Column(name = "color_id", insertable = false, updatable = false)
-    Long colorId;
-    @Column(name = "size_id", insertable = false, updatable = false)
-    Long sizeId;
+  @Column(name = "product_id", insertable = false, updatable = false)
+  Long productId;
 
-    @PrePersist
-    void control(){
-        setIsActive(true);
-        setIsDeleted(false);
-    }
+  @Column(name = "color_id", insertable = false, updatable = false)
+  Long colorId;
+
+  @Column(name = "size_id", insertable = false, updatable = false)
+  Long sizeId;
+
+  @PrePersist
+  void control() {
+    setIsActive(true);
+    setIsDeleted(false);
+  }
 }

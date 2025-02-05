@@ -1,12 +1,11 @@
 package com.example.project_economic.entity;
 
 import jakarta.persistence.*;
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
-import java.util.Set;
 
 @Getter
 @Setter
@@ -18,36 +17,35 @@ import java.util.Set;
 @Where(clause = "is_deleted = false")
 @Entity
 @Table(name = "user")
-public class UserEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class UserEntity {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    String username;
+  String username;
 
-    String password;
+  String password;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    Set<RoleEntity> roleEntitySet;
+  @ManyToMany
+  @JoinTable(
+      name = "user_role",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id"))
+  Set<RoleEntity> roleEntitySet;
 
-    String email;
+  String email;
 
-    String phoneNumber;
+  String phoneNumber;
 
-    String address;
+  String address;
 
-    Boolean isActive;
+  Boolean isActive;
 
-    Boolean isDeleted;
+  Boolean isDeleted;
 
-    @PrePersist
-    public void control() {
-        setIsActive(true);
-        setIsDeleted(false);
-    }
+  @PrePersist
+  public void control() {
+    setIsActive(true);
+    setIsDeleted(false);
+  }
 }

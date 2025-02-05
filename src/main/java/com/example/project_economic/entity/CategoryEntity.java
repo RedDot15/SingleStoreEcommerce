@@ -1,13 +1,12 @@
 package com.example.project_economic.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
-import java.time.LocalDateTime;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -20,29 +19,28 @@ import java.util.Set;
 @Entity
 @Table(name = "category")
 public class CategoryEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    @Column(name = "name",unique = true)
-    String name;
+  @Column(name = "name", unique = true)
+  String name;
 
-    LocalDateTime createdDate;
+  LocalDateTime createdDate;
 
-    Boolean isActive;
+  Boolean isActive;
 
-    Boolean isDeleted;
+  Boolean isDeleted;
 
-    @Where(clause = "is_active = true")
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    Set<ProductEntity> activeProductEntitySet;
+  @Where(clause = "is_active = true")
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "category_id")
+  Set<ProductEntity> activeProductEntitySet;
 
-    @PrePersist
-    public void control() {
-        setCreatedDate(LocalDateTime.now());
-        setIsActive(false);
-        setIsDeleted(false);
-    }
+  @PrePersist
+  public void control() {
+    setCreatedDate(LocalDateTime.now());
+    setIsActive(false);
+    setIsDeleted(false);
+  }
 }
-

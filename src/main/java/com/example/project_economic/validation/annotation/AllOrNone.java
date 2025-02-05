@@ -3,7 +3,6 @@ package com.example.project_economic.validation.annotation;
 import com.example.project_economic.validation.validator.AllOrNoneValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-
 import java.lang.annotation.*;
 
 @Target(ElementType.TYPE)
@@ -11,9 +10,11 @@ import java.lang.annotation.*;
 @Documented
 @Constraint(validatedBy = AllOrNoneValidator.class)
 public @interface AllOrNone {
-    String[] fields();
+  String[] fields();
 
-    String message() default "These field must be all null or all not null.";
-    Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default {};
+  String message() default "These field must be all null or all not null.";
+
+  Class<?>[] groups() default {};
+
+  Class<? extends Payload>[] payload() default {};
 }

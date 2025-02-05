@@ -1,10 +1,9 @@
 package com.example.project_economic.entity;
 
 import jakarta.persistence.*;
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Getter
 @Setter
@@ -15,19 +14,18 @@ import java.util.Set;
 @Entity
 @Table(name = "role")
 public class RoleEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    String name;
+  String name;
 
-    String description;
+  String description;
 
-    @ManyToMany
-    @JoinTable(
-            name = "role_permission",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-    Set<PermissionEntity> permissionEntitySet;
+  @ManyToMany
+  @JoinTable(
+      name = "role_permission",
+      joinColumns = @JoinColumn(name = "role_id"),
+      inverseJoinColumns = @JoinColumn(name = "permission_id"))
+  Set<PermissionEntity> permissionEntitySet;
 }

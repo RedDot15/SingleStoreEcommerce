@@ -1,13 +1,12 @@
 package com.example.project_economic.entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
-import java.math.BigDecimal;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -20,45 +19,45 @@ import java.util.Set;
 @Entity
 @Table(name = "product")
 public class ProductEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    String name;
+  String name;
 
-    String description;
+  String description;
 
-    BigDecimal costPrice;
+  BigDecimal costPrice;
 
-    BigDecimal salePrice;
+  BigDecimal salePrice;
 
-    Integer likes;
+  Integer likes;
 
-    Boolean isActive;
+  Boolean isActive;
 
-    Boolean isDeleted;
+  Boolean isDeleted;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id",referencedColumnName = "id")
-    CategoryEntity categoryEntity;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "category_id", referencedColumnName = "id")
+  CategoryEntity categoryEntity;
 
-    @Where(clause = "is_active = true")
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    Set<ProductImageEntity> activeProductImageEntitySet;
+  @Where(clause = "is_active = true")
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "product_id")
+  Set<ProductImageEntity> activeProductImageEntitySet;
 
-    @Where(clause = "is_active = true")
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    Set<ProductDetailEntity> activeProductDetailEntitySet;
+  @Where(clause = "is_active = true")
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "product_id")
+  Set<ProductDetailEntity> activeProductDetailEntitySet;
 
-    @Column(name = "category_id", insertable = false, updatable = false)
-    Long categoryId;
+  @Column(name = "category_id", insertable = false, updatable = false)
+  Long categoryId;
 
-    @PrePersist
-    void control(){
-        setLikes(0);
-        setIsActive(false);
-        setIsDeleted(false);
-    }
+  @PrePersist
+  void control() {
+    setLikes(0);
+    setIsActive(false);
+    setIsDeleted(false);
+  }
 }

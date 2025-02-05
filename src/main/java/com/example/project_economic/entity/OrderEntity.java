@@ -1,10 +1,9 @@
 package com.example.project_economic.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,21 +14,21 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "order")
 public class OrderEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    LocalDateTime boughtAt;
+  LocalDateTime boughtAt;
 
-    Boolean received;
+  Boolean received;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    UserEntity userEntity;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  UserEntity userEntity;
 
-    @PrePersist
-    void control(){
-        setBoughtAt(LocalDateTime.now());
-        setReceived(false);
-    }
+  @PrePersist
+  void control() {
+    setBoughtAt(LocalDateTime.now());
+    setReceived(false);
+  }
 }

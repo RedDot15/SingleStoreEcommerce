@@ -12,29 +12,32 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class StorageConfig {
-    @Value("${cloud.aws.credentials.access-key}")
-    private String accessKey;
-    @Value("${cloud.aws.credentials.secret-key}")
-    private String accessSecret;
-    @Value("${cloud.aws.region.static}")
-    private String region;
+  @Value("${cloud.aws.credentials.access-key}")
+  private String accessKey;
 
-    @Bean(name = "s3ClientRead")
-    public AmazonS3 s3ClientRead() {
-        AWSCredentials credentials = new BasicAWSCredentials(accessKey, accessSecret);
-        AwsClientBuilder.EndpointConfiguration endpoint = new AwsClientBuilder.EndpointConfiguration("cloudfront.net" ,region);
-        return AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withEndpointConfiguration(endpoint)
-                .build();
-    }
+  @Value("${cloud.aws.credentials.secret-key}")
+  private String accessSecret;
 
-    @Bean(name = "s3ClientWrite")
-    public AmazonS3 s3ClientWrite() {
-        AWSCredentials credentials = new BasicAWSCredentials(accessKey, accessSecret);
-        return AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(region)
-                .build();
-    }
+  @Value("${cloud.aws.region.static}")
+  private String region;
+
+  @Bean(name = "s3ClientRead")
+  public AmazonS3 s3ClientRead() {
+    AWSCredentials credentials = new BasicAWSCredentials(accessKey, accessSecret);
+    AwsClientBuilder.EndpointConfiguration endpoint =
+        new AwsClientBuilder.EndpointConfiguration("cloudfront.net", region);
+    return AmazonS3ClientBuilder.standard()
+        .withCredentials(new AWSStaticCredentialsProvider(credentials))
+        .withEndpointConfiguration(endpoint)
+        .build();
+  }
+
+  @Bean(name = "s3ClientWrite")
+  public AmazonS3 s3ClientWrite() {
+    AWSCredentials credentials = new BasicAWSCredentials(accessKey, accessSecret);
+    return AmazonS3ClientBuilder.standard()
+        .withCredentials(new AWSStaticCredentialsProvider(credentials))
+        .withRegion(region)
+        .build();
+  }
 }

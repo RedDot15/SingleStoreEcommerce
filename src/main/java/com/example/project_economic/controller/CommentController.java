@@ -1,5 +1,7 @@
 package com.example.project_economic.controller;
 
+import static com.example.project_economic.helper.ResponseBuilder.buildResponse;
+
 import com.example.project_economic.dto.response.wrap.ResponseObject;
 import com.example.project_economic.service.CommentService;
 import lombok.AccessLevel;
@@ -12,21 +14,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.example.project_economic.helper.ResponseBuilder.buildResponse;
-
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @RequestMapping(path = "/comment")
 public class CommentController {
-    CommentService commentService;
+  CommentService commentService;
 
-    @GetMapping("/list/all/by/product/{productId}")
-    public ResponseEntity<ResponseObject> showAllCommentOfAProduct(@PathVariable Long productId){
-        return buildResponse(
-                HttpStatus.OK,
-                "All comments fetch successfully.",
-                commentService.getAllByProductId(productId)
-        );
-    }
+  @GetMapping("/list/all/by/product/{productId}")
+  public ResponseEntity<ResponseObject> showAllCommentOfAProduct(@PathVariable Long productId) {
+    return buildResponse(
+        HttpStatus.OK,
+        "All comments fetch successfully.",
+        commentService.getAllByProductId(productId));
+  }
 }

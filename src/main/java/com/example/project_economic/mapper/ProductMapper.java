@@ -9,14 +9,17 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
-    // Add
-    @Mapping(target = "categoryEntity", ignore = true)
-    ProductEntity toProductEntity(ProductRequest productRequest);
-    // Update
-    @Mapping(target = "categoryEntity", ignore = true)
-    void updateProductEntityFromRequest(@MappingTarget ProductEntity productEntity, ProductRequest productRequest);
-    // Response
-    @Mapping(target = "categoryResponse", source = "categoryEntity")
-    @Mapping(target = "activeProductImageResponseSet", source = "activeProductImageEntitySet")
-    ProductResponse toProductResponse(ProductEntity productEntity);
+  // Add
+  @Mapping(target = "categoryEntity", ignore = true)
+  ProductEntity toProductEntity(ProductRequest productRequest);
+
+  // Update
+  @Mapping(target = "categoryEntity", ignore = true)
+  void updateProductEntityFromRequest(
+      @MappingTarget ProductEntity productEntity, ProductRequest productRequest);
+
+  // Response
+  @Mapping(target = "categoryResponse", source = "categoryEntity")
+  @Mapping(target = "activeProductImageResponseSet", source = "activeProductImageEntitySet")
+  ProductResponse toProductResponse(ProductEntity productEntity);
 }

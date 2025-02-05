@@ -12,18 +12,18 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "cart_item")
-public class CartItemEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class CartItemEntity {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    UserEntity userEntity;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "user_id")
+  UserEntity userEntity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_detail_id")
-    ProductDetailEntity productDetailEntity;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "product_detail_id")
+  ProductDetailEntity productDetailEntity;
 
-    Integer quantity;
+  Integer quantity;
 }

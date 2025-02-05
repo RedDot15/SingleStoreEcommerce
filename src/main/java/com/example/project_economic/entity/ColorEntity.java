@@ -1,12 +1,11 @@
 package com.example.project_economic.entity;
 
 import jakarta.persistence.*;
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
-import java.util.Set;
 
 @Getter
 @Setter
@@ -19,26 +18,26 @@ import java.util.Set;
 @Entity
 @Table(name = "color")
 public class ColorEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    String name;
+  String name;
 
-    String hexCode;
+  String hexCode;
 
-    Boolean isDeleted;
+  Boolean isDeleted;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "color_id")
-    Set<ProductDetailEntity> productDetailEntitySet;
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "color_id")
+  Set<ProductDetailEntity> productDetailEntitySet;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "color_id")
-    Set<ProductImageEntity> productImageEntitySet;
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "color_id")
+  Set<ProductImageEntity> productImageEntitySet;
 
-    @PrePersist
-    void control(){
-        setIsDeleted(false);
-    }
+  @PrePersist
+  void control() {
+    setIsDeleted(false);
+  }
 }

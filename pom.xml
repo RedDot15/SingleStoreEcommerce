@@ -18,6 +18,8 @@
         <projectlombok-lombok.version>1.18.32</projectlombok-lombok.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+        <spotless.version>2.44.0</spotless.version>
     </properties>
     <dependencies>
         <dependency>
@@ -139,6 +141,54 @@
                         <arg>-Amapstruct.defaultComponentModel=spring</arg>
                         <arg>-Amapstruct.verbose=true</arg>
                     </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>com/example/project_economic/dto/**</exclude>
+                        <exclude>com/example/project_economic/entity/**</exclude>
+                        <exclude>com/example/project_economic/mapper/**</exclude>
+                        <exclude>com/example/project_economic/config/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>apply</goal>  <!-- Apply formatting -->
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <java>
+                        <!-- Use Google Java Format -->
+                        <googleJavaFormat/>
+                        <trimTrailingWhitespace/>
+                        <endWithNewline/>
+                        <removeUnusedImports/>
+                    </java>
                 </configuration>
             </plugin>
         </plugins>

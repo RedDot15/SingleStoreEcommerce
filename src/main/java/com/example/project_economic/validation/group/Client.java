@@ -1,4 +1,3 @@
 package com.example.project_economic.validation.group;
 
-public interface Client {
-}
+public interface Client {}

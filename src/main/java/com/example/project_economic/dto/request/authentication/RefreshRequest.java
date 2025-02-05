@@ -10,6 +10,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RefreshRequest {
-    @NotBlank(message = "Refresh token is required.")
-    String refreshToken;
+  @NotBlank(message = "Refresh token is required.")
+  String refreshToken;
 }

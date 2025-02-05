@@ -1,46 +1,45 @@
 package com.example.project_economic.dto.response;
 
 import com.example.project_economic.utils.CurrencyFormatter;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
 import java.util.Set;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductResponse implements Comparable{
-    Long id;
+public class ProductResponse implements Comparable {
+  Long id;
 
-    String name;
+  String name;
 
-    String description;
+  String description;
 
-    BigDecimal costPrice;
+  BigDecimal costPrice;
 
-    BigDecimal salePrice;
+  BigDecimal salePrice;
 
-    Integer likes;
+  Integer likes;
 
-    Boolean isActive;
+  Boolean isActive;
 
-    CategoryResponse categoryResponse;
+  CategoryResponse categoryResponse;
 
-    Set<ProductImageResponse> activeProductImageResponseSet;
+  Set<ProductImageResponse> activeProductImageResponseSet;
 
-    public String getFormattedSalePrice(){
-        return CurrencyFormatter.getFormattedCurrency(salePrice.toString());
-    }
+  public String getFormattedSalePrice() {
+    return CurrencyFormatter.getFormattedCurrency(salePrice.toString());
+  }
 
-    public String getFormattedCostPrice(){
-        return CurrencyFormatter.getFormattedCurrency(costPrice.toString());
-    }
+  public String getFormattedCostPrice() {
+    return CurrencyFormatter.getFormattedCurrency(costPrice.toString());
+  }
 
-    @Override
-    public int compareTo(Object o) {
-        return id.compareTo(((ProductResponse)o).getId());
-    }
+  @Override
+  public int compareTo(Object o) {
+    return id.compareTo(((ProductResponse) o).getId());
+  }
 }

@@ -13,20 +13,20 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @Table(name = "order_item")
 public class OrderItemEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    OrderEntity orderEntity;
+  @ManyToOne
+  @JoinColumn(name = "order_id")
+  OrderEntity orderEntity;
 
-    @ManyToOne
-    @JoinColumn(name = "product_detail_id")
-    ProductDetailEntity productDetailEntity;
+  @ManyToOne
+  @JoinColumn(name = "product_detail_id")
+  ProductDetailEntity productDetailEntity;
 
-    @Column(name = "product_detail_id", insertable = false, updatable = false)
-    Long productDetailId;
+  @Column(name = "product_detail_id", insertable = false, updatable = false)
+  Long productDetailId;
 
-    Integer quantity;
+  Integer quantity;
 }

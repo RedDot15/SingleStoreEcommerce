@@ -1,10 +1,9 @@
 package com.example.project_economic.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,36 +14,35 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "comment")
 public class CommentEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    String content;
+  String content;
 
-    Integer star;
+  Integer star;
 
-    Integer likeCount;
+  Integer likeCount;
 
-    Integer dislike;
+  Integer dislike;
 
-    LocalDateTime createdAt;
+  LocalDateTime createdAt;
 
-    LocalDateTime updatedAt;
+  LocalDateTime updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    UserEntity userEntity;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  UserEntity userEntity;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    ProductEntity productEntity;
+  @ManyToOne
+  @JoinColumn(name = "product_id")
+  ProductEntity productEntity;
 
-    @PrePersist
-    void control(){
-        setLikeCount(0);
-        setDislike(0);
-        setCreatedAt(LocalDateTime.now());
-        setUpdatedAt(LocalDateTime.now());
-    }
+  @PrePersist
+  void control() {
+    setLikeCount(0);
+    setDislike(0);
+    setCreatedAt(LocalDateTime.now());
+    setUpdatedAt(LocalDateTime.now());
+  }
 }
-

@@ -1,32 +1,31 @@
 package com.example.project_economic.dto.response;
 
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse implements Comparable{
-    Long id;
+public class UserResponse implements Comparable {
+  Long id;
 
-    String username;
+  String username;
 
-    Set<RoleResponse> roleResponseSet;
+  Set<RoleResponse> roleResponseSet;
 
-    String email;
+  String email;
 
-    String phoneNumber;
+  String phoneNumber;
 
-    String address;
+  String address;
 
-    Boolean isActive;
+  Boolean isActive;
 
-    @Override
-    public int compareTo(Object o) {
-        return id.compareTo(((UserResponse)o).getId());
-    }
+  @Override
+  public int compareTo(Object o) {
+    return id.compareTo(((UserResponse) o).getId());
+  }
 }

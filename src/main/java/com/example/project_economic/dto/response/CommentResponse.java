@@ -1,9 +1,8 @@
 package com.example.project_economic.dto.response;
 
+import java.time.LocalDateTime;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -11,19 +10,19 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentResponse {
-    Long id;
+  Long id;
 
-    String content;
+  String content;
 
-    Integer star;
+  Integer star;
 
-    Integer likeCount;
+  Integer likeCount;
 
-    Integer dislike;
+  Integer dislike;
 
-    LocalDateTime createdAt;
+  LocalDateTime createdAt;
 
-    LocalDateTime updatedAt;
+  LocalDateTime updatedAt;
 
-    UserResponse userResponse;
+  UserResponse userResponse;
 }

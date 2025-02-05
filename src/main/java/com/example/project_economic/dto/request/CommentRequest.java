@@ -15,22 +15,25 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentRequest {
-    @Null(groups = Create.class, message = "Id must not be provided during create.")
-    @NotNull(groups = Update.class, message = "Id is required during update.")
-    Long id;
+  @Null(groups = Create.class, message = "Id must not be provided during create.")
+  @NotNull(groups = Update.class, message = "Id is required during update.")
+  Long id;
 
-    @NotNull(groups = {Create.class,Update.class}, message = "Content is required.")
-    @Size(max = 255, message = "Content must not exceed {max} characters.")
-    String content;
+  @NotNull(
+      groups = {Create.class, Update.class},
+      message = "Content is required.")
+  @Size(max = 255, message = "Content must not exceed {max} characters.")
+  String content;
 
-    @NotNull(groups = {Create.class,Update.class}, message = "Star is required.")
-    @Positive(message = "Star must be greater than 0.")
-    Integer star;
+  @NotNull(
+      groups = {Create.class, Update.class},
+      message = "Star is required.")
+  @Positive(message = "Star must be greater than 0.")
+  Integer star;
 
-    @NotNull(groups = Create.class, message = "User ID is required.")
-    Long userId;
+  @NotNull(groups = Create.class, message = "User ID is required.")
+  Long userId;
 
-    @NotNull(groups = Create.class, message = "Product ID is required.")
-    Long productId;
-
+  @NotNull(groups = Create.class, message = "Product ID is required.")
+  Long productId;
 }

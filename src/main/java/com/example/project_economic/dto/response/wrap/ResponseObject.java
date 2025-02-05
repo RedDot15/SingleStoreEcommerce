@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseObject {
-    private String status;
+  private String status;
 
-    private String message;
+  private String message;
 
-    private Object data;
+  private Object data;
 }

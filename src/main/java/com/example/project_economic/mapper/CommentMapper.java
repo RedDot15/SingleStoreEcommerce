@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-    // Response
-    @Mapping(target = "userResponse", source = "userEntity")
-    CommentResponse toCommentResponse(CommentEntity commentEntity);
+  // Response
+  @Mapping(target = "userResponse", source = "userEntity")
+  CommentResponse toCommentResponse(CommentEntity commentEntity);
 }

@@ -9,24 +9,23 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductDetailResponse implements Comparable{
-    Long id;
+public class ProductDetailResponse implements Comparable {
+  Long id;
 
-    ProductResponse productResponse;
+  ProductResponse productResponse;
 
-    ColorResponse colorResponse;
+  ColorResponse colorResponse;
 
-    SizeResponse sizeResponse;
+  SizeResponse sizeResponse;
 
-    Integer stock;
+  Integer stock;
 
-    Boolean isActive;
+  Boolean isActive;
 
-    @JsonIgnore
-    Boolean isNew;
+  @JsonIgnore Boolean isNew;
 
-    @Override
-    public int compareTo(Object o) {
-        return id.compareTo(((ProductDetailResponse)o).getId());
-    }
+  @Override
+  public int compareTo(Object o) {
+    return id.compareTo(((ProductDetailResponse) o).getId());
+  }
 }
