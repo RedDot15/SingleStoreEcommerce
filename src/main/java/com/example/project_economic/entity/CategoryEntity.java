@@ -19,28 +19,28 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "category")
 public class CategoryEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
 
-  @Column(name = "name", unique = true)
-  String name;
+	@Column(name = "name", unique = true)
+	String name;
 
-  LocalDateTime createdDate;
+	LocalDateTime createdDate;
 
-  Boolean isActive;
+	Boolean isActive;
 
-  Boolean isDeleted;
+	Boolean isDeleted;
 
-  @Where(clause = "is_active = true")
-  @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "category_id")
-  Set<ProductEntity> activeProductEntitySet;
+	@Where(clause = "is_active = true")
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "category_id")
+	Set<ProductEntity> activeProductEntitySet;
 
-  @PrePersist
-  public void control() {
-    setCreatedDate(LocalDateTime.now());
-    setIsActive(false);
-    setIsDeleted(false);
-  }
+	@PrePersist
+	public void control() {
+		setCreatedDate(LocalDateTime.now());
+		setIsActive(false);
+		setIsDeleted(false);
+	}
 }

@@ -9,14 +9,14 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductImageResponse implements Comparable {
-  Long id;
+	Long id;
 
-  String name;
+	String name;
 
-  Boolean isActive;
+	Boolean isActive;
 
-  @Override
-  public int compareTo(Object o) {
-    return id.compareTo(((ProductImageResponse) o).getId());
-  }
+	@Override
+	public int compareTo(Object o) {
+		return id.compareTo(((ProductImageResponse) o).getId());
+	}
 }

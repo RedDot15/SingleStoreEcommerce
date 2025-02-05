@@ -21,42 +21,38 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/size")
 public class SizeController {
-  SizeService sizeService;
+	SizeService sizeService;
 
-  @GetMapping("/list/all")
-  public ResponseEntity<ResponseObject> showAll() {
-    // Fetch & Return all sizes
-    return buildResponse(HttpStatus.OK, "All sizes fetch successfully.", sizeService.getAll());
-  }
+	@GetMapping("/list/all")
+	public ResponseEntity<ResponseObject> showAll() {
+		// Fetch & Return all sizes
+		return buildResponse(HttpStatus.OK, "All sizes fetch successfully.", sizeService.getAll());
+	}
 
-  @GetMapping("/list/active/by/product/{productId}")
-  public ResponseEntity<ResponseObject> showActiveSizeOfAProduct(@PathVariable Long productId) {
-    // Return active size by productId
-    return buildResponse(
-        HttpStatus.OK,
-        "Active sizes fetch successfully.",
-        sizeService.getActiveByProductId(productId));
-  }
+	@GetMapping("/list/active/by/product/{productId}")
+	public ResponseEntity<ResponseObject> showActiveSizeOfAProduct(@PathVariable Long productId) {
+		// Return active size by productId
+		return buildResponse(
+				HttpStatus.OK, "Active sizes fetch successfully.", sizeService.getActiveByProductId(productId));
+	}
 
-  @PostMapping("/add")
-  public ResponseEntity<ResponseObject> add(
-      @Validated({Create.class, Default.class}) @RequestBody SizeRequest sizeRequest) {
-    // Create & Return size
-    return buildResponse(
-        HttpStatus.OK, "Created new size successfully.", sizeService.add(sizeRequest));
-  }
+	@PostMapping("/add")
+	public ResponseEntity<ResponseObject> add(
+			@Validated({Create.class, Default.class}) @RequestBody SizeRequest sizeRequest) {
+		// Create & Return size
+		return buildResponse(HttpStatus.OK, "Created new size successfully.", sizeService.add(sizeRequest));
+	}
 
-  @PutMapping("/update")
-  public ResponseEntity<ResponseObject> update(
-      @Validated({Update.class, Default.class}) @RequestBody SizeRequest sizeRequest) {
-    // Update & Return size
-    return buildResponse(
-        HttpStatus.OK, "Updated size successfully", sizeService.update(sizeRequest));
-  }
+	@PutMapping("/update")
+	public ResponseEntity<ResponseObject> update(
+			@Validated({Update.class, Default.class}) @RequestBody SizeRequest sizeRequest) {
+		// Update & Return size
+		return buildResponse(HttpStatus.OK, "Updated size successfully", sizeService.update(sizeRequest));
+	}
 
-  @DeleteMapping("/{sizeId}/delete")
-  public ResponseEntity<ResponseObject> delete(@PathVariable Long sizeId) {
-    // Delete & Return id
-    return buildResponse(HttpStatus.OK, "Deleted size successfully.", sizeService.delete(sizeId));
-  }
+	@DeleteMapping("/{sizeId}/delete")
+	public ResponseEntity<ResponseObject> delete(@PathVariable Long sizeId) {
+		// Delete & Return id
+		return buildResponse(HttpStatus.OK, "Deleted size successfully.", sizeService.delete(sizeId));
+	}
 }

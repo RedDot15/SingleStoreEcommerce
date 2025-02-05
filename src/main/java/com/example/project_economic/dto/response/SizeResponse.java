@@ -9,12 +9,12 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SizeResponse implements Comparable {
-  Long id;
+	Long id;
 
-  String name;
+	String name;
 
-  @Override
-  public int compareTo(Object o) {
-    return id.compareTo(((SizeResponse) o).getId());
-  }
+	@Override
+	public int compareTo(Object o) {
+		return id.compareTo(((SizeResponse) o).getId());
+	}
 }

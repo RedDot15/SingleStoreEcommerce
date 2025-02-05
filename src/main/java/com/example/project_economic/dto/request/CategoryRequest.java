@@ -14,12 +14,12 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryRequest {
-  @Null(groups = Create.class, message = "Id must not be provided during creation.")
-  @NotNull(groups = Update.class, message = "Id is required during update.")
-  Long id;
+	@Null(groups = Create.class, message = "Id must not be provided during creation.")
+	@NotNull(groups = Update.class, message = "Id is required during update.")
+	Long id;
 
-  @NotBlank(
-      groups = {Create.class, Update.class},
-      message = "Category name is required.")
-  String name;
+	@NotBlank(
+			groups = {Create.class, Update.class},
+			message = "Category name is required.")
+	String name;
 }

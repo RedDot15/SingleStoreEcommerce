@@ -10,22 +10,22 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse implements Comparable {
-  Long id;
+	Long id;
 
-  String username;
+	String username;
 
-  Set<RoleResponse> roleResponseSet;
+	Set<RoleResponse> roleResponseSet;
 
-  String email;
+	String email;
 
-  String phoneNumber;
+	String phoneNumber;
 
-  String address;
+	String address;
 
-  Boolean isActive;
+	Boolean isActive;
 
-  @Override
-  public int compareTo(Object o) {
-    return id.compareTo(((UserResponse) o).getId());
-  }
+	@Override
+	public int compareTo(Object o) {
+		return id.compareTo(((UserResponse) o).getId());
+	}
 }

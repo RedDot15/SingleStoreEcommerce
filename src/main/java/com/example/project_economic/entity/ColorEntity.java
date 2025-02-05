@@ -18,26 +18,26 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "color")
 public class ColorEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
 
-  String name;
+	String name;
 
-  String hexCode;
+	String hexCode;
 
-  Boolean isDeleted;
+	Boolean isDeleted;
 
-  @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "color_id")
-  Set<ProductDetailEntity> productDetailEntitySet;
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "color_id")
+	Set<ProductDetailEntity> productDetailEntitySet;
 
-  @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "color_id")
-  Set<ProductImageEntity> productImageEntitySet;
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "color_id")
+	Set<ProductImageEntity> productImageEntitySet;
 
-  @PrePersist
-  void control() {
-    setIsDeleted(false);
-  }
+	@PrePersist
+	void control() {
+		setIsDeleted(false);
+	}
 }

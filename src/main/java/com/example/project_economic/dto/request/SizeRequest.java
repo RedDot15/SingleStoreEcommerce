@@ -15,13 +15,13 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SizeRequest {
-  @Null(groups = Create.class, message = "Id must not be provided during creation.")
-  @NotNull(groups = Update.class, message = "Id is required during update.")
-  Long id;
+	@Null(groups = Create.class, message = "Id must not be provided during creation.")
+	@NotNull(groups = Update.class, message = "Id is required during update.")
+	Long id;
 
-  @NotBlank(
-      groups = {Create.class, Update.class},
-      message = "Size name is required.")
-  @Size(max = 50, message = "Size name must not exceed {max} characters.")
-  String name;
+	@NotBlank(
+			groups = {Create.class, Update.class},
+			message = "Size name is required.")
+	@Size(max = 50, message = "Size name must not exceed {max} characters.")
+	String name;
 }

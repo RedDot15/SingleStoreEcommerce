@@ -5,15 +5,15 @@ import com.example.project_economic.dto.response.SizeResponse;
 import java.util.Set;
 
 public interface SizeService {
-  // Fetch
-  Set<SizeResponse> getAll();
+	// Fetch
+	Set<SizeResponse> getAll();
 
-  Set<SizeResponse> getActiveByProductId(Long productId);
+	Set<SizeResponse> getActiveByProductId(Long productId);
 
-  // Add/Update/Delete
-  SizeResponse add(SizeRequest sizeRequest);
+	// Add/Update/Delete
+	SizeResponse add(SizeRequest sizeRequest);
 
-  SizeResponse update(SizeRequest sizeRequest);
+	SizeResponse update(SizeRequest sizeRequest);
 
-  Long delete(Long sizeId);
+	Long delete(Long sizeId);
 }

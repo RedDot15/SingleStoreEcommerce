@@ -11,16 +11,16 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CartItemMapper {
-  // Response
-  @Mapping(target = "productDetailResponse", source = "productDetailEntity")
-  CartItemResponse toCartItemResponse(CartItemEntity cartItemEntity);
+	// Response
+	@Mapping(target = "productDetailResponse", source = "productDetailEntity")
+	CartItemResponse toCartItemResponse(CartItemEntity cartItemEntity);
 
-  @Mapping(target = "productResponse", source = "productEntity")
-  @Mapping(target = "colorResponse", source = "colorEntity")
-  @Mapping(target = "sizeResponse", source = "sizeEntity")
-  ProductDetailResponse toProductDetailResponse(ProductDetailEntity productDetailEntity);
+	@Mapping(target = "productResponse", source = "productEntity")
+	@Mapping(target = "colorResponse", source = "colorEntity")
+	@Mapping(target = "sizeResponse", source = "sizeEntity")
+	ProductDetailResponse toProductDetailResponse(ProductDetailEntity productDetailEntity);
 
-  @Mapping(target = "categoryResponse", source = "categoryEntity")
-  @Mapping(target = "activeProductImageResponseSet", source = "activeProductImageEntitySet")
-  ProductResponse toProductResponse(ProductEntity productEntity);
+	@Mapping(target = "categoryResponse", source = "categoryEntity")
+	@Mapping(target = "activeProductImageResponseSet", source = "activeProductImageEntitySet")
+	ProductResponse toProductResponse(ProductEntity productEntity);
 }

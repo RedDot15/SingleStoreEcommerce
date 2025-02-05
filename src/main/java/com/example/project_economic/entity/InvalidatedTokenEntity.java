@@ -16,7 +16,8 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @Table(name = "invalidated_token")
 public class InvalidatedTokenEntity {
-  @Id String id;
+	@Id
+	String id;
 
-  Date expiryTime;
+	Date expiryTime;
 }

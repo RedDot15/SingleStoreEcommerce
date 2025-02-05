@@ -6,27 +6,27 @@ import com.example.project_economic.dto.response.UserResponse;
 import java.util.Set;
 
 public interface UserService {
-  // Fetch
-  Set<UserResponse> getAll();
+	// Fetch
+	Set<UserResponse> getAll();
 
-  UserResponse getMyInfo();
+	UserResponse getMyInfo();
 
-  // Add/Update/Delete
-  UserResponse add(UserRequest userRequest);
+	// Add/Update/Delete
+	UserResponse add(UserRequest userRequest);
 
-  UserResponse update(UserRequest userRequest);
+	UserResponse update(UserRequest userRequest);
 
-  Long delete(Long id);
+	Long delete(Long id);
 
-  // Change status
-  UserResponse deactivate(Long id);
+	// Change status
+	UserResponse deactivate(Long id);
 
-  UserResponse activate(Long id);
+	UserResponse activate(Long id);
 
-  // CLIENT service
-  UserResponse register(UserRequest userRequest);
+	// CLIENT service
+	UserResponse register(UserRequest userRequest);
 
-  UserResponse updateInformation(UserRequest userRequest);
+	UserResponse updateInformation(UserRequest userRequest);
 
-  UserResponse changePassword(UserChangePasswordRequest request);
+	UserResponse changePassword(UserChangePasswordRequest request);
 }

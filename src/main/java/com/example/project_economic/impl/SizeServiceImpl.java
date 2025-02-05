@@ -27,78 +27,74 @@ import org.springframework.stereotype.Service;
 @Transactional
 @Service
 public class SizeServiceImpl implements SizeService {
-  SizeRepository sizeRepository;
-  ProductDetailRepository productDetailRepository;
-  SizeMapper sizeMapper;
-  ProductService productService;
-  ProductDetailService productDetailService;
+	SizeRepository sizeRepository;
+	ProductDetailRepository productDetailRepository;
+	SizeMapper sizeMapper;
+	ProductService productService;
+	ProductDetailService productDetailService;
 
-  @PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_SIZE')")
-  @Override
-  public Set<SizeResponse> getAll() {
-    return new TreeSet<>(
-        sizeRepository.findAll().stream()
-            .map(sizeMapper::toSizeResponse)
-            .collect(Collectors.toSet()));
-  }
+	@PreAuthorize("hasRole('ADMIN') or hasAuthority('GET_ALL_SIZE')")
+	@Override
+	public Set<SizeResponse> getAll() {
+		return new TreeSet<>(sizeRepository.findAll().stream()
+				.map(sizeMapper::toSizeResponse)
+				.collect(Collectors.toSet()));
+	}
 
-  @Override
-  public Set<SizeResponse> getActiveByProductId(Long productId) {
-    // Product inactive exception
-    productService.validateProductIsActive(productId);
-    // Get product detail
-    Set<ProductDetailEntity> productDetailEntitySet =
-        productDetailRepository.findActiveByProductId(productId);
-    // Get size
-    Set<SizeEntity> sizeEntitySet = new TreeSet<>();
-    for (ProductDetailEntity productDetailEntity : productDetailEntitySet) {
-      sizeEntitySet.add(productDetailEntity.getSizeEntity());
-    }
-    // Return result
-    return new TreeSet<>(
-        sizeEntitySet.stream().map(sizeMapper::toSizeResponse).collect(Collectors.toSet()));
-  }
+	@Override
+	public Set<SizeResponse> getActiveByProductId(Long productId) {
+		// Product inactive exception
+		productService.validateProductIsActive(productId);
+		// Get product detail
+		Set<ProductDetailEntity> productDetailEntitySet = productDetailRepository.findActiveByProductId(productId);
+		// Get size
+		Set<SizeEntity> sizeEntitySet = new TreeSet<>();
+		for (ProductDetailEntity productDetailEntity : productDetailEntitySet) {
+			sizeEntitySet.add(productDetailEntity.getSizeEntity());
+		}
+		// Return result
+		return new TreeSet<>(
+				sizeEntitySet.stream().map(sizeMapper::toSizeResponse).collect(Collectors.toSet()));
+	}
 
-  @PreAuthorize("hasRole('ADMIN') or hasAuthority('ADD_SIZE')")
-  @Override
-  public SizeResponse add(SizeRequest sizeRequest) {
-    // Name duplicate exception
-    if (sizeRepository.existsByName(sizeRequest.getName()))
-      throw new AppException(ErrorCode.SIZE_DUPLICATE);
-    // Add & Return
-    return sizeMapper.toSizeResponse(sizeRepository.save(sizeMapper.toSizeEntity(sizeRequest)));
-  }
+	@PreAuthorize("hasRole('ADMIN') or hasAuthority('ADD_SIZE')")
+	@Override
+	public SizeResponse add(SizeRequest sizeRequest) {
+		// Name duplicate exception
+		if (sizeRepository.existsByName(sizeRequest.getName())) throw new AppException(ErrorCode.SIZE_DUPLICATE);
+		// Add & Return
+		return sizeMapper.toSizeResponse(sizeRepository.save(sizeMapper.toSizeEntity(sizeRequest)));
+	}
 
-  @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_SIZE')")
-  @Override
-  public SizeResponse update(SizeRequest sizeRequest) {
-    // Name duplicate exception
-    if (sizeRepository.existsByNameExceptId(sizeRequest.getName(), sizeRequest.getId()))
-      throw new AppException(ErrorCode.SIZE_DUPLICATE);
-    // Get Entity & Not found/Deleted exception
-    SizeEntity foundSizeEntity =
-        sizeRepository
-            .findById(sizeRequest.getId())
-            .orElseThrow(() -> new AppException(ErrorCode.SIZE_NOT_FOUND));
-    // Update
-    sizeMapper.updateSizeEntityFromRequest(foundSizeEntity, sizeRequest);
-    // Save
-    return sizeMapper.toSizeResponse(sizeRepository.save(foundSizeEntity));
-  }
+	@PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_SIZE')")
+	@Override
+	public SizeResponse update(SizeRequest sizeRequest) {
+		// Name duplicate exception
+		if (sizeRepository.existsByNameExceptId(sizeRequest.getName(), sizeRequest.getId()))
+			throw new AppException(ErrorCode.SIZE_DUPLICATE);
+		// Get Entity & Not found/Deleted exception
+		SizeEntity foundSizeEntity = sizeRepository
+				.findById(sizeRequest.getId())
+				.orElseThrow(() -> new AppException(ErrorCode.SIZE_NOT_FOUND));
+		// Update
+		sizeMapper.updateSizeEntityFromRequest(foundSizeEntity, sizeRequest);
+		// Save
+		return sizeMapper.toSizeResponse(sizeRepository.save(foundSizeEntity));
+	}
 
-  @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_SIZE')")
-  @Override
-  public Long delete(Long id) {
-    // Get entity
-    SizeEntity foundSizeEntity =
-        sizeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SIZE_NOT_FOUND));
-    // Also delete every product detail relate to this size
-    for (ProductDetailEntity productDetailEntity : foundSizeEntity.getProductDetailEntitySet()) {
-      productDetailService.delete(productDetailEntity.getId());
-    }
-    // Delete color
-    sizeRepository.delete(foundSizeEntity);
-    // Return ID
-    return id;
-  }
+	@PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_SIZE')")
+	@Override
+	public Long delete(Long id) {
+		// Get entity
+		SizeEntity foundSizeEntity =
+				sizeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SIZE_NOT_FOUND));
+		// Also delete every product detail relate to this size
+		for (ProductDetailEntity productDetailEntity : foundSizeEntity.getProductDetailEntitySet()) {
+			productDetailService.delete(productDetailEntity.getId());
+		}
+		// Delete color
+		sizeRepository.delete(foundSizeEntity);
+		// Return ID
+		return id;
+	}
 }

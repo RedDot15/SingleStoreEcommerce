@@ -13,16 +13,16 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserChangePasswordRequest {
-  @NotNull(groups = Update.class, message = "Id is required.")
-  Long id;
+	@NotNull(groups = Update.class, message = "Id is required.")
+	Long id;
 
-  @NotBlank(groups = Update.class, message = "Old password is required.")
-  String oldPassword;
+	@NotBlank(groups = Update.class, message = "Old password is required.")
+	String oldPassword;
 
-  @NotBlank(groups = Update.class, message = "Password is required.")
-  @Size(min = 6, message = "Password must be at least {min} characters long.")
-  String password;
+	@NotBlank(groups = Update.class, message = "Password is required.")
+	@Size(min = 6, message = "Password must be at least {min} characters long.")
+	String password;
 
-  @NotBlank(groups = Update.class, message = "Confirm password is required.")
-  String confirmPassword;
+	@NotBlank(groups = Update.class, message = "Confirm password is required.")
+	String confirmPassword;
 }

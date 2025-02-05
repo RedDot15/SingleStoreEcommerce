@@ -8,13 +8,12 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
-  // Add
-  CategoryEntity toCategoryEntity(CategoryRequest categoryRequest);
+	// Add
+	CategoryEntity toCategoryEntity(CategoryRequest categoryRequest);
 
-  // Update
-  void updateCategoryEntityFromRequest(
-      @MappingTarget CategoryEntity categoryEntity, CategoryRequest categoryRequest);
+	// Update
+	void updateCategoryEntityFromRequest(@MappingTarget CategoryEntity categoryEntity, CategoryRequest categoryRequest);
 
-  // Response
-  CategoryResponse toCategoryResponse(CategoryEntity categoryEntity);
+	// Response
+	CategoryResponse toCategoryResponse(CategoryEntity categoryEntity);
 }

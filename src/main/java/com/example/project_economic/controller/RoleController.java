@@ -21,33 +21,31 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/role")
 public class RoleController {
-  RoleService roleService;
+	RoleService roleService;
 
-  @GetMapping("/list/all")
-  public ResponseEntity<ResponseObject> showAll() {
-    // Fetch & Return all roles
-    return buildResponse(HttpStatus.OK, "All roles fetch successfully.", roleService.getAll());
-  }
+	@GetMapping("/list/all")
+	public ResponseEntity<ResponseObject> showAll() {
+		// Fetch & Return all roles
+		return buildResponse(HttpStatus.OK, "All roles fetch successfully.", roleService.getAll());
+	}
 
-  @PostMapping("/add")
-  public ResponseEntity<ResponseObject> add(
-      @Validated({Create.class, Default.class}) @RequestBody RoleRequest roleRequest) {
-    // Create & Return role
-    return buildResponse(
-        HttpStatus.OK, "Created new role successfully.", roleService.add(roleRequest));
-  }
+	@PostMapping("/add")
+	public ResponseEntity<ResponseObject> add(
+			@Validated({Create.class, Default.class}) @RequestBody RoleRequest roleRequest) {
+		// Create & Return role
+		return buildResponse(HttpStatus.OK, "Created new role successfully.", roleService.add(roleRequest));
+	}
 
-  @PutMapping("/update")
-  public ResponseEntity<ResponseObject> update(
-      @Validated({Update.class, Default.class}) @RequestBody RoleRequest roleRequest) {
-    // Update & Return role
-    return buildResponse(
-        HttpStatus.OK, "Updated role successfully", roleService.update(roleRequest));
-  }
+	@PutMapping("/update")
+	public ResponseEntity<ResponseObject> update(
+			@Validated({Update.class, Default.class}) @RequestBody RoleRequest roleRequest) {
+		// Update & Return role
+		return buildResponse(HttpStatus.OK, "Updated role successfully", roleService.update(roleRequest));
+	}
 
-  @DeleteMapping("/{roleId}/delete")
-  public ResponseEntity<ResponseObject> delete(@PathVariable Long roleId) {
-    // Delete & Return id
-    return buildResponse(HttpStatus.OK, "Deleted role successfully.", roleService.delete(roleId));
-  }
+	@DeleteMapping("/{roleId}/delete")
+	public ResponseEntity<ResponseObject> delete(@PathVariable Long roleId) {
+		// Delete & Return id
+		return buildResponse(HttpStatus.OK, "Deleted role successfully.", roleService.delete(roleId));
+	}
 }

@@ -10,9 +10,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderResponse {
-  Long id;
+	Long id;
 
-  LocalDateTime boughtAt;
+	LocalDateTime boughtAt;
 
-  Boolean received;
+	Boolean received;
 }

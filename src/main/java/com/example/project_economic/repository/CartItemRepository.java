@@ -11,37 +11,35 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItemEntity, Long> {
-  // Fetch
-  @Query(value = "SELECT * FROM cart_item c WHERE c.user_id = :userId", nativeQuery = true)
-  List<CartItemEntity> findAllByUserId(@Param("userId") Long userId);
+	// Fetch
+	@Query(value = "SELECT * FROM cart_item c WHERE c.user_id = :userId", nativeQuery = true)
+	List<CartItemEntity> findAllByUserId(@Param("userId") Long userId);
 
-  @Query(
-      value =
-          "SELECT * FROM cart_item c WHERE c.user_id = :userId AND c.product_detail_id = :productDetailId",
-      nativeQuery = true)
-  CartItemEntity findFirstByUserIdAndProductDetailId(
-      @Param("userId") Long userId, @Param("productDetailId") Long productDetailId);
+	@Query(
+			value = "SELECT * FROM cart_item c WHERE c.user_id = :userId AND c.product_detail_id = :productDetailId",
+			nativeQuery = true)
+	CartItemEntity findFirstByUserIdAndProductDetailId(
+			@Param("userId") Long userId, @Param("productDetailId") Long productDetailId);
 
-  // Count
-  @Query(value = "SELECT COUNT(c.id) FROM cart_item c WHERE c.user_id= :userId", nativeQuery = true)
-  Long countAllByUserId(@Param("userId") Long userId);
+	// Count
+	@Query(value = "SELECT COUNT(c.id) FROM cart_item c WHERE c.user_id= :userId", nativeQuery = true)
+	Long countAllByUserId(@Param("userId") Long userId);
 
-  // Delete
-  @Modifying
-  @Query(
-      value =
-          "DELETE FROM cart_item ct WHERE ct.product_detail_id IN ( "
-              + "    SELECT pd.id FROM product_detail pd WHERE pd.product_id = :productId AND pd.is_active = true AND pd.is_deleted = false"
-              + ") ",
-      nativeQuery = true)
-  void deleteAllByProductId(Long productId);
+	// Delete
+	@Modifying
+	@Query(
+			value = "DELETE FROM cart_item ct WHERE ct.product_detail_id IN ( "
+					+ "    SELECT pd.id FROM product_detail pd WHERE pd.product_id = :productId AND pd.is_active = true AND pd.is_deleted = false"
+					+ ") ",
+			nativeQuery = true)
+	void deleteAllByProductId(Long productId);
 
-  @Modifying
-  @Query(value = "DELETE FROM CartItemEntity ct WHERE ct.productDetailEntity.id = :productDetailId")
-  void deleteAllByProductDetailId(Long productDetailId);
+	@Modifying
+	@Query(value = "DELETE FROM CartItemEntity ct WHERE ct.productDetailEntity.id = :productDetailId")
+	void deleteAllByProductDetailId(Long productDetailId);
 
-  @Modifying
-  @Transactional
-  @Query(value = "DELETE FROM cart_item  c where c.user_id = :userId", nativeQuery = true)
-  void deleteAllByUserId(@Param("userId") Long userId);
+	@Modifying
+	@Transactional
+	@Query(value = "DELETE FROM cart_item  c where c.user_id = :userId", nativeQuery = true)
+	void deleteAllByUserId(@Param("userId") Long userId);
 }

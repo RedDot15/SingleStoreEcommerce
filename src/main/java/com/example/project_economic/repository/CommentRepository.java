@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
-  // Fetch
-  @Query(value = "SELECT * FROM comment c WHERE c.product_id = :productId", nativeQuery = true)
-  List<CommentEntity> findAllByProductId(Long productId);
+	// Fetch
+	@Query(value = "SELECT * FROM comment c WHERE c.product_id = :productId", nativeQuery = true)
+	List<CommentEntity> findAllByProductId(Long productId);
 }

@@ -9,15 +9,15 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductFilterRequest {
-  Long categoryId;
+	Long categoryId;
 
-  Double fromPrice;
+	Double fromPrice;
 
-  Double toPrice;
+	Double toPrice;
 
-  Long colorId;
+	Long colorId;
 
-  Long sizeId;
+	Long sizeId;
 
-  String keyword;
+	String keyword;
 }

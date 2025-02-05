@@ -10,19 +10,19 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentResponse {
-  Long id;
+	Long id;
 
-  String content;
+	String content;
 
-  Integer star;
+	Integer star;
 
-  Integer likeCount;
+	Integer likeCount;
 
-  Integer dislike;
+	Integer dislike;
 
-  LocalDateTime createdAt;
+	LocalDateTime createdAt;
 
-  LocalDateTime updatedAt;
+	LocalDateTime updatedAt;
 
-  UserResponse userResponse;
+	UserResponse userResponse;
 }

@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
-  Boolean existsByName(String name);
+	Boolean existsByName(String name);
 
-  @Query("SELECT r FROM RoleEntity r WHERE r.name = :name AND r.id <> :id")
-  Boolean existsByNameExceptId(String name, Long id);
+	@Query("SELECT r FROM RoleEntity r WHERE r.name = :name AND r.id <> :id")
+	Boolean existsByNameExceptId(String name, Long id);
 
-  Optional<RoleEntity> findByName(String name);
+	Optional<RoleEntity> findByName(String name);
 }

@@ -11,17 +11,17 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface OrderItemMapper {
-  // Response
-  @Mapping(target = "orderResponse", source = "orderEntity")
-  @Mapping(target = "productDetailResponse", source = "productDetailEntity")
-  OrderItemResponse toOrderItemResponse(OrderItemEntity orderItemEntity);
+	// Response
+	@Mapping(target = "orderResponse", source = "orderEntity")
+	@Mapping(target = "productDetailResponse", source = "productDetailEntity")
+	OrderItemResponse toOrderItemResponse(OrderItemEntity orderItemEntity);
 
-  @Mapping(target = "productResponse", source = "productEntity")
-  @Mapping(target = "colorResponse", source = "colorEntity")
-  @Mapping(target = "sizeResponse", source = "sizeEntity")
-  ProductDetailResponse toProductDetailResponse(ProductDetailEntity productDetailEntity);
+	@Mapping(target = "productResponse", source = "productEntity")
+	@Mapping(target = "colorResponse", source = "colorEntity")
+	@Mapping(target = "sizeResponse", source = "sizeEntity")
+	ProductDetailResponse toProductDetailResponse(ProductDetailEntity productDetailEntity);
 
-  @Mapping(target = "categoryResponse", source = "categoryEntity")
-  @Mapping(target = "activeProductImageResponseSet", source = "activeProductImageEntitySet")
-  ProductResponse toProductResponse(ProductEntity productEntity);
+	@Mapping(target = "categoryResponse", source = "categoryEntity")
+	@Mapping(target = "activeProductImageResponseSet", source = "activeProductImageEntitySet")
+	ProductResponse toProductResponse(ProductEntity productEntity);
 }

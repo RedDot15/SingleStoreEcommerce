@@ -183,11 +183,14 @@
                 </executions>
                 <configuration>
                     <java>
-                        <!-- Use Google Java Format -->
-                        <googleJavaFormat/>
+                        <palantirJavaFormat/>
                         <trimTrailingWhitespace/>
                         <endWithNewline/>
                         <removeUnusedImports/>
+                        <indent>
+                            <tabs>true</tabs>
+                            <spacesPerTab>4</spacesPerTab>
+                        </indent>
                     </java>
                 </configuration>
             </plugin>

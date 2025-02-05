@@ -11,20 +11,19 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderItemResponse {
-  Long id;
+	Long id;
 
-  OrderResponse orderResponse;
+	OrderResponse orderResponse;
 
-  ProductDetailResponse productDetailResponse;
+	ProductDetailResponse productDetailResponse;
 
-  Integer quantity;
+	Integer quantity;
 
-  public String totalMoney() {
-    return CurrencyFormatter.getFormattedCurrency(
-        productDetailResponse
-            .getProductResponse()
-            .getSalePrice()
-            .multiply(new BigDecimal(quantity))
-            .toString());
-  }
+	public String totalMoney() {
+		return CurrencyFormatter.getFormattedCurrency(productDetailResponse
+				.getProductResponse()
+				.getSalePrice()
+				.multiply(new BigDecimal(quantity))
+				.toString());
+	}
 }

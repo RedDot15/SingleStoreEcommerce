@@ -11,18 +11,17 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartItemResponse {
-  Long id;
+	Long id;
 
-  ProductDetailResponse productDetailResponse;
+	ProductDetailResponse productDetailResponse;
 
-  Integer quantity;
+	Integer quantity;
 
-  public String totalMoney() {
-    return CurrencyFormatter.getFormattedCurrency(
-        productDetailResponse
-            .getProductResponse()
-            .getSalePrice()
-            .multiply(new BigDecimal(quantity))
-            .toString());
-  }
+	public String totalMoney() {
+		return CurrencyFormatter.getFormattedCurrency(productDetailResponse
+				.getProductResponse()
+				.getSalePrice()
+				.multiply(new BigDecimal(quantity))
+				.toString());
+	}
 }

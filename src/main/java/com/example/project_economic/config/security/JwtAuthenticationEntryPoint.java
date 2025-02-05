@@ -11,23 +11,21 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-  @Override
-  public void commence(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      AuthenticationException authException)
-      throws IOException {
-    // Get error code
-    ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
-    // Set response
-    response.setStatus(errorCode.getHttpStatus().value());
-    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    // new ResponseObject
-    ResponseObject responseObject = new ResponseObject("failed", errorCode.getMessage(), null);
-    // Mapper
-    ObjectMapper objectMapper = new ObjectMapper();
-    // Write response
-    response.getWriter().write(objectMapper.writeValueAsString(responseObject));
-    response.flushBuffer();
-  }
+	@Override
+	public void commence(
+			HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+			throws IOException {
+		// Get error code
+		ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
+		// Set response
+		response.setStatus(errorCode.getHttpStatus().value());
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		// new ResponseObject
+		ResponseObject responseObject = new ResponseObject("failed", errorCode.getMessage(), null);
+		// Mapper
+		ObjectMapper objectMapper = new ObjectMapper();
+		// Write response
+		response.getWriter().write(objectMapper.writeValueAsString(responseObject));
+		response.flushBuffer();
+	}
 }

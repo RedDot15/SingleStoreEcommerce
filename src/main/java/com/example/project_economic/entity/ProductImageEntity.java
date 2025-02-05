@@ -17,27 +17,27 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "product_image")
 public class ProductImageEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
 
-  String name;
+	String name;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "product_id")
-  ProductEntity productEntity;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "product_id")
+	ProductEntity productEntity;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "color_id")
-  ColorEntity colorEntity;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "color_id")
+	ColorEntity colorEntity;
 
-  Boolean isActive;
+	Boolean isActive;
 
-  Boolean isDeleted;
+	Boolean isDeleted;
 
-  @PrePersist
-  void control() {
-    setIsActive(true);
-    setIsDeleted(false);
-  }
+	@PrePersist
+	void control() {
+		setIsActive(true);
+		setIsDeleted(false);
+	}
 }

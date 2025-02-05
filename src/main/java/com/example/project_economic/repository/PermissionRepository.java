@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PermissionRepository extends JpaRepository<PermissionEntity, Long> {
-  Boolean existsByName(String name);
+	Boolean existsByName(String name);
 
-  @Query("SELECT p FROM PermissionEntity p WHERE p.name = :name AND p.id <> :id")
-  Boolean existsByNameExceptId(String name, Long id);
+	@Query("SELECT p FROM PermissionEntity p WHERE p.name = :name AND p.id <> :id")
+	Boolean existsByNameExceptId(String name, Long id);
 }

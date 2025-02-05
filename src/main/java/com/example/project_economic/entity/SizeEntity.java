@@ -18,20 +18,20 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "size")
 public class SizeEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
 
-  String name;
+	String name;
 
-  Boolean isDeleted;
+	Boolean isDeleted;
 
-  @OneToMany
-  @JoinColumn(name = "size_id")
-  Set<ProductDetailEntity> productDetailEntitySet;
+	@OneToMany
+	@JoinColumn(name = "size_id")
+	Set<ProductDetailEntity> productDetailEntitySet;
 
-  @PrePersist
-  void control() {
-    setIsDeleted(false);
-  }
+	@PrePersist
+	void control() {
+		setIsDeleted(false);
+	}
 }

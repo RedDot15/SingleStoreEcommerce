@@ -13,11 +13,11 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @Table(name = "permission")
 public class PermissionEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
 
-  String name;
+	String name;
 
-  String description;
+	String description;
 }

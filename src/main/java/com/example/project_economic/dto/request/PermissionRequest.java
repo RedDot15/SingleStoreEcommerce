@@ -15,18 +15,18 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PermissionRequest {
-  @Null(groups = Create.class, message = "Id must not be provided during create.")
-  @NotNull(groups = Update.class, message = "Id is required during update.")
-  Long id;
+	@Null(groups = Create.class, message = "Id must not be provided during create.")
+	@NotNull(groups = Update.class, message = "Id is required during update.")
+	Long id;
 
-  @NotBlank(
-      groups = {Create.class, Update.class},
-      message = "Name is required.")
-  String name;
+	@NotBlank(
+			groups = {Create.class, Update.class},
+			message = "Name is required.")
+	String name;
 
-  @NotNull(
-      groups = {Create.class, Update.class},
-      message = "Description is required.")
-  @Size(max = 500, message = "Description must not exceed {max} characters.")
-  String description;
+	@NotNull(
+			groups = {Create.class, Update.class},
+			message = "Description is required.")
+	@Size(max = 500, message = "Description must not exceed {max} characters.")
+	String description;
 }

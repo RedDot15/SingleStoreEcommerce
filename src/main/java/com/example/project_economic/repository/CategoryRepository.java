@@ -8,28 +8,24 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
-  // Fetch
-  @Query(
-      value = "SELECT * FROM category c WHERE c.is_active = true AND c.is_deleted = false",
-      nativeQuery = true)
-  Set<CategoryEntity> findActive();
+	// Fetch
+	@Query(value = "SELECT * FROM category c WHERE c.is_active = true AND c.is_deleted = false", nativeQuery = true)
+	Set<CategoryEntity> findActive();
 
-  // Exist
-  @Query(
-      "SELECT EXISTS ("
-          + "   SELECT 1 FROM CategoryEntity c"
-          + "   WHERE c.name = :name AND c.isDeleted = false"
-          + ")")
-  Boolean existsByName(String name);
+	// Exist
+	@Query("SELECT EXISTS ("
+			+ "   SELECT 1 FROM CategoryEntity c"
+			+ "   WHERE c.name = :name AND c.isDeleted = false"
+			+ ")")
+	Boolean existsByName(String name);
 
-  @Query(
-      "SELECT EXISTS ("
-          + "   SELECT 1 FROM CategoryEntity c "
-          + "   WHERE c.name = :name AND c.id <> :id AND c.isDeleted = false"
-          + ")")
-  Boolean existsByNameExceptId(String name, Long id);
+	@Query("SELECT EXISTS ("
+			+ "   SELECT 1 FROM CategoryEntity c "
+			+ "   WHERE c.name = :name AND c.id <> :id AND c.isDeleted = false"
+			+ ")")
+	Boolean existsByNameExceptId(String name, Long id);
 
-  // Fetch 1 include deleted
-  @Query("SELECT c FROM CategoryEntity c WHERE c.id = :id")
-  CategoryEntity findIncludingDeletedById(Long id);
+	// Fetch 1 include deleted
+	@Query("SELECT c FROM CategoryEntity c WHERE c.id = :id")
+	CategoryEntity findIncludingDeletedById(Long id);
 }

@@ -24,26 +24,25 @@ import org.springframework.web.bind.annotation.RestController;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 public class WebSocketController {
-  CommentService commentService;
+	CommentService commentService;
 
-  @MessageMapping("/send/new-comment")
-  @SendTo("/topic/new-comment")
-  public ResponseEntity<ResponseObject> handleCommentAddRequest(
-      @Validated({Create.class, Default.class}) @RequestBody CommentRequest commentRequest) {
-    return buildResponse(HttpStatus.OK, "New comment added.", commentService.add(commentRequest));
-  }
+	@MessageMapping("/send/new-comment")
+	@SendTo("/topic/new-comment")
+	public ResponseEntity<ResponseObject> handleCommentAddRequest(
+			@Validated({Create.class, Default.class}) @RequestBody CommentRequest commentRequest) {
+		return buildResponse(HttpStatus.OK, "New comment added.", commentService.add(commentRequest));
+	}
 
-  @MessageMapping("/send/edit-comment")
-  @SendTo("/topic/edit-comment")
-  public ResponseEntity<ResponseObject> handleCommentEditRequest(
-      @Validated({Update.class, Default.class}) @RequestBody CommentRequest commentRequest) {
-    return buildResponse(
-        HttpStatus.OK, "A comment is edited.", commentService.edit(commentRequest));
-  }
+	@MessageMapping("/send/edit-comment")
+	@SendTo("/topic/edit-comment")
+	public ResponseEntity<ResponseObject> handleCommentEditRequest(
+			@Validated({Update.class, Default.class}) @RequestBody CommentRequest commentRequest) {
+		return buildResponse(HttpStatus.OK, "A comment is edited.", commentService.edit(commentRequest));
+	}
 
-  @MessageMapping("/send/delete-comment/{commentId}")
-  @SendTo("/topic/delete-comment")
-  public ResponseEntity<ResponseObject> handleCommentDeleteRequest(@PathVariable Long commentId) {
-    return buildResponse(HttpStatus.OK, "A comment is deleted.", commentService.delete(commentId));
-  }
+	@MessageMapping("/send/delete-comment/{commentId}")
+	@SendTo("/topic/delete-comment")
+	public ResponseEntity<ResponseObject> handleCommentDeleteRequest(@PathVariable Long commentId) {
+		return buildResponse(HttpStatus.OK, "A comment is deleted.", commentService.delete(commentId));
+	}
 }

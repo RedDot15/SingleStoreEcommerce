@@ -14,19 +14,19 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartItemRequest {
-  @Null(groups = Create.class, message = "Id must not be provided during addition.")
-  @NotNull(groups = Update.class, message = "Id is required during update.")
-  Long id;
+	@Null(groups = Create.class, message = "Id must not be provided during addition.")
+	@NotNull(groups = Update.class, message = "Id is required during update.")
+	Long id;
 
-  @NotNull(groups = Create.class, message = "User ID is required.")
-  Long userId;
+	@NotNull(groups = Create.class, message = "User ID is required.")
+	Long userId;
 
-  @NotNull(groups = Create.class, message = "Product detail ID is required.")
-  Long productDetailId;
+	@NotNull(groups = Create.class, message = "Product detail ID is required.")
+	Long productDetailId;
 
-  @NotNull(
-      groups = {Create.class, Update.class},
-      message = "Quantity is required.")
-  @Positive(message = "Quantity must be a positive number.")
-  Integer quantity;
+	@NotNull(
+			groups = {Create.class, Update.class},
+			message = "Quantity is required.")
+	@Positive(message = "Quantity must be a positive number.")
+	Integer quantity;
 }

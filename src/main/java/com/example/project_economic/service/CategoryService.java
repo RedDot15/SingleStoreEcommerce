@@ -6,23 +6,23 @@ import com.example.project_economic.entity.CategoryEntity;
 import java.util.Set;
 
 public interface CategoryService {
-  // Fetch
-  Set<CategoryResponse> getAll();
+	// Fetch
+	Set<CategoryResponse> getAll();
 
-  Set<CategoryResponse> getActive();
+	Set<CategoryResponse> getActive();
 
-  // Add/Update/Delete
-  CategoryResponse add(CategoryRequest categoryRequest);
+	// Add/Update/Delete
+	CategoryResponse add(CategoryRequest categoryRequest);
 
-  CategoryResponse update(CategoryRequest categoryRequest);
+	CategoryResponse update(CategoryRequest categoryRequest);
 
-  Long delete(Long id);
+	Long delete(Long id);
 
-  // Change status
-  CategoryResponse activate(Long id);
+	// Change status
+	CategoryResponse activate(Long id);
 
-  CategoryResponse deactivate(Long id);
+	CategoryResponse deactivate(Long id);
 
-  // Validate
-  CategoryEntity validateCategoryIsActive(Long id);
+	// Validate
+	CategoryEntity validateCategoryIsActive(Long id);
 }

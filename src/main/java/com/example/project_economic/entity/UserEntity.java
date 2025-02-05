@@ -18,34 +18,34 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "user")
 public class UserEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
 
-  String username;
+	String username;
 
-  String password;
+	String password;
 
-  @ManyToMany
-  @JoinTable(
-      name = "user_role",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "role_id"))
-  Set<RoleEntity> roleEntitySet;
+	@ManyToMany
+	@JoinTable(
+			name = "user_role",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	Set<RoleEntity> roleEntitySet;
 
-  String email;
+	String email;
 
-  String phoneNumber;
+	String phoneNumber;
 
-  String address;
+	String address;
 
-  Boolean isActive;
+	Boolean isActive;
 
-  Boolean isDeleted;
+	Boolean isDeleted;
 
-  @PrePersist
-  public void control() {
-    setIsActive(true);
-    setIsDeleted(false);
-  }
+	@PrePersist
+	public void control() {
+		setIsActive(true);
+		setIsDeleted(false);
+	}
 }

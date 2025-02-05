@@ -16,18 +16,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/order-item")
 public class OrderItemController {
-  OrderItemService orderItemService;
+	OrderItemService orderItemService;
 
-  @GetMapping("/list/all/by/user/{userId}")
-  public ResponseEntity<ResponseObject> showAll(@PathVariable Long userId) {
-    // Fetch & Return all users
-    return buildResponse(
-        HttpStatus.OK, "All users fetch successfully.", orderItemService.getAllByUserId(userId));
-  }
+	@GetMapping("/list/all/by/user/{userId}")
+	public ResponseEntity<ResponseObject> showAll(@PathVariable Long userId) {
+		// Fetch & Return all users
+		return buildResponse(HttpStatus.OK, "All users fetch successfully.", orderItemService.getAllByUserId(userId));
+	}
 
-  @PostMapping("/my-item/add")
-  public ResponseEntity<ResponseObject> addMyItem() {
-    return buildResponse(
-        HttpStatus.OK, "Added order-items successfully.", orderItemService.addMyItem());
-  }
+	@PostMapping("/my-item/add")
+	public ResponseEntity<ResponseObject> addMyItem() {
+		return buildResponse(HttpStatus.OK, "Added order-items successfully.", orderItemService.addMyItem());
+	}
 }

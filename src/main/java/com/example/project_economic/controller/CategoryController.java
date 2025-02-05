@@ -20,60 +20,50 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/category")
 public class CategoryController {
-  CategoryService categoryService;
+	CategoryService categoryService;
 
-  @GetMapping("/list/all")
-  public ResponseEntity<ResponseObject> showAll() {
-    // Fetch & Return categories
-    return buildResponse(
-        HttpStatus.OK, "All categories fetched successfully.", categoryService.getAll());
-  }
+	@GetMapping("/list/all")
+	public ResponseEntity<ResponseObject> showAll() {
+		// Fetch & Return categories
+		return buildResponse(HttpStatus.OK, "All categories fetched successfully.", categoryService.getAll());
+	}
 
-  @GetMapping("/list/active")
-  public ResponseEntity<ResponseObject> showActive() {
-    // Fetch & Return categories
-    return buildResponse(
-        HttpStatus.OK, "Active categories fetched successfully.", categoryService.getActive());
-  }
+	@GetMapping("/list/active")
+	public ResponseEntity<ResponseObject> showActive() {
+		// Fetch & Return categories
+		return buildResponse(HttpStatus.OK, "Active categories fetched successfully.", categoryService.getActive());
+	}
 
-  @PostMapping("/add")
-  public ResponseEntity<ResponseObject> add(
-      @Validated(Create.class) @RequestBody CategoryRequest categoryRequest) {
-    // Add category & Return
-    return buildResponse(
-        HttpStatus.CREATED,
-        "Created new category successfully.",
-        categoryService.add(categoryRequest));
-  }
+	@PostMapping("/add")
+	public ResponseEntity<ResponseObject> add(@Validated(Create.class) @RequestBody CategoryRequest categoryRequest) {
+		// Add category & Return
+		return buildResponse(
+				HttpStatus.CREATED, "Created new category successfully.", categoryService.add(categoryRequest));
+	}
 
-  @PutMapping("/update")
-  public ResponseEntity<ResponseObject> update(
-      @Validated(Update.class) @RequestBody CategoryRequest categoryRequest) {
-    // Update category & Return
-    return buildResponse(
-        HttpStatus.OK, "Updated category successfully.", categoryService.update(categoryRequest));
-  }
+	@PutMapping("/update")
+	public ResponseEntity<ResponseObject> update(
+			@Validated(Update.class) @RequestBody CategoryRequest categoryRequest) {
+		// Update category & Return
+		return buildResponse(HttpStatus.OK, "Updated category successfully.", categoryService.update(categoryRequest));
+	}
 
-  @DeleteMapping("/{categoryId}/delete")
-  public ResponseEntity<ResponseObject> delete(@PathVariable Long categoryId) {
-    // Delete & Return
-    return buildResponse(
-        HttpStatus.OK, "Category deleted successfully.", categoryService.delete(categoryId));
-  }
+	@DeleteMapping("/{categoryId}/delete")
+	public ResponseEntity<ResponseObject> delete(@PathVariable Long categoryId) {
+		// Delete & Return
+		return buildResponse(HttpStatus.OK, "Category deleted successfully.", categoryService.delete(categoryId));
+	}
 
-  @PutMapping("/{categoryId}/activate")
-  public ResponseEntity<ResponseObject> activate(@PathVariable Long categoryId) {
-    // Build and return success response
-    return buildResponse(
-        HttpStatus.OK, "Category activated successfully.", categoryService.activate(categoryId));
-  }
+	@PutMapping("/{categoryId}/activate")
+	public ResponseEntity<ResponseObject> activate(@PathVariable Long categoryId) {
+		// Build and return success response
+		return buildResponse(HttpStatus.OK, "Category activated successfully.", categoryService.activate(categoryId));
+	}
 
-  @PutMapping("/{categoryId}/deactivate")
-  public ResponseEntity<ResponseObject> deactivate(@PathVariable Long categoryId) {
-    // Deactivate
-    return buildResponse(
-        HttpStatus.OK,
-        "Category deactivated successfully.",
-        categoryService.deactivate(categoryId));
-  }
+	@PutMapping("/{categoryId}/deactivate")
+	public ResponseEntity<ResponseObject> deactivate(@PathVariable Long categoryId) {
+		// Deactivate
+		return buildResponse(
+				HttpStatus.OK, "Category deactivated successfully.", categoryService.deactivate(categoryId));
+	}
 }

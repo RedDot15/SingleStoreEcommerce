@@ -9,12 +9,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItemEntity, Long> {
-  // Fetch
-  @Query(
-      value =
-          "SELECT * FROM order_item oi WHERE oi.order_id IN ("
-              + "    SELECT * FROM order o WHERE o.user_id = :userId"
-              + ")",
-      nativeQuery = true)
-  List<OrderItemEntity> findAllByUserId(@Param("userId") Long userId);
+	// Fetch
+	@Query(
+			value = "SELECT * FROM order_item oi WHERE oi.order_id IN ("
+					+ "    SELECT * FROM order o WHERE o.user_id = :userId"
+					+ ")",
+			nativeQuery = true)
+	List<OrderItemEntity> findAllByUserId(@Param("userId") Long userId);
 }

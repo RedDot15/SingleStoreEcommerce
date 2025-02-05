@@ -16,22 +16,22 @@ import org.springframework.stereotype.Service;
 @Transactional
 @Service("securityService")
 public class SecurityServiceImpl implements SecurityService {
-  CartItemRepository cartItemRepository;
-  CommentRepository commentRepository;
+	CartItemRepository cartItemRepository;
+	CommentRepository commentRepository;
 
-  @Override
-  public Boolean isCartItemOwner(Long cartItemId, Long userId) {
-    return cartItemRepository
-        .findById(cartItemId)
-        .map(cartItem -> cartItem.getUserEntity().getId().equals(userId))
-        .orElse(false);
-  }
+	@Override
+	public Boolean isCartItemOwner(Long cartItemId, Long userId) {
+		return cartItemRepository
+				.findById(cartItemId)
+				.map(cartItem -> cartItem.getUserEntity().getId().equals(userId))
+				.orElse(false);
+	}
 
-  @Override
-  public Boolean isCommentOwner(Long commentId, Long userId) {
-    return commentRepository
-        .findById(commentId)
-        .map(commentEntity -> commentEntity.getUserEntity().getId().equals(userId))
-        .orElse(false);
-  }
+	@Override
+	public Boolean isCommentOwner(Long commentId, Long userId) {
+		return commentRepository
+				.findById(commentId)
+				.map(commentEntity -> commentEntity.getUserEntity().getId().equals(userId))
+				.orElse(false);
+	}
 }

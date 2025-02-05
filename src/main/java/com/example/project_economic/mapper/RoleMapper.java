@@ -9,15 +9,15 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {
-  // Add
-  @Mapping(target = "permissionEntitySet", ignore = true)
-  RoleEntity toRoleEntity(RoleRequest roleRequest);
+	// Add
+	@Mapping(target = "permissionEntitySet", ignore = true)
+	RoleEntity toRoleEntity(RoleRequest roleRequest);
 
-  // Update
-  @Mapping(target = "permissionEntitySet", ignore = true)
-  void updateRoleEntityFromRequest(@MappingTarget RoleEntity roleEntity, RoleRequest roleRequest);
+	// Update
+	@Mapping(target = "permissionEntitySet", ignore = true)
+	void updateRoleEntityFromRequest(@MappingTarget RoleEntity roleEntity, RoleRequest roleRequest);
 
-  // Response
-  @Mapping(target = "permissionResponseSet", source = "permissionEntitySet")
-  RoleResponse toRoleResponse(RoleEntity roleEntity);
+	// Response
+	@Mapping(target = "permissionResponseSet", source = "permissionEntitySet")
+	RoleResponse toRoleResponse(RoleEntity roleEntity);
 }

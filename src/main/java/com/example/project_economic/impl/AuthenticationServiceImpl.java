@@ -35,74 +35,73 @@ import org.springframework.stereotype.Service;
 @Transactional
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
-  PasswordEncoder passwordEncoder;
-  UserRepository userRepository;
-  InvalidatedTokenRepository invalidatedTokenRepository;
-  TokenService tokenService;
+	PasswordEncoder passwordEncoder;
+	UserRepository userRepository;
+	InvalidatedTokenRepository invalidatedTokenRepository;
+	TokenService tokenService;
 
-  @NonFinal
-  @Value("${jwt.refreshable-duration}")
-  Long REFRESHABLE_DURATION;
+	@NonFinal
+	@Value("${jwt.refreshable-duration}")
+	Long REFRESHABLE_DURATION;
 
-  @Override
-  public AuthenticationResponse authenticate(AuthenticationRequest request) {
-    // Fetch
-    UserEntity userEntity =
-        userRepository
-            .findActiveByUsername(request.getUsername())
-            .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
-    // Authenticate
-    boolean authenticated =
-        passwordEncoder.matches(request.getPassword(), userEntity.getPassword());
-    if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
-    // Generate token
-    String uuid = UUID.randomUUID().toString();
-    String refreshToken = tokenService.generateToken(userEntity, true, uuid);
-    String accessToken = tokenService.generateToken(userEntity, false, uuid);
-    // Return token
-    return AuthenticationResponse.builder()
-        .accessToken(accessToken)
-        .refreshToken(refreshToken)
-        .authenticated(true)
-        .build();
-  }
+	@Override
+	public AuthenticationResponse authenticate(AuthenticationRequest request) {
+		// Fetch
+		UserEntity userEntity = userRepository
+				.findActiveByUsername(request.getUsername())
+				.orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+		// Authenticate
+		boolean authenticated = passwordEncoder.matches(request.getPassword(), userEntity.getPassword());
+		if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
+		// Generate token
+		String uuid = UUID.randomUUID().toString();
+		String refreshToken = tokenService.generateToken(userEntity, true, uuid);
+		String accessToken = tokenService.generateToken(userEntity, false, uuid);
+		// Return token
+		return AuthenticationResponse.builder()
+				.accessToken(accessToken)
+				.refreshToken(refreshToken)
+				.authenticated(true)
+				.build();
+	}
 
-  @Override
-  public RefreshResponse refresh(RefreshRequest request) {
-    // Verify token
-    Jwt jwt = tokenService.verifyToken(request.getRefreshToken(), true);
-    // Get token information
-    UserEntity userEntity =
-        userRepository
-            .findActiveByUsername(jwt.getSubject())
-            .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
-    String jti = jwt.getClaim("jti");
-    Date expiryTime = Date.from(jwt.getClaim("exp"));
-    // Build & Save invalid token
-    InvalidatedTokenEntity invalidatedTokenEntity =
-        InvalidatedTokenEntity.builder().id(jti).expiryTime(expiryTime).build();
+	@Override
+	public RefreshResponse refresh(RefreshRequest request) {
+		// Verify token
+		Jwt jwt = tokenService.verifyToken(request.getRefreshToken(), true);
+		// Get token information
+		UserEntity userEntity = userRepository
+				.findActiveByUsername(jwt.getSubject())
+				.orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+		String jti = jwt.getClaim("jti");
+		Date expiryTime = Date.from(jwt.getClaim("exp"));
+		// Build & Save invalid token
+		InvalidatedTokenEntity invalidatedTokenEntity =
+				InvalidatedTokenEntity.builder().id(jti).expiryTime(expiryTime).build();
 
-    invalidatedTokenRepository.save(invalidatedTokenEntity);
-    // Generate new token
-    String uuid = UUID.randomUUID().toString();
-    String refreshToken = tokenService.generateToken(userEntity, true, uuid);
-    String accessToken = tokenService.generateToken(userEntity, false, uuid);
-    // Return token
-    return RefreshResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
-  }
+		invalidatedTokenRepository.save(invalidatedTokenEntity);
+		// Generate new token
+		String uuid = UUID.randomUUID().toString();
+		String refreshToken = tokenService.generateToken(userEntity, true, uuid);
+		String accessToken = tokenService.generateToken(userEntity, false, uuid);
+		// Return token
+		return RefreshResponse.builder()
+				.accessToken(accessToken)
+				.refreshToken(refreshToken)
+				.build();
+	}
 
-  public void logout() {
-    // Get Jwt token from Context
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    Jwt jwt = (Jwt) authentication.getPrincipal();
-    // Get token information
-    String jti = jwt.getClaim("rid");
-    Date expiryTime =
-        Date.from(Instant.from(jwt.getClaim("iat")).plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS));
-    // Build & Save invalid token
-    InvalidatedTokenEntity invalidatedTokenEntity =
-        InvalidatedTokenEntity.builder().id(jti).expiryTime(expiryTime).build();
+	public void logout() {
+		// Get Jwt token from Context
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Jwt jwt = (Jwt) authentication.getPrincipal();
+		// Get token information
+		String jti = jwt.getClaim("rid");
+		Date expiryTime = Date.from(Instant.from(jwt.getClaim("iat")).plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS));
+		// Build & Save invalid token
+		InvalidatedTokenEntity invalidatedTokenEntity =
+				InvalidatedTokenEntity.builder().id(jti).expiryTime(expiryTime).build();
 
-    invalidatedTokenRepository.save(invalidatedTokenEntity);
-  }
+		invalidatedTokenRepository.save(invalidatedTokenEntity);
+	}
 }

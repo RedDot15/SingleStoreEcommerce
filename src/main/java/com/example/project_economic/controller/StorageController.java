@@ -15,26 +15,26 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/file")
 public class StorageController {
-  StorageService storageService;
+	StorageService storageService;
 
-  @PostMapping("/upload")
-  public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) {
-    return new ResponseEntity<>(storageService.uploadFile(file), HttpStatus.OK);
-  }
+	@PostMapping("/upload")
+	public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) {
+		return new ResponseEntity<>(storageService.uploadFile(file), HttpStatus.OK);
+	}
 
-  @GetMapping("/download/{fileName}")
-  public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable String fileName) {
-    byte[] data = storageService.downloadFile(fileName);
-    ByteArrayResource resource = new ByteArrayResource(data);
-    return ResponseEntity.ok()
-        .contentLength(data.length)
-        .header("Content-type", "application/octet-stream")
-        .header("Content-disposition", "attachment; filename=\"" + fileName + "\"")
-        .body(resource);
-  }
+	@GetMapping("/download/{fileName}")
+	public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable String fileName) {
+		byte[] data = storageService.downloadFile(fileName);
+		ByteArrayResource resource = new ByteArrayResource(data);
+		return ResponseEntity.ok()
+				.contentLength(data.length)
+				.header("Content-type", "application/octet-stream")
+				.header("Content-disposition", "attachment; filename=\"" + fileName + "\"")
+				.body(resource);
+	}
 
-  @DeleteMapping("/delete/{fileName}")
-  public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
-    return new ResponseEntity<>(storageService.deleteFile(fileName), HttpStatus.OK);
-  }
+	@DeleteMapping("/delete/{fileName}")
+	public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
+		return new ResponseEntity<>(storageService.deleteFile(fileName), HttpStatus.OK);
+	}
 }

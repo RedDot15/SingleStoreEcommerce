@@ -19,13 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/comment")
 public class CommentController {
-  CommentService commentService;
+	CommentService commentService;
 
-  @GetMapping("/list/all/by/product/{productId}")
-  public ResponseEntity<ResponseObject> showAllCommentOfAProduct(@PathVariable Long productId) {
-    return buildResponse(
-        HttpStatus.OK,
-        "All comments fetch successfully.",
-        commentService.getAllByProductId(productId));
-  }
+	@GetMapping("/list/all/by/product/{productId}")
+	public ResponseEntity<ResponseObject> showAllCommentOfAProduct(@PathVariable Long productId) {
+		return buildResponse(
+				HttpStatus.OK, "All comments fetch successfully.", commentService.getAllByProductId(productId));
+	}
 }

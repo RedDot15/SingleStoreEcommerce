@@ -31,55 +31,58 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @TestPropertySource("/test.properties")
 public class AuthenticationControllerTest {
 
-  MockMvc mockMvc;
+	MockMvc mockMvc;
 
-  @Mock AuthenticationService authenticationServiceMock;
+	@Mock
+	AuthenticationService authenticationServiceMock;
 
-  @InjectMocks private AuthenticationController authenticationController;
+	@InjectMocks
+	private AuthenticationController authenticationController;
 
-  ObjectMapper objectMapper;
-  AuthenticationRequest authenticationRequest;
-  AuthenticationResponse authenticationResponse;
+	ObjectMapper objectMapper;
+	AuthenticationRequest authenticationRequest;
+	AuthenticationResponse authenticationResponse;
 
-  public static final String USERNAME = "test";
-  public static final String PASSWORD = "test";
-  public static final String ACCESS_TOKEN = "accessToken";
-  public static final String REFRESH_TOKEN = "refreshToken";
+	public static final String USERNAME = "test";
+	public static final String PASSWORD = "test";
+	public static final String ACCESS_TOKEN = "accessToken";
+	public static final String REFRESH_TOKEN = "refreshToken";
 
-  @BeforeEach
-  void initData() {
-    mockMvc = MockMvcBuilders.standaloneSetup(authenticationController).build();
+	@BeforeEach
+	void initData() {
+		mockMvc = MockMvcBuilders.standaloneSetup(authenticationController).build();
 
-    objectMapper = new ObjectMapper();
+		objectMapper = new ObjectMapper();
 
-    authenticationRequest =
-        AuthenticationRequest.builder().username(USERNAME).password(PASSWORD).build();
+		authenticationRequest = AuthenticationRequest.builder()
+				.username(USERNAME)
+				.password(PASSWORD)
+				.build();
 
-    authenticationResponse =
-        AuthenticationResponse.builder()
-            .authenticated(true)
-            .accessToken(ACCESS_TOKEN)
-            .refreshToken(REFRESH_TOKEN)
-            .build();
-  }
+		authenticationResponse = AuthenticationResponse.builder()
+				.authenticated(true)
+				.accessToken(ACCESS_TOKEN)
+				.refreshToken(REFRESH_TOKEN)
+				.build();
+	}
 
-  @Test
-  public void authenticate_validRequest_success() throws Exception {
-    // GIVEN
-    String content = objectMapper.writeValueAsString(authenticationRequest);
+	@Test
+	public void authenticate_validRequest_success() throws Exception {
+		// GIVEN
+		String content = objectMapper.writeValueAsString(authenticationRequest);
 
-    Mockito.when(authenticationServiceMock.authenticate(authenticationRequest))
-        .thenReturn(authenticationResponse);
-    // WHEN & THEN
-    mockMvc
-        .perform(
-            get("/auth/token/get").contentType(MediaType.APPLICATION_JSON_VALUE).content(content))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("status").value("ok"))
-        .andExpect(jsonPath("message").value("Authenticate successfully."))
-        .andExpect(jsonPath("data.accessToken").value(ACCESS_TOKEN))
-        .andExpect(jsonPath("data.refreshToken").value(REFRESH_TOKEN));
+		Mockito.when(authenticationServiceMock.authenticate(authenticationRequest))
+				.thenReturn(authenticationResponse);
+		// WHEN & THEN
+		mockMvc.perform(get("/auth/token/get")
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(content))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("status").value("ok"))
+				.andExpect(jsonPath("message").value("Authenticate successfully."))
+				.andExpect(jsonPath("data.accessToken").value(ACCESS_TOKEN))
+				.andExpect(jsonPath("data.refreshToken").value(REFRESH_TOKEN));
 
-    verify(authenticationServiceMock).authenticate(authenticationRequest);
-  }
+		verify(authenticationServiceMock).authenticate(authenticationRequest);
+	}
 }

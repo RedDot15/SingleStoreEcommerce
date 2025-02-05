@@ -14,18 +14,18 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @Table(name = "role")
 public class RoleEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
 
-  String name;
+	String name;
 
-  String description;
+	String description;
 
-  @ManyToMany
-  @JoinTable(
-      name = "role_permission",
-      joinColumns = @JoinColumn(name = "role_id"),
-      inverseJoinColumns = @JoinColumn(name = "permission_id"))
-  Set<PermissionEntity> permissionEntitySet;
+	@ManyToMany
+	@JoinTable(
+			name = "role_permission",
+			joinColumns = @JoinColumn(name = "role_id"),
+			inverseJoinColumns = @JoinColumn(name = "permission_id"))
+	Set<PermissionEntity> permissionEntitySet;
 }

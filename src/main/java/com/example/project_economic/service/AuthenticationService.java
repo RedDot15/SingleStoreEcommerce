@@ -6,12 +6,12 @@ import com.example.project_economic.dto.response.authentication.AuthenticationRe
 import com.example.project_economic.dto.response.authentication.RefreshResponse;
 
 public interface AuthenticationService {
-  // Authenticate
-  AuthenticationResponse authenticate(AuthenticationRequest request);
+	// Authenticate
+	AuthenticationResponse authenticate(AuthenticationRequest request);
 
-  // Refresh
-  RefreshResponse refresh(RefreshRequest request);
+	// Refresh
+	RefreshResponse refresh(RefreshRequest request);
 
-  // Logout
-  void logout();
+	// Logout
+	void logout();
 }

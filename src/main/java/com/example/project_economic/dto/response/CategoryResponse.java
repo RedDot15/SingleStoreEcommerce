@@ -10,16 +10,16 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryResponse implements Comparable {
-  Long id;
+	Long id;
 
-  String name;
+	String name;
 
-  LocalDateTime createdDate;
+	LocalDateTime createdDate;
 
-  Boolean isActive;
+	Boolean isActive;
 
-  @Override
-  public int compareTo(Object o) {
-    return id.compareTo(((CategoryResponse) o).getId());
-  }
+	@Override
+	public int compareTo(Object o) {
+		return id.compareTo(((CategoryResponse) o).getId());
+	}
 }

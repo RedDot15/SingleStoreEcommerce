@@ -22,83 +22,77 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/product-detail")
 public class ProductDetailController {
-  ProductDetailService productDetailService;
+	ProductDetailService productDetailService;
 
-  @GetMapping("/list/all/by/product/{productId}")
-  public ResponseEntity<ResponseObject> showAllProductDetailOfAProduct(
-      @PathVariable Long productId) {
-    // Return all products-detail by productId
-    return buildResponse(
-        HttpStatus.OK,
-        "All product-detail fetch successfully.",
-        productDetailService.getAllByProductId(productId));
-  }
+	@GetMapping("/list/all/by/product/{productId}")
+	public ResponseEntity<ResponseObject> showAllProductDetailOfAProduct(@PathVariable Long productId) {
+		// Return all products-detail by productId
+		return buildResponse(
+				HttpStatus.OK,
+				"All product-detail fetch successfully.",
+				productDetailService.getAllByProductId(productId));
+	}
 
-  @PostMapping("/add")
-  public ResponseEntity<ResponseObject> add(
-      @Validated({Create.class, Default.class}) @RequestBody
-          ProductDetailRequest productDetailRequest) {
-    // Add product-detail
-    ProductDetailResponse productDetailResponse = productDetailService.add(productDetailRequest);
-    // Get http status
-    HttpStatus httpStatus = productDetailResponse.getIsNew() ? HttpStatus.CREATED : HttpStatus.OK;
-    // Get message
-    String message =
-        productDetailResponse.getIsNew()
-            ? "Created new product detail successfully."
-            : "Product detail ID: "
-                + productDetailResponse.getId()
-                + " added "
-                + productDetailRequest.getStock()
-                + " more stock successfully.";
-    // Return
-    return buildResponse(httpStatus, message, productDetailResponse);
-  }
+	@PostMapping("/add")
+	public ResponseEntity<ResponseObject> add(
+			@Validated({Create.class, Default.class}) @RequestBody ProductDetailRequest productDetailRequest) {
+		// Add product-detail
+		ProductDetailResponse productDetailResponse = productDetailService.add(productDetailRequest);
+		// Get http status
+		HttpStatus httpStatus = productDetailResponse.getIsNew() ? HttpStatus.CREATED : HttpStatus.OK;
+		// Get message
+		String message = productDetailResponse.getIsNew()
+				? "Created new product detail successfully."
+				: "Product detail ID: "
+						+ productDetailResponse.getId()
+						+ " added "
+						+ productDetailRequest.getStock()
+						+ " more stock successfully.";
+		// Return
+		return buildResponse(httpStatus, message, productDetailResponse);
+	}
 
-  @PutMapping("/update")
-  public ResponseEntity<ResponseObject> update(
-      @Validated({Update.class, Default.class}) @RequestBody
-          ProductDetailRequest productDetailRequest) {
-    // Update & Return product-detail
-    return buildResponse(
-        HttpStatus.OK,
-        "Updated product detail id: " + productDetailRequest.getId() + " successfully",
-        productDetailService.update(productDetailRequest));
-  }
+	@PutMapping("/update")
+	public ResponseEntity<ResponseObject> update(
+			@Validated({Update.class, Default.class}) @RequestBody ProductDetailRequest productDetailRequest) {
+		// Update & Return product-detail
+		return buildResponse(
+				HttpStatus.OK,
+				"Updated product detail id: " + productDetailRequest.getId() + " successfully",
+				productDetailService.update(productDetailRequest));
+	}
 
-  @DeleteMapping("/{productDetailId}/delete")
-  public ResponseEntity<ResponseObject> delete(@PathVariable Long productDetailId) {
-    // Delete product-detail & Return
-    return buildResponse(
-        HttpStatus.OK,
-        "Deleted product-detail successfully.",
-        productDetailService.delete(productDetailId));
-  }
+	@DeleteMapping("/{productDetailId}/delete")
+	public ResponseEntity<ResponseObject> delete(@PathVariable Long productDetailId) {
+		// Delete product-detail & Return
+		return buildResponse(
+				HttpStatus.OK, "Deleted product-detail successfully.", productDetailService.delete(productDetailId));
+	}
 
-  @PutMapping("/{productDetailId}/activate")
-  public ResponseEntity<ResponseObject> activate(@PathVariable Long productDetailId) {
-    // Activate & Return
-    return buildResponse(
-        HttpStatus.OK,
-        "Activated product-detail successfully.",
-        productDetailService.activate(productDetailId));
-  }
+	@PutMapping("/{productDetailId}/activate")
+	public ResponseEntity<ResponseObject> activate(@PathVariable Long productDetailId) {
+		// Activate & Return
+		return buildResponse(
+				HttpStatus.OK,
+				"Activated product-detail successfully.",
+				productDetailService.activate(productDetailId));
+	}
 
-  @GetMapping("/{productDetailId}/deactivate/check")
-  public ResponseEntity<ResponseObject> deactivateCheck(@PathVariable Long productDetailId) {
-    // Return check message
-    return buildResponse(
-        HttpStatus.OK,
-        "Deactivate check message fetch successfully.",
-        productDetailService.getDeactivateCheckMessage(productDetailId));
-  }
+	@GetMapping("/{productDetailId}/deactivate/check")
+	public ResponseEntity<ResponseObject> deactivateCheck(@PathVariable Long productDetailId) {
+		// Return check message
+		return buildResponse(
+				HttpStatus.OK,
+				"Deactivate check message fetch successfully.",
+				productDetailService.getDeactivateCheckMessage(productDetailId));
+	}
 
-  @PutMapping("/{productDetailId}/deactivate")
-  public ResponseEntity<ResponseObject> deactivate(@PathVariable Long productDetailId) {
-    // Deactivate & Return
-    return buildResponse(
-        HttpStatus.OK,
-        "Deactivated product-detail successfully.",
-        productDetailService.deactivate(productDetailId));
-  }
+	@PutMapping("/{productDetailId}/deactivate")
+	public ResponseEntity<ResponseObject> deactivate(@PathVariable Long productDetailId) {
+		// Deactivate & Return
+		return buildResponse(
+				HttpStatus.OK,
+				"Deactivated product-detail successfully.",
+				productDetailService.deactivate(productDetailId));
+	}
 }

@@ -19,24 +19,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
-  AuthenticationService authenticationService;
+	AuthenticationService authenticationService;
 
-  @GetMapping("/token/get")
-  public ResponseEntity<ResponseObject> authenticate(
-      @Valid @RequestBody AuthenticationRequest request) {
-    return buildResponse(
-        HttpStatus.OK, "Authenticate successfully.", authenticationService.authenticate(request));
-  }
+	@GetMapping("/token/get")
+	public ResponseEntity<ResponseObject> authenticate(@Valid @RequestBody AuthenticationRequest request) {
+		return buildResponse(HttpStatus.OK, "Authenticate successfully.", authenticationService.authenticate(request));
+	}
 
-  @PostMapping("/token/refresh")
-  public ResponseEntity<ResponseObject> refreshToken(@Valid @RequestBody RefreshRequest request) {
-    return buildResponse(
-        HttpStatus.OK, "Authenticate successfully.", authenticationService.refresh(request));
-  }
+	@PostMapping("/token/refresh")
+	public ResponseEntity<ResponseObject> refreshToken(@Valid @RequestBody RefreshRequest request) {
+		return buildResponse(HttpStatus.OK, "Authenticate successfully.", authenticationService.refresh(request));
+	}
 
-  @PostMapping("/my-token/invalidate")
-  public ResponseEntity<ResponseObject> logout() {
-    authenticationService.logout();
-    return buildResponse(HttpStatus.OK, "Log out successfully.", null);
-  }
+	@PostMapping("/my-token/invalidate")
+	public ResponseEntity<ResponseObject> logout() {
+		authenticationService.logout();
+		return buildResponse(HttpStatus.OK, "Log out successfully.", null);
+	}
 }
