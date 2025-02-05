@@ -3,6 +3,7 @@ package com.example.project_economic.impl;
 import com.example.project_economic.dto.request.authentication.AuthenticationRequest;
 import com.example.project_economic.dto.request.authentication.RefreshRequest;
 import com.example.project_economic.dto.response.authentication.AuthenticationResponse;
+import com.example.project_economic.dto.response.authentication.RefreshResponse;
 import com.example.project_economic.entity.InvalidatedTokenEntity;
 import com.example.project_economic.entity.UserEntity;
 import com.example.project_economic.exception.ErrorCode;
@@ -56,7 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         // Fetch
         UserEntity userEntity = userRepository.findActiveByUsername(request.getUsername())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
         // Authenticate
         boolean authenticated = passwordEncoder.matches(request.getPassword(), userEntity.getPassword());
         if (!authenticated)
@@ -74,7 +75,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse refresh(RefreshRequest request) {
+    public RefreshResponse refresh(RefreshRequest request) {
         // Verify token
         Jwt jwt = tokenService.verifyToken(request.getRefreshToken(), true);
         // Get token information
@@ -94,10 +95,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String refreshToken = tokenService.generateToken(userEntity, true, uuid);
         String accessToken = tokenService.generateToken(userEntity, false, uuid);
         // Return token
-        return AuthenticationResponse.builder()
+        return RefreshResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .authenticated(true)
                 .build();
     }
 
