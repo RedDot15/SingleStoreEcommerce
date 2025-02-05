@@ -4,8 +4,6 @@ import com.example.project_economic.dto.request.authentication.AuthenticationReq
 import com.example.project_economic.dto.request.authentication.RefreshRequest;
 import com.example.project_economic.dto.response.authentication.AuthenticationResponse;
 import com.example.project_economic.dto.response.authentication.RefreshResponse;
-import com.example.project_economic.entity.UserEntity;
-import org.springframework.security.oauth2.jwt.Jwt;
 
 public interface AuthenticationService {
     // Authenticate

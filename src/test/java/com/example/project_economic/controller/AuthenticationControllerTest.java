@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
@@ -34,11 +33,11 @@ public class AuthenticationControllerTest {
 
     MockMvc mockMvc;
 
-    @InjectMocks
-    private AuthenticationController authenticationController;
-
     @Mock
     AuthenticationService authenticationServiceMock;
+
+    @InjectMocks
+    private AuthenticationController authenticationController;
 
     ObjectMapper objectMapper;
     AuthenticationRequest authenticationRequest;

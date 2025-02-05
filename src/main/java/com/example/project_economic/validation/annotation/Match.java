@@ -1,6 +1,5 @@
 package com.example.project_economic.validation.annotation;
 
-import com.example.project_economic.validation.validator.AllOrNoneValidator;
 import com.example.project_economic.validation.validator.MatchValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

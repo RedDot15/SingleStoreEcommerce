@@ -1,15 +1,8 @@
 package com.example.project_economic.impl;
 
-import com.example.project_economic.dto.request.authentication.AuthenticationRequest;
-import com.example.project_economic.dto.request.authentication.RefreshRequest;
-import com.example.project_economic.dto.response.authentication.AuthenticationResponse;
-import com.example.project_economic.entity.InvalidatedTokenEntity;
 import com.example.project_economic.entity.UserEntity;
-import com.example.project_economic.exception.ErrorCode;
-import com.example.project_economic.exception.custom.AppException;
 import com.example.project_economic.repository.InvalidatedTokenRepository;
 import com.example.project_economic.repository.UserRepository;
-import com.example.project_economic.service.AuthenticationService;
 import com.example.project_economic.service.TokenService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -21,9 +14,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -35,7 +25,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Objects;
 import java.util.StringJoiner;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)

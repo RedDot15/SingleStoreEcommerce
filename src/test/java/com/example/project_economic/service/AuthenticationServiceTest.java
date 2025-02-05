@@ -15,13 +15,11 @@ import com.example.project_economic.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.security.core.Authentication;
@@ -29,7 +27,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -51,7 +48,6 @@ import static org.mockito.Mockito.*;
 @AutoConfigureMockMvc
 @TestPropertySource("/test.properties")
 public class AuthenticationServiceTest {
-
     @Mock
     UserRepository userRepositoryMock;
     @Mock
@@ -92,10 +88,10 @@ public class AuthenticationServiceTest {
     private static final String ACCESS_TOKEN_RESPONSE = "accessTokenResponse";
     private static final String REFRESH_TOKEN_RESPONSE = "refreshTokenResponse";
 
+    private static final Date ACCESS_TOKEN_IAT = Date.from(Instant.now());
+
     private static final String REFRESH_TOKEN_ID = "refreshTokenId";
     private static final Date REFRESH_TOKEN_EXPIRY = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
-
-    private static final Date ACCESS_TOKEN_IAT = Date.from(Instant.now());
 
     @BeforeEach
     void initData(){

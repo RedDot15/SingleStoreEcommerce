@@ -1,6 +1,5 @@
 package com.example.project_economic.validation.validator;
 
-import com.example.project_economic.validation.annotation.AllOrNone;
 import com.example.project_economic.validation.annotation.Match;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -9,7 +8,6 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
