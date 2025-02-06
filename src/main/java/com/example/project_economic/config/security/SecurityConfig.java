@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -19,7 +18,9 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -50,7 +51,6 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, CustomJwtDecoder customJwtDecoder)
 			throws Exception {
 		return httpSecurity
-				.csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(
 						authorize -> authorize
 								.requestMatchers(PUBLIC_ENDPOINTS)
@@ -62,15 +62,21 @@ public class SecurityConfig {
 								.decoder(customJwtDecoder)
 								.jwtAuthenticationConverter(jwtAuthenticationConverter()))
 						.authenticationEntryPoint(new JwtAuthenticationEntryPoint()))
-				.logout(httpSecurityLogoutConfigurer -> {
-					httpSecurityLogoutConfigurer
-							.invalidateHttpSession(true)
-							.deleteCookies("JSESSIONID") // xoa session
-							.clearAuthentication(true)
-							.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-							.logoutSuccessUrl("/"); // Trang tra ve khi dang xuat thanh cong
-				})
 				.build();
+	}
+
+	@Bean
+	public CorsFilter corsFilter() {
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+		corsConfiguration.addAllowedOrigin("*");
+		corsConfiguration.addAllowedMethod("*");
+		corsConfiguration.addAllowedHeader("*");
+
+		UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+		urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+
+		return new CorsFilter(urlBasedCorsConfigurationSource);
 	}
 
 	@Bean
