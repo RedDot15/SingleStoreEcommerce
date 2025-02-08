@@ -53,9 +53,8 @@ public class CartItemController {
 		return buildResponse(HttpStatus.OK, "Deleted cart-item successfully", cartItemService.delete(cartItemId));
 	}
 
-	@DeleteMapping("/delete/by/user/{userId}")
-	public ResponseEntity<ResponseObject> deleteAllByUserId(@PathVariable Long userId) {
-		return buildResponse(
-				HttpStatus.OK, "Deleted cart-items successfully", cartItemService.deleteAllByUserId(userId));
+	@DeleteMapping("/my-cart/delete")
+	public ResponseEntity<ResponseObject> deleteAllByUserId() {
+		return buildResponse(HttpStatus.OK, "Deleted cart-items successfully", cartItemService.deleteAllMyCart());
 	}
 }

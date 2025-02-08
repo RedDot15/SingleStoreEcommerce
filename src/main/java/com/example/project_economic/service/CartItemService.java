@@ -19,5 +19,5 @@ public interface CartItemService {
 	Long delete(Long id);
 
 	// Delete all by ID
-	Long deleteAllByUserId(Long id);
+	Long deleteAllMyCart();
 }

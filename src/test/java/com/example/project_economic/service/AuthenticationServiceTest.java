@@ -147,7 +147,7 @@ public class AuthenticationServiceTest {
 	}
 
 	@Test
-	public void authenticate_validRequest_success() {
+	void authenticate_validRequest_success() {
 		// GIVEN
 		when(userRepositoryMock.findActiveByUsername(USERNAME)).thenReturn(Optional.of(userEntity));
 		when(passwordEncoderMock.matches(PASSWORD, PASSWORD_HASH)).thenReturn(true);
@@ -183,7 +183,7 @@ public class AuthenticationServiceTest {
 	}
 
 	@Test
-	public void authenticate_invalidPassword_throwsException() {
+	void authenticate_invalidPassword_throwsException() {
 		// GIVEN
 		when(userRepositoryMock.findActiveByUsername(USERNAME)).thenReturn(Optional.of(userEntity));
 		when(passwordEncoderMock.matches(PASSWORD, PASSWORD_HASH)).thenReturn(false);
@@ -199,7 +199,7 @@ public class AuthenticationServiceTest {
 	}
 
 	@Test
-	public void refresh_validRequest_success() {
+	void refresh_validRequest_success() {
 		// GIVEN
 		when(tokenServiceMock.verifyToken(REFRESH_TOKEN_REQUEST, true)).thenReturn(refreshJwt);
 		when(userRepositoryMock.findActiveByUsername(USERNAME)).thenReturn(Optional.of(userEntity));
@@ -222,7 +222,7 @@ public class AuthenticationServiceTest {
 	}
 
 	@Test
-	public void refresh_userNotFound_throwsException() {
+	void refresh_userNotFound_throwsException() {
 		// GIVEN
 		when(tokenServiceMock.verifyToken(REFRESH_TOKEN_REQUEST, true)).thenReturn(refreshJwt);
 		when(userRepositoryMock.findActiveByUsername(USERNAME)).thenReturn(Optional.empty());
@@ -237,7 +237,7 @@ public class AuthenticationServiceTest {
 	}
 
 	@Test
-	public void logout_validRequest_success() {
+	void logout_validRequest_success() {
 		// GIVEN
 		SecurityContextHolder.setContext(securityContextMock);
 		when(securityContextMock.getAuthentication()).thenReturn(authenticationMock);
@@ -249,6 +249,6 @@ public class AuthenticationServiceTest {
 		// THEN
 		verify(securityContextMock).getAuthentication();
 		verify(authenticationMock).getPrincipal();
-		verify(invalidatedTokenRepositoryMock).save(any());
+		verify(invalidatedTokenRepositoryMock).save(any(InvalidatedTokenEntity.class));
 	}
 }

@@ -12,12 +12,14 @@ import com.example.project_economic.repository.UserRepository;
 import com.example.project_economic.service.CartItemService;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -38,7 +40,7 @@ public class CartItemServiceImpl implements CartItemService {
 		// Return result
 		return cartItemRepository.findAllByUserId(userId).stream()
 				.map(cartItemMapper::toCartItemResponse)
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	@PreAuthorize(
@@ -92,18 +94,20 @@ public class CartItemServiceImpl implements CartItemService {
 	@Override
 	public Long delete(Long id) {
 		// Retrieve the cart item to check ownership
-		CartItemEntity cartItemEntity =
-				cartItemRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CART_ITEM_NOT_FOUND));
+		cartItemRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CART_ITEM_NOT_FOUND));
 		// Delete cart-item
 		cartItemRepository.deleteById(id);
 		// Return id
 		return id;
 	}
 
-	@PreAuthorize(
-			"hasRole('ADMIN') or hasAuthority('DELETE_CART_ITEM') or (#userId == authentication.principal.claims['uid'])")
 	@Override
-	public Long deleteAllByUserId(Long userId) {
+	public Long deleteAllMyCart() {
+		// Get Jwt token from Context
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Jwt jwt = (Jwt) authentication.getPrincipal();
+		// Get userId from token
+		Long userId = jwt.getClaim("uid");
 		// Delete cart-item
 		cartItemRepository.deleteAllByUserId(userId);
 		// Return id
