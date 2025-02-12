@@ -1,11 +1,15 @@
 package com.example.project_economic.impl;
 
+import com.example.project_economic.dto.request.OrderItemRequest;
 import com.example.project_economic.dto.response.*;
 import com.example.project_economic.entity.*;
+import com.example.project_economic.exception.ErrorCode;
+import com.example.project_economic.exception.custom.AppException;
 import com.example.project_economic.mapper.*;
 import com.example.project_economic.repository.*;
 import com.example.project_economic.service.OrderItemService;
 import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -81,19 +85,29 @@ public class OrderItemServiceImpl implements OrderItemService {
 		return orderItemResponseList;
 	}
 
+	@PreAuthorize("@securityService.isOrderOwner(#orderItemRequest.orderId, authentication.principal.claims['uid'])")
 	@Override
-	public List<OrderItemResponse> addMyItem() {
+	public List<OrderItemResponse> addMyItem(OrderItemRequest orderItemRequest) {
 		// Get Jwt token from Context
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Jwt jwt = (Jwt) authentication.getPrincipal();
 		// Get userId from token
 		Long userId = jwt.getClaim("uid");
 		// Fetch
-		List<CartItemEntity> cartItemEntityList = cartItemRepository.findAllByUserId(userId);
-		// Create & Save new order
-		OrderEntity orderEntity = orderRepository.save(OrderEntity.builder()
-				.userEntity(userRepository.getReferenceById(userId))
-				.build());
+		List<CartItemEntity> cartItemEntityList = cartItemRepository.findAllByUserIdAndProductDetailIdIn(
+				userId, orderItemRequest.getProductDetailIdList());
+		OrderEntity orderEntity = orderRepository
+				.findById(orderItemRequest.getOrderId())
+				.orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+		// Count total amount & total amount mismatch exception
+		BigDecimal totalAmount = BigDecimal.ZERO;
+		for (CartItemEntity cartItemEntity : cartItemEntityList) {
+			Integer quantity = cartItemEntity.getQuantity();
+			BigDecimal salePrice =
+					cartItemEntity.getProductDetailEntity().getProductEntity().getSalePrice();
+			totalAmount = totalAmount.add(salePrice.multiply(new BigDecimal(quantity)));
+		}
+		if (!totalAmount.equals(orderEntity.getTotalAmount())) throw new AppException(ErrorCode.ORDER_PRICE_MISMATCH);
 		// Create order-item list for response
 		List<OrderItemResponse> orderItemResponseList = new LinkedList<>();
 		// For each cart-item entity list to add new order-item

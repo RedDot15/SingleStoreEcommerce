@@ -1,6 +1,6 @@
 package com.example.project_economic.config.security;
 
-import com.example.project_economic.service.TokenService;
+import com.example.project_economic.service.authentication.TokenService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

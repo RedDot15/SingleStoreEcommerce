@@ -12,7 +12,7 @@ import com.example.project_economic.repository.ProductImageRepository;
 import com.example.project_economic.repository.ProductRepository;
 import com.example.project_economic.service.ProductImageService;
 import com.example.project_economic.service.ProductService;
-import com.example.project_economic.service.StorageService;
+import com.example.project_economic.service.aws_storage.StorageService;
 import jakarta.transaction.Transactional;
 import java.util.Set;
 import java.util.TreeSet;

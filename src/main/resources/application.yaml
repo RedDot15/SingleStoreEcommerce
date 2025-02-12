@@ -12,7 +12,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
   config:
     import: env.properties
   servlet:
@@ -42,3 +42,7 @@ jwt:
   signer-key: ${SIGNER_KEY}
   valid-duration: 3600 # in second
   refreshable-duration: 36000 # in seconds
+
+paypal:
+  client-id: ${PAYPAL_CLIENT_ID}
+  client-secret: ${PAYPAL_CLIENT_SECRET}

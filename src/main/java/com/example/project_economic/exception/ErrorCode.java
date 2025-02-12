@@ -44,6 +44,11 @@ public enum ErrorCode {
 	COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Comment not found."),
 	// Cart item
 	CART_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "Cart-item not found."),
+	// Order
+	ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "Order not found."),
+	ORDER_PRICE_MISMATCH(HttpStatus.CONFLICT, "Order price mismatch."),
+	ORDER_EMPTY(HttpStatus.CONFLICT, "Order is empty."),
+	ORDER_COMPLETED(HttpStatus.CONFLICT, "Order is completed."),
 	// Authentication
 	UNAUTHENTICATED(HttpStatus.UNAUTHORIZED, "Unauthenticated error."),
 	UNAUTHORIZED(HttpStatus.FORBIDDEN, "You do not have permission to perform this operation."),
@@ -58,6 +63,11 @@ public enum ErrorCode {
 	INVALID_FILE_TYPE(HttpStatus.BAD_REQUEST, "You can only upload image file."),
 	FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "File must be <= 5MB."),
 	FILE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "File upload failed."),
+	// Payment
+	PAYMENT_CREATE_REQUEST_FAILED(
+			HttpStatus.INTERNAL_SERVER_ERROR, "Payment create request failed due to an unexpected error."),
+	PAYMENT_EXCUTE_REQUEST_FAILED(
+			HttpStatus.INTERNAL_SERVER_ERROR, "Payment excute request failed due to an unexpected error."),
 	;
 
 	HttpStatus httpStatus;

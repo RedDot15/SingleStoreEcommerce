@@ -2,8 +2,10 @@ package com.example.project_economic.controller;
 
 import static com.example.project_economic.helper.ResponseBuilder.buildResponse;
 
+import com.example.project_economic.dto.request.OrderItemRequest;
 import com.example.project_economic.dto.response.wrap.ResponseObject;
 import com.example.project_economic.service.OrderItemService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,7 +27,8 @@ public class OrderItemController {
 	}
 
 	@PostMapping("/my-item/add")
-	public ResponseEntity<ResponseObject> addMyItem() {
-		return buildResponse(HttpStatus.OK, "Added order-items successfully.", orderItemService.addMyItem());
+	public ResponseEntity<ResponseObject> addMyItem(@Valid @RequestBody OrderItemRequest orderItemRequest) {
+		return buildResponse(
+				HttpStatus.OK, "Added order-items successfully.", orderItemService.addMyItem(orderItemRequest));
 	}
 }

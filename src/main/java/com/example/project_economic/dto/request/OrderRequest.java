@@ -1,23 +1,18 @@
-package com.example.project_economic.dto.response;
+package com.example.project_economic.dto.request;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderResponse {
+public class OrderRequest {
 	String id;
 
 	BigDecimal totalAmount;
-
-	LocalDateTime boughtAt;
-
-	Boolean received;
 
 	String status;
 }

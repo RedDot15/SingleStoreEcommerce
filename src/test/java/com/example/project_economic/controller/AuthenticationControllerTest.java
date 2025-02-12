@@ -1,12 +1,14 @@
 package com.example.project_economic.controller;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.project_economic.controller.authentication.AuthenticationController;
 import com.example.project_economic.dto.request.authentication.AuthenticationRequest;
 import com.example.project_economic.dto.response.authentication.AuthenticationResponse;
-import com.example.project_economic.service.AuthenticationService;
+import com.example.project_economic.service.authentication.AuthenticationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;

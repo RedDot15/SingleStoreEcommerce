@@ -1,7 +1,7 @@
 package com.example.project_economic.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -10,14 +10,15 @@ import com.example.project_economic.dto.request.authentication.AuthenticationReq
 import com.example.project_economic.dto.request.authentication.RefreshRequest;
 import com.example.project_economic.dto.response.authentication.AuthenticationResponse;
 import com.example.project_economic.dto.response.authentication.RefreshResponse;
-import com.example.project_economic.entity.InvalidatedTokenEntity;
 import com.example.project_economic.entity.RoleEntity;
 import com.example.project_economic.entity.UserEntity;
+import com.example.project_economic.entity.authentication.InvalidatedTokenEntity;
 import com.example.project_economic.exception.ErrorCode;
 import com.example.project_economic.exception.custom.AppException;
-import com.example.project_economic.impl.AuthenticationServiceImpl;
-import com.example.project_economic.repository.InvalidatedTokenRepository;
+import com.example.project_economic.impl.authentication.AuthenticationServiceImpl;
 import com.example.project_economic.repository.UserRepository;
+import com.example.project_economic.repository.authentication.InvalidatedTokenRepository;
+import com.example.project_economic.service.authentication.TokenService;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -38,6 +39,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -219,6 +221,19 @@ public class AuthenticationServiceTest {
 		verify(userRepositoryMock).findActiveByUsername(USERNAME);
 		verify(invalidatedTokenRepositoryMock).save(any());
 		verify(tokenServiceMock, times(2)).generateToken(eq(userEntity), anyBoolean(), anyString());
+	}
+
+	@Test
+	void refresh_invalidToken_throwsException() {
+		// GIVEN
+		when(tokenServiceMock.verifyToken(REFRESH_TOKEN_REQUEST, true)).thenThrow(JwtException.class);
+		// WHEN
+		AppException exception = assertThrows(AppException.class, () -> authenticationService.refresh(refreshRequest));
+		// THEN
+		assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.UNAUTHENTICATED);
+
+		verify(tokenServiceMock).verifyToken(REFRESH_TOKEN_REQUEST, true);
+		verifyNoInteractions(invalidatedTokenRepositoryMock, userRepositoryMock);
 	}
 
 	@Test
