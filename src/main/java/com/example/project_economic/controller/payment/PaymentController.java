@@ -3,7 +3,7 @@ package com.example.project_economic.controller.payment;
 import static com.example.project_economic.helper.ResponseBuilder.buildResponse;
 
 import com.example.project_economic.dto.request.payment.PaymentRequest;
-import com.example.project_economic.dto.response.wrap.ResponseObject;
+import com.example.project_economic.helper.ResponseObject;
 import com.example.project_economic.service.payment.PaymentService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;

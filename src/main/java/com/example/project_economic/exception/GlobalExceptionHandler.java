@@ -3,7 +3,7 @@ package com.example.project_economic.exception;
 import static com.example.project_economic.helper.ResponseBuilder.buildResponse;
 
 import com.example.project_economic.dto.response.validation.ValidationResponse;
-import com.example.project_economic.dto.response.wrap.ResponseObject;
+import com.example.project_economic.helper.ResponseObject;
 import com.example.project_economic.exception.custom.AppException;
 import jakarta.validation.ConstraintViolation;
 import java.util.Arrays;

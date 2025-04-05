@@ -4,7 +4,7 @@ import static com.example.project_economic.helper.ResponseBuilder.buildResponse;
 
 import com.example.project_economic.dto.request.UserChangePasswordRequest;
 import com.example.project_economic.dto.request.UserRequest;
-import com.example.project_economic.dto.response.wrap.ResponseObject;
+import com.example.project_economic.helper.ResponseObject;
 import com.example.project_economic.service.UserService;
 import com.example.project_economic.validation.group.Admin;
 import com.example.project_economic.validation.group.Client;

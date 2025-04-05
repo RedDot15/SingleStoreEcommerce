@@ -4,7 +4,7 @@ import static com.example.project_economic.helper.ResponseBuilder.buildResponse;
 
 import com.example.project_economic.dto.request.authentication.AuthenticationRequest;
 import com.example.project_economic.dto.request.authentication.RefreshRequest;
-import com.example.project_economic.dto.response.wrap.ResponseObject;
+import com.example.project_economic.helper.ResponseObject;
 import com.example.project_economic.service.authentication.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 	AuthenticationService authenticationService;
 
-	@GetMapping("/token/get")
+	@PostMapping("/token/get")
 	public ResponseEntity<ResponseObject> authenticate(@Valid @RequestBody AuthenticationRequest request) {
 		return buildResponse(HttpStatus.OK, "Authenticate successfully.", authenticationService.authenticate(request));
 	}

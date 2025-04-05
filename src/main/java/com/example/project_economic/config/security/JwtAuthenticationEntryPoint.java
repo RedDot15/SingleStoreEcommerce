@@ -1,6 +1,6 @@
 package com.example.project_economic.config.security;
 
-import com.example.project_economic.dto.response.wrap.ResponseObject;
+import com.example.project_economic.helper.ResponseObject;
 import com.example.project_economic.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

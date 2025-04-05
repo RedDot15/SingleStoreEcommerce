@@ -1,4 +1,4 @@
-package com.example.project_economic.dto.response.wrap;
+package com.example.project_economic.helper;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

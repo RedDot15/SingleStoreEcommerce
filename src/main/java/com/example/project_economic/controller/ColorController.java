@@ -3,7 +3,7 @@ package com.example.project_economic.controller;
 import static com.example.project_economic.helper.ResponseBuilder.buildResponse;
 
 import com.example.project_economic.dto.request.ColorRequest;
-import com.example.project_economic.dto.response.wrap.ResponseObject;
+import com.example.project_economic.helper.ResponseObject;
 import com.example.project_economic.service.ColorService;
 import com.example.project_economic.validation.group.Create;
 import com.example.project_economic.validation.group.Update;
