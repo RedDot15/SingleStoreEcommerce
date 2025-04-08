@@ -34,9 +34,9 @@ cloud:
 
 application:
   cloudfront:
-    name: dyg4oa4f8q8zk
+    name: ${CLOUDFRONT_NAME}
   bucket:
-    name: mysinglestore3
+    name: ${BUCKET_NAME}
 
 jwt:
   signer-key: ${SIGNER_KEY}
