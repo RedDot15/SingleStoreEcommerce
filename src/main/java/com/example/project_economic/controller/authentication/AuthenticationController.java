@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 	AuthenticationService authenticationService;
 
-	@PostMapping("/token/get")
+	@PostMapping("/token")
 	public ResponseEntity<ResponseObject> authenticate(@Valid @RequestBody AuthenticationRequest request) {
 		return buildResponse(HttpStatus.OK, "Authenticate successfully.", authenticationService.authenticate(request));
 	}
